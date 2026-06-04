@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 import { FileProvider } from '@/components/FileProvider';
 import { getDictionary } from '@/dictionaries';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import AnimatedFavicon from '@/components/AnimatedFavicon';
 
 export default async function RootLayout({
   children,
@@ -51,6 +52,7 @@ export default async function RootLayout({
         )}
       </head>
       <body className="antialiased min-h-screen flex flex-col selection:bg-[#4d9fff]/30">
+        <AnimatedFavicon />
         <FileProvider>
           {/* Header */}
           <header className="border-b border-[#1c1c2e] bg-[#06060c]/85 backdrop-blur-md sticky top-0 z-50">
