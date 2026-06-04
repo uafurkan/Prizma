@@ -369,7 +369,7 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
   const relatedConversions = getIlgiliDonusumler(cift, 6);
 
   return (
-    <div className="flex flex-col gap-12 py-12 px-4 max-w-3xl mx-auto w-full animate-fade-in">
+    <div className="flex flex-col gap-12 py-12 px-4 max-w-5xl mx-auto w-full animate-fade-in">
       {/* Header */}
       <section className="flex flex-col items-center text-center gap-4 pt-6">
         <div className="flex items-center gap-3 md:gap-5 justify-center">

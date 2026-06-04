@@ -105,7 +105,7 @@ export default function DownloadCard({ results, onReset }: DownloadCardProps) {
                 type="text"
                 value={name}
                 onChange={(e) => handleRename(0, e.target.value)}
-                className="w-full bg-[#06060c] border border-[#1c1c2e] hover:border-[#5a5a7a]/50 text-[#e8e8f4] px-4 py-2 rounded-xl text-sm font-semibold outline-none focus:border-[#4d9fff]"
+                className="w-full bg-[#06060c] border border-[#1c1c2e] hover:border-[#5a5a7a]/50 text-[#e8e8f4] px-4 py-2 rounded-xl text-sm font-semibold outline-none focus:border-[#4d9fff] font-mono"
               />
             </div>
 
@@ -173,7 +173,7 @@ export default function DownloadCard({ results, onReset }: DownloadCardProps) {
                 type="text"
                 value={fileNames[i] || r.filename}
                 onChange={(e) => handleRename(i, e.target.value)}
-                className="bg-transparent border-none text-[#e8e8f4] font-semibold text-sm outline-none focus:bg-[#12121e] px-1 py-0.5 rounded w-full"
+                className="bg-transparent border-none text-[#e8e8f4] font-semibold text-sm outline-none focus:bg-[#12121e] px-1 py-0.5 rounded w-full font-mono"
               />
               <div className="flex items-center gap-2 text-[10px] font-mono text-[#5a5a7a]">
                 <span>{formatFileSize(r.originalSize)}</span>

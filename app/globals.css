@@ -46,6 +46,13 @@
   box-sizing: border-box;
 }
 
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -68,6 +75,14 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* ── Selection ── */
@@ -224,7 +239,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   gap: 8px;
   padding: 14px 28px;
   border-radius: 12px;
-  font-family: var(--font-syne);
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 15px;
   border: none;
@@ -264,7 +279,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   gap: 8px;
   padding: 12px 24px;
   border-radius: 10px;
-  font-family: var(--font-syne);
+  font-family: var(--font-sans);
   font-weight: 600;
   font-size: 14px;
   border: 1px solid var(--border);

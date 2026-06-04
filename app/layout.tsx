@@ -54,7 +54,7 @@ export default function RootLayout({
                 PRİZMA
               </span>
             </Link>
-            <nav className="flex items-center gap-6">
+            <nav className="flex items-center gap-4 md:gap-6 overflow-x-auto no-scrollbar max-w-[65%] whitespace-nowrap">
               <Link
                 href="/kategori/goruntu"
                 className="text-sm font-semibold text-[#5a5a7a] hover:text-[#e8e8f4] transition-colors"
