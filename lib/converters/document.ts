@@ -1,5 +1,4 @@
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
-
+// pdf-lib, xlsx, mammoth loaded dynamically
 export interface DocConversionResult {
   blob: Blob
   filename: string
@@ -110,6 +109,7 @@ export async function textToPDF(
     plainText = text
   }
 
+  const { PDFDocument, StandardFonts, rgb } = await import('pdf-lib')
   const pdfDoc = await PDFDocument.create()
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const fontSize = 12
@@ -158,6 +158,7 @@ export async function mergePDFs(
   files: File[],
   outputName = 'merged.pdf'
 ): Promise<DocConversionResult> {
+  const { PDFDocument } = await import('pdf-lib')
   const merged = await PDFDocument.create()
 
   for (const file of files) {
@@ -184,6 +185,7 @@ export async function splitPDF(
   file: File
 ): Promise<DocConversionResult[]> {
   const bytes = new Uint8Array(await file.arrayBuffer())
+  const { PDFDocument } = await import('pdf-lib')
   const source = await PDFDocument.load(bytes)
   const results: DocConversionResult[] = []
   const baseName = file.name.replace(/\.pdf$/i, '')

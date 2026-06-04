@@ -1,4 +1,4 @@
-import { pipeline } from '@xenova/transformers';
+// @xenova/transformers loaded dynamically
 
 let transcriber: any = null;
 
@@ -14,6 +14,7 @@ export async function convertSpeechToText(
   
   if (!transcriber) {
     // Load the multilingual whisper model
+    const { pipeline } = await import('@xenova/transformers');
     transcriber = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', {
       progress_callback: (data: any) => {
         if (onProgress) {

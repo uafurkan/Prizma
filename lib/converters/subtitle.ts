@@ -1,5 +1,3 @@
-import subsrt from 'subsrt-ts';
-
 export interface SubtitleConversionResult {
   blob: Blob;
   filename: string;
@@ -11,6 +9,7 @@ export async function convertSubtitle(
   file: File,
   targetExt: string
 ): Promise<SubtitleConversionResult> {
+  const subsrt = (await import('subsrt-ts')).default;
   const text = await file.text();
   const targetFormat = targetExt.toLowerCase();
 

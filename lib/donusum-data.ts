@@ -108,6 +108,46 @@ export function getCategoryPath(lang: string, catSlug: string): string {
   return `/en/category/${enMap[catSlug] || catSlug}`;
 }
 
+export function getTranslatedPath(pathname: string, currentLang: string, targetLang: string): string {
+  if (currentLang === targetLang) return pathname;
+
+  const enMap: Record<string, string> = {
+    'goruntu': 'image',
+    'video': 'video',
+    'ses': 'audio',
+    'belge': 'document',
+    'arsiv': 'archive',
+    'altyazi': 'subtitle'
+  };
+  
+  const trMap: Record<string, string> = Object.entries(enMap).reduce((acc, [k, v]) => ({ ...acc, [v]: k }), {});
+
+  let newPath = pathname;
+  if (currentLang === 'tr' && targetLang === 'en') {
+    newPath = pathname.replace('/tr/kategori/', '/en/category/');
+    for (const [trSlug, enSlug] of Object.entries(enMap)) {
+      if (newPath.endsWith(`/${trSlug}`)) {
+        newPath = newPath.replace(`/${trSlug}`, `/${enSlug}`);
+        break;
+      }
+    }
+  } else if (currentLang === 'en' && targetLang === 'tr') {
+    newPath = pathname.replace('/en/category/', '/tr/kategori/');
+    for (const [enSlug, trSlug] of Object.entries(trMap)) {
+      if (newPath.endsWith(`/${enSlug}`)) {
+        newPath = newPath.replace(`/${enSlug}`, `/${trSlug}`);
+        break;
+      }
+    }
+  }
+
+  if (newPath === pathname) {
+    newPath = pathname.replace(`/${currentLang}`, `/${targetLang}`);
+  }
+
+  return newPath;
+}
+
 export const DONUSUM_DATA: DonusumCift[] = [
   // ===== GÖRÜNTÜ =====
   {

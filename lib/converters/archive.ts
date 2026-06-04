@@ -1,5 +1,4 @@
-import JSZip from 'jszip'
-
+// jszip loaded dynamically
 export interface ArchiveEntry {
   name: string
   blob: Blob
@@ -13,6 +12,7 @@ export async function filesToZip(
   files: File[] | ArchiveEntry[],
   outputName = 'archive.zip'
 ): Promise<Blob> {
+  const JSZip = (await import('jszip')).default
   const zip = new JSZip()
 
   for (const file of files) {
@@ -38,6 +38,7 @@ export async function filesToZip(
 /* ========================================================================== */
 
 export async function extractZip(file: File): Promise<ArchiveEntry[]> {
+  const JSZip = (await import('jszip')).default
   const zip = await JSZip.loadAsync(await file.arrayBuffer())
   const entries: ArchiveEntry[] = []
 

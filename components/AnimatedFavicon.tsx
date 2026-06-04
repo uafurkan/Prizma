@@ -65,8 +65,13 @@ export default function AnimatedFavicon() {
 
     function getOrCreateLink(): HTMLLinkElement {
       let link = document.querySelector("link[rel='icon'][data-prizma]") as HTMLLinkElement | null;
+      
+      // Always clean up any rogue icons injected by Next.js metadata during navigation
+      document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']").forEach(el => {
+        if (!el.hasAttribute('data-prizma')) el.remove();
+      });
+
       if (!link) {
-        document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']").forEach(el => el.remove());
         link = document.createElement('link');
         link.rel = 'icon';
         link.type = 'image/png';

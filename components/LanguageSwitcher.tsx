@@ -1,15 +1,15 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
+import { getTranslatedPath } from '@/lib/donusum-data';
 
 export default function LanguageSwitcher({ currentLang }: { currentLang: string }) {
   const router = useRouter();
   const pathname = usePathname();
 
   const switchLanguage = (lang: string) => {
-    // If we're on /en/foo, change to /tr/foo
     if (!pathname) return;
-    const newPath = pathname.replace(`/${currentLang}`, `/${lang}`);
+    const newPath = getTranslatedPath(pathname, currentLang, lang);
     router.push(newPath);
   };
 
