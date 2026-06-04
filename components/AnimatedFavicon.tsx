@@ -12,12 +12,8 @@ const BASE_COLORS = [
 ];
 
 const SIZE = 64;
-const ROTATION_DURATION = 20000; // 20s - synced with site's spin-slow
-const HUE_ROTATE_DURATION = 8000; // 8s - synced with site's prismRotate
-
-// Singleton: ensure only one animation loop ever runs, even across re-mounts
-let isRunning = false;
-let animFrameId = 0;
+const ROTATION_DURATION = 20000; // 20s
+const HUE_ROTATE_DURATION = 8000; // 8s
 
 function hueRotateRGB(r: number, g: number, b: number, degrees: number): [number, number, number] {
   const rr = r / 255, gg = g / 255, bb = b / 255;
@@ -56,102 +52,107 @@ function hueRotateRGB(r: number, g: number, b: number, degrees: number): [number
   return [Math.round(r2 * 255), Math.round(g2 * 255), Math.round(b2 * 255)];
 }
 
-function startFaviconAnimation() {
-  if (isRunning) return;
-  isRunning = true;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = SIZE;
-  canvas.height = SIZE;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) { isRunning = false; return; }
-
-  function getOrCreateLink(): HTMLLinkElement {
-    // Always find the current link or create one - handles Next.js head swaps
-    let link = document.querySelector("link[rel='icon'][data-prizma]") as HTMLLinkElement | null;
-    if (!link) {
-      // Remove any existing favicons first
-      document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']").forEach(el => el.remove());
-      link = document.createElement('link');
-      link.rel = 'icon';
-      link.type = 'image/png';
-      link.setAttribute('data-prizma', 'true');
-      document.head.appendChild(link);
-    }
-    return link;
-  }
-
-  const startTime = performance.now();
-  let lastFrame = 0;
-
-  function render(now: number) {
-    if (now - lastFrame < 83) { // ~12fps
-      animFrameId = requestAnimationFrame(render);
-      return;
-    }
-    lastFrame = now;
-    if (!ctx) return;
-
-    const elapsed = now - startTime;
-    const angle = (elapsed / ROTATION_DURATION) * Math.PI * 2;
-    const hueDeg = (elapsed / HUE_ROTATE_DURATION) * 360;
-
-    ctx.clearRect(0, 0, SIZE, SIZE);
-
-    const cx = SIZE / 2;
-    const cy = SIZE / 2 + 2;
-    const radius = SIZE * 0.40;
-
-    const pts: [number, number][] = [];
-    for (let i = 0; i < 3; i++) {
-      const a = angle + (i * Math.PI * 2) / 3 - Math.PI / 2;
-      pts.push([cx + Math.cos(a) * radius, cy + Math.sin(a) * radius]);
-    }
-
-    const rotatedColors = BASE_COLORS.map(([r, g, b]) => {
-      const [rr, gg, bb] = hueRotateRGB(r, g, b, hueDeg);
-      return `rgb(${rr},${gg},${bb})`;
-    });
-
-    ctx.lineWidth = 5;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-
-    // Edge 0→1
-    const g1 = ctx.createLinearGradient(pts[0][0], pts[0][1], pts[1][0], pts[1][1]);
-    g1.addColorStop(0, rotatedColors[0]);
-    g1.addColorStop(1, rotatedColors[2]);
-    ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); ctx.lineTo(pts[1][0], pts[1][1]);
-    ctx.strokeStyle = g1; ctx.stroke();
-
-    // Edge 1→2
-    const g2 = ctx.createLinearGradient(pts[1][0], pts[1][1], pts[2][0], pts[2][1]);
-    g2.addColorStop(0, rotatedColors[2]);
-    g2.addColorStop(1, rotatedColors[4]);
-    ctx.beginPath(); ctx.moveTo(pts[1][0], pts[1][1]); ctx.lineTo(pts[2][0], pts[2][1]);
-    ctx.strokeStyle = g2; ctx.stroke();
-
-    // Edge 2→0
-    const g3 = ctx.createLinearGradient(pts[2][0], pts[2][1], pts[0][0], pts[0][1]);
-    g3.addColorStop(0, rotatedColors[4]);
-    g3.addColorStop(1, rotatedColors[0]);
-    ctx.beginPath(); ctx.moveTo(pts[2][0], pts[2][1]); ctx.lineTo(pts[0][0], pts[0][1]);
-    ctx.strokeStyle = g3; ctx.stroke();
-
-    // Re-acquire link each frame in case Next.js swapped the head
-    const link = getOrCreateLink();
-    link.href = canvas.toDataURL('image/png');
-
-    animFrameId = requestAnimationFrame(render);
-  }
-
-  animFrameId = requestAnimationFrame(render);
-}
-
 export default function AnimatedFavicon() {
   useEffect(() => {
-    startFaviconAnimation();
-    // Never cleanup - the singleton keeps running across all page navigations
+    let animFrameId = 0;
+    let isCancelled = false;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    function getOrCreateLink(): HTMLLinkElement {
+      let link = document.querySelector("link[rel='icon'][data-prizma]") as HTMLLinkElement | null;
+      if (!link) {
+        document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']").forEach(el => el.remove());
+        link = document.createElement('link');
+        link.rel = 'icon';
+        link.type = 'image/png';
+        link.setAttribute('data-prizma', 'true');
+        if (document.head) {
+          document.head.appendChild(link);
+        }
+      }
+      return link;
+    }
+
+    const startTime = performance.now();
+    let lastFrame = 0;
+
+    function render(now: number) {
+      if (isCancelled) return;
+
+      try {
+        if (now - lastFrame >= 100) { // ~10fps to avoid browser throttling
+          lastFrame = now;
+
+          const elapsed = now - startTime;
+          const angle = (elapsed / ROTATION_DURATION) * Math.PI * 2;
+          const hueDeg = (elapsed / HUE_ROTATE_DURATION) * 360;
+
+          ctx!.clearRect(0, 0, SIZE, SIZE);
+
+          const cx = SIZE / 2;
+          const cy = SIZE / 2 + 2;
+          const radius = SIZE * 0.40;
+
+          const pts: [number, number][] = [];
+          for (let i = 0; i < 3; i++) {
+            const a = angle + (i * Math.PI * 2) / 3 - Math.PI / 2;
+            pts.push([cx + Math.cos(a) * radius, cy + Math.sin(a) * radius]);
+          }
+
+          const rotatedColors = BASE_COLORS.map(([r, g, b]) => {
+            const [rr, gg, bb] = hueRotateRGB(r, g, b, hueDeg);
+            return `rgb(${rr},${gg},${bb})`;
+          });
+
+          ctx!.lineWidth = 5;
+          ctx!.lineCap = 'round';
+          ctx!.lineJoin = 'round';
+
+          // Edge 0→1
+          const g1 = ctx!.createLinearGradient(pts[0][0], pts[0][1], pts[1][0], pts[1][1]);
+          g1.addColorStop(0, rotatedColors[0]);
+          g1.addColorStop(1, rotatedColors[2]);
+          ctx!.beginPath(); ctx!.moveTo(pts[0][0], pts[0][1]); ctx!.lineTo(pts[1][0], pts[1][1]);
+          ctx!.strokeStyle = g1; ctx!.stroke();
+
+          // Edge 1→2
+          const g2 = ctx!.createLinearGradient(pts[1][0], pts[1][1], pts[2][0], pts[2][1]);
+          g2.addColorStop(0, rotatedColors[2]);
+          g2.addColorStop(1, rotatedColors[4]);
+          ctx!.beginPath(); ctx!.moveTo(pts[1][0], pts[1][1]); ctx!.lineTo(pts[2][0], pts[2][1]);
+          ctx!.strokeStyle = g2; ctx!.stroke();
+
+          // Edge 2→0
+          const g3 = ctx!.createLinearGradient(pts[2][0], pts[2][1], pts[0][0], pts[0][1]);
+          g3.addColorStop(0, rotatedColors[4]);
+          g3.addColorStop(1, rotatedColors[0]);
+          ctx!.beginPath(); ctx!.moveTo(pts[2][0], pts[2][1]); ctx!.lineTo(pts[0][0], pts[0][1]);
+          ctx!.strokeStyle = g3; ctx!.stroke();
+
+          const link = getOrCreateLink();
+          link.href = canvas.toDataURL('image/png');
+        }
+      } catch (err) {
+        console.error("Favicon animation error:", err);
+        // Continue animation even if an error occurs in one frame
+      }
+
+      if (!isCancelled) {
+        animFrameId = requestAnimationFrame(render);
+      }
+    }
+
+    animFrameId = requestAnimationFrame(render);
+
+    return () => {
+      isCancelled = true;
+      cancelAnimationFrame(animFrameId);
+    };
   }, []);
 
   return null;
