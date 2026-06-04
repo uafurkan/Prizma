@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { DONUSUM_DATA, getFormatRenk } from '@/lib/donusum-data';
+import { DONUSUM_DATA, getFormatRenk, getDonusumPath } from '@/lib/donusum-data';
 
 export default function SearchBar({ lang }: { lang: string }) {
   const [query, setQuery] = useState('');
@@ -71,7 +71,7 @@ export default function SearchBar({ lang }: { lang: string }) {
           {results.map((res) => (
             <Link
               key={res.slug}
-              href={`/${lang}/${res.slug}`}
+              href={getDonusumPath(lang, res.slug)}
               className="flex items-center justify-between p-3 rounded-xl hover:bg-surface2 transition-colors group/item"
               onClick={() => setFocused(false)}
             >

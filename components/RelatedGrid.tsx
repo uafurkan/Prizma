@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import FormatBadge from '@/components/FormatBadge';
-import type { DonusumCift } from '@/lib/donusum-data';
+import { getDonusumPath, type DonusumCift } from '@/lib/donusum-data';
 
 export interface RelatedGridProps {
   items: DonusumCift[];
@@ -22,7 +22,7 @@ export default function RelatedGrid({ items, title = "Diğer Dönüşümler", la
           return (
             <Link
               key={d.slug}
-              href={`/${lang}/${d.slug}`}
+              href={getDonusumPath(lang, d.slug)}
               className="group flex flex-col p-4 rounded-xl border border-border bg-surface2 hover:border-muted/50 hover:bg-[#1a1a2e] transition-colors gap-3"
             >
             <div className="flex items-center gap-3 mb-3">

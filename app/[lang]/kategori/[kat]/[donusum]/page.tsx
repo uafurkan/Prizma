@@ -5,16 +5,19 @@ import type { Metadata } from 'next';
 import { getDictionary } from '@/dictionaries';
 
 interface PageProps {
-  params: Promise<{ lang: string; donusum: string }>;
+  params: Promise<{ lang: string; kat: string; donusum: string }>;
 }
 
 export async function generateStaticParams() {
   const locales = ['en', 'tr'];
-  const params: { lang: string; donusum: string }[] = [];
+  const params: { lang: string; kat: string; donusum: string }[] = [];
   
   locales.forEach(lang => {
     DONUSUM_DATA.forEach(d => {
-      params.push({ lang, donusum: d.slug });
+      // The 'kategori' path is nested under 'kategori/[kat]' for BOTH languages in the physical folder structure.
+      // But we will handle english via rewrite or proxy. For physical static params, we just use the raw category slug
+      // wait, actually, if the folder is `kategori/[kat]`, then `kat` must be the tr category slug for both.
+      params.push({ lang, kat: d.kategori, donusum: d.slug });
     });
   });
   
@@ -71,19 +74,19 @@ export default async function Page({ params }: PageProps) {
         '@type': 'HowToStep',
         name: dict.howTo.step1Title,
         text: dict.howTo.step1Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/${cift.slug}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
       },
       {
         '@type': 'HowToStep',
         name: dict.howTo.step2Title,
         text: dict.howTo.step2Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/${cift.slug}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
       },
       {
         '@type': 'HowToStep',
         name: dict.howTo.step3Title,
         text: dict.howTo.step3Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/${cift.slug}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
       },
     ],
   };

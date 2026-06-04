@@ -2,7 +2,7 @@ import Link from 'next/link';
 import UniversalConverter from '@/components/UniversalConverter';
 import AdSlot from '@/components/AdSlot';
 import FormatBadge from '@/components/FormatBadge';
-import { KATEGORILER, DONUSUM_DATA, getCategoryPath } from '@/lib/donusum-data';
+import { KATEGORILER, DONUSUM_DATA, getCategoryPath, getDonusumPath } from '@/lib/donusum-data';
 import { getDictionary } from '@/dictionaries';
 import SearchBar from '@/components/SearchBar';
 
@@ -132,7 +132,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             return (
               <Link
                 key={d.slug}
-                href={`/${lang}/${d.slug}`}
+                href={getDonusumPath(lang, d.slug)}
                 className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-5 hover:border-muted/50 hover:bg-surface2 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="flex items-center gap-3 mb-2">

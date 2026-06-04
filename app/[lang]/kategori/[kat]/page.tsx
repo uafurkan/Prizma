@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getDonusumlerByKategori, getKategoriBySlug, KATEGORILER, KategoriSlug } from '@/lib/donusum-data';
+import { getDonusumlerByKategori, getKategoriBySlug, KATEGORILER, KategoriSlug, getDonusumPath } from '@/lib/donusum-data';
 import FormatBadge from '@/components/FormatBadge';
 import AdSlot from '@/components/AdSlot';
 import type { Metadata } from 'next';
@@ -75,7 +75,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             return (
               <Link
                 key={d.slug}
-                href={`/${lang}/${d.slug}`}
+                href={getDonusumPath(lang, d.slug)}
                 className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-5 hover:border-muted/50 hover:bg-surface2 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="flex items-center gap-3 mb-2">
