@@ -59,7 +59,7 @@ export default function SearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setFocused(true)}
-          className="w-full py-4 pl-12 pr-4 bg-transparent text-[#e8e8f4] placeholder-[#5a5a7a] outline-none font-[family-name:var(--font-syne)] text-base"
+          className="w-full py-4 pl-12 pr-4 bg-transparent border-none text-[#e8e8f4] placeholder-[#5a5a7a] outline-none font-sans text-base"
         />
       </div>
 
@@ -77,7 +77,7 @@ export default function SearchBar() {
               className="flex items-center gap-3 px-5 py-3.5 hover:bg-[#12121e] transition-colors group"
             >
               <span
-                className="text-xs font-bold px-2.5 py-1 rounded-md font-[family-name:var(--font-jetbrains)]"
+                className="text-xs font-bold px-2.5 py-1 rounded-md font-mono"
                 style={{
                   color: getFormatRenk(d.from),
                   backgroundColor: `${getFormatRenk(d.from)}15`,
@@ -89,7 +89,7 @@ export default function SearchBar() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
               <span
-                className="text-xs font-bold px-2.5 py-1 rounded-md font-[family-name:var(--font-jetbrains)]"
+                className="text-xs font-bold px-2.5 py-1 rounded-md font-mono"
                 style={{
                   color: getFormatRenk(d.to),
                   backgroundColor: `${getFormatRenk(d.to)}15`,

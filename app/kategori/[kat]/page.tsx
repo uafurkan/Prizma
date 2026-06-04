@@ -21,8 +21,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   if (!kategori) return {};
 
   return {
-    title: `${kategori.baslik} — Ücretsiz Online`,
-    description: `${kategori.aciklama} 100% tarayıcıda, sunucuya dosya gönderilmez. Hızlı ve güvenli.`,
+    title: `${kategori.baslik} Dönüştürücüler — Ücretsiz Online`,
+    description: `${kategori.baslik} dönüştürme araçları. ${kategori.aciklama} 100% tarayıcıda, sunucuya dosya gönderilmez. Hızlı ve güvenli.`,
   };
 }
 
@@ -42,7 +42,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <div className="flex items-center justify-center md:justify-start gap-4">
           <span className="text-4xl md:text-5xl">{kategori.ikon}</span>
           <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-[#e8e8f4] to-[#5a5a7a] bg-clip-text text-transparent">
-            {kategori.baslik}
+            {kategori.baslik} Dönüştürücüler
           </h1>
         </div>
         <p className="text-[#5a5a7a] md:text-lg max-w-2xl font-medium">

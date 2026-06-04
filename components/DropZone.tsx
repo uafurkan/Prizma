@@ -80,7 +80,7 @@ export default function DropZone({ accept, multiple = false, onFiles, label }: D
           </svg>
         </div>
         <div className="text-center">
-          <p className="text-[#e8e8f4] font-semibold font-[family-name:var(--font-syne)] text-lg">
+          <p className="text-[#e8e8f4] font-semibold font-sans text-lg">
             {label || 'Dosyanızı sürükleyin veya tıklayın'}
           </p>
           <p className="text-[#5a5a7a] text-sm mt-1">

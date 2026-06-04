@@ -5,13 +5,13 @@ import Link from 'next/link';
 import { Analytics } from '@vercel/analytics/react';
 
 const syne = Syne({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   weight: ['400', '600', '700', '800'],
   variable: '--font-syne',
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   weight: ['400', '600', '700'],
   variable: '--font-jetbrains',
 });

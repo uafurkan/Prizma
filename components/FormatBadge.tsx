@@ -16,7 +16,7 @@ export default function FormatBadge({ format, size = 'md' }: FormatBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center font-bold rounded-lg font-[family-name:var(--font-jetbrains)] ${sizes[size]} transition-all`}
+      className={`inline-flex items-center font-bold rounded-lg font-mono ${sizes[size]} transition-all`}
       style={{
         color: renk,
         backgroundColor: `${renk}15`,

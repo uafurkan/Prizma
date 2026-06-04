@@ -12,7 +12,7 @@ export default function RelatedGrid({ items, title = 'İlgili Dönüşümler' }:
 
   return (
     <section>
-      <h2 className="text-xl font-bold font-[family-name:var(--font-syne)] text-[#e8e8f4] mb-6">
+      <h2 className="text-xl font-bold font-sans text-[#e8e8f4] mb-6">
         {title}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

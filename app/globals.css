@@ -23,7 +23,7 @@
   --foreground: var(--text);
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -36,8 +36,8 @@
   --color-prism-g: var(--g);
   --color-prism-b: var(--b);
   --color-prism-p: var(--p);
-  --font-syne: 'Syne', sans-serif;
-  --font-jetbrains: 'JetBrains Mono', monospace;
+  --font-sans: var(--font-syne), sans-serif;
+  --font-mono: var(--font-jetbrains), monospace;
 }
 
 * {
@@ -49,7 +49,7 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-syne);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -168,16 +168,16 @@ body {
 }
 
 /* ── Input Styles ── */
-input[type="text"],
+:where(input[type="text"],
 input[type="search"],
 input[type="number"],
-select {
+select) {
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 8px;
   padding: 10px 14px;
-  font-family: var(--font-jetbrains);
+  font-family: var(--font-mono);
   font-size: 13px;
   transition: border-color 0.2s ease;
 }
