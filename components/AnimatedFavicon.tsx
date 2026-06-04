@@ -64,21 +64,20 @@ export default function AnimatedFavicon() {
     if (!ctx) return;
 
     function updateLinks(dataUrl: string) {
-      let links = document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']");
-      if (links.length === 0) {
-        const link = document.createElement('link');
-        link.rel = 'icon';
-        link.type = 'image/png';
-        link.setAttribute('data-prizma', 'true');
-        if (document.head) document.head.appendChild(link);
-        links = document.querySelectorAll("link[rel='icon'][data-prizma]");
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.type = 'image/png';
+      link.setAttribute('data-prizma', 'true');
+      link.href = dataUrl;
+      
+      if (document.head) {
+        document.head.appendChild(link);
       }
       
-      links.forEach(link => {
-        const l = link as HTMLLinkElement;
-        l.href = dataUrl;
-        l.type = 'image/png';
-        l.removeAttribute('media');
+      // Sonradan eklediğimiz dışındaki tüm eski ikonları temizle (Böylece tarayıcı "ikon yok" sanıp loading göstermez)
+      const prevLinks = document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']");
+      prevLinks.forEach(el => {
+        if (el !== link) el.remove();
       });
     }
 
