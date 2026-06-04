@@ -15,6 +15,7 @@ import { getFFmpegArgs, getClipArgs } from '@/lib/converters/video-audio';
 import { convertViaCanvas, convertHEIC, imagesToPDF, pdfToImages } from '@/lib/converters/image';
 import { docxToHTML, textToPDF, mergePDFs, splitPDF, excelToCSV, csvToExcel } from '@/lib/converters/document';
 import { filesToZip, extractZip } from '@/lib/converters/archive';
+import { useGlobalFiles } from '@/components/FileProvider';
 
 interface ConvertPageProps {
   cift: DonusumCift;
@@ -46,6 +47,7 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
   const [localError, setLocalError] = useState<string | null>(null);
   const [ffmpegSupported, setFfmpegSupported] = useState(true);
   const [showInfoBanner, setShowInfoBanner] = useState(false);
+  const { globalFiles, setGlobalFiles } = useGlobalFiles();
 
   const {
     runFFmpeg,
@@ -85,7 +87,7 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
     }));
   };
 
-  const handleFiles = (selectedFiles: File[]) => {
+  const handleFiles = useCallback((selectedFiles: File[]) => {
     setLocalError(null);
     setResults([]);
     
@@ -106,7 +108,15 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
     }
 
     setFiles(validFiles);
-  };
+  }, [cift.fromExt]);
+
+  // Handle Global Files (from Universal Converter)
+  useEffect(() => {
+    if (globalFiles && globalFiles.length > 0) {
+      handleFiles(globalFiles);
+      setGlobalFiles([]); // Clear context so they don't persist on subsequent visits
+    }
+  }, [globalFiles, handleFiles, setGlobalFiles]);
 
   const handleReset = () => {
     setFiles([]);

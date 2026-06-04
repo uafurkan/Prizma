@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import SearchBar from '@/components/SearchBar';
+import UniversalConverter from '@/components/UniversalConverter';
 import AdSlot from '@/components/AdSlot';
 import FormatBadge from '@/components/FormatBadge';
 import { KATEGORILER, DONUSUM_DATA } from '@/lib/donusum-data';
@@ -73,9 +73,9 @@ export default function Home() {
           Dosyalarınız hiçbir zaman bir sunucuya yüklenmez, gizliliğiniz tamamen korunur.
         </p>
 
-        {/* Search Bar Island */}
-        <div className="w-full max-w-2xl mt-4">
-          <SearchBar />
+        {/* Universal Converter Island */}
+        <div className="w-full mt-8">
+          <UniversalConverter />
         </div>
       </section>
 
