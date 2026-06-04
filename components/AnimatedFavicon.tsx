@@ -63,22 +63,25 @@ export default function AnimatedFavicon() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Sadece bir kere ikon elementi oluştur
+    let faviconLink = document.getElementById('dynamic-prizma-favicon') as HTMLLinkElement | null;
+    if (!faviconLink) {
+      faviconLink = document.createElement('link');
+      faviconLink.id = 'dynamic-prizma-favicon';
+      faviconLink.rel = 'icon';
+      faviconLink.type = 'image/png';
+      if (document.head) document.head.appendChild(faviconLink);
+    }
+    
+    // Eski/istenmeyen ikonları temizle
+    document.querySelectorAll("link[rel='icon']:not(#dynamic-prizma-favicon), link[rel='shortcut icon']:not(#dynamic-prizma-favicon)").forEach(el => el.remove());
+
     function updateLinks(dataUrl: string) {
-      const link = document.createElement('link');
-      link.rel = 'icon';
-      link.type = 'image/png';
-      link.setAttribute('data-prizma', 'true');
-      link.href = dataUrl;
-      
-      if (document.head) {
-        document.head.appendChild(link);
+      if (faviconLink) {
+        faviconLink.href = dataUrl;
       }
-      
-      // Sonradan eklediğimiz dışındaki tüm eski ikonları temizle (Böylece tarayıcı "ikon yok" sanıp loading göstermez)
-      const prevLinks = document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']");
-      prevLinks.forEach(el => {
-        if (el !== link) el.remove();
-      });
+    }
+
     const startTime = performance.now();
     let animFrameId: number;
     let lastRenderTime = 0;
@@ -140,13 +143,9 @@ export default function AnimatedFavicon() {
       }
     }
 
-    function loop(now: number) {
+    function loop() {
       if (isCancelled) return;
-      // 30fps limiti (yaklaşık 33ms). 60fps tarayıcıyı yorabilir.
-      if (now - lastRenderTime >= 33) {
-        render();
-        lastRenderTime = now;
-      }
+      render();
       animFrameId = requestAnimationFrame(loop);
     }
 
