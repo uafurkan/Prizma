@@ -29,6 +29,7 @@ import AnimatedFavicon from '@/components/AnimatedFavicon';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import ThemeToggle from '@/components/ThemeToggle';
 import HeaderNav from '@/components/HeaderNav';
+import MobileMenu from '@/components/MobileMenu';
 
 export default async function RootLayout({
   children,
@@ -67,7 +68,8 @@ export default async function RootLayout({
                   PRİZMA
                 </span>
               </Link>
-              <nav className="flex items-center gap-4 md:gap-6 overflow-x-auto no-scrollbar max-w-[65%] whitespace-nowrap">
+              {/* Desktop Nav */}
+              <nav className="hidden md:flex items-center gap-4 md:gap-6 max-w-[65%] whitespace-nowrap">
                 <ThemeToggle />
                 <LanguageSwitcher currentLang={lang} />
                 <HeaderNav lang={lang} dict={dict} />
@@ -77,6 +79,12 @@ export default async function RootLayout({
                   </svg>
                 </a>
               </nav>
+
+              {/* Mobile Nav */}
+              <MobileMenu lang={lang} dict={dict}>
+                <ThemeToggle />
+                <LanguageSwitcher currentLang={lang} />
+              </MobileMenu>
             </div>
           </header>
 
