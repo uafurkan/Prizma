@@ -1,40 +1,38 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { getTranslatedPath } from '@/lib/donusum-data';
 
 export default function LanguageSwitcher({ currentLang }: { currentLang: string }) {
-  const router = useRouter();
   const pathname = usePathname();
 
-  const switchLanguage = (lang: string) => {
-    if (!pathname) return;
-    const newPath = getTranslatedPath(pathname, currentLang, lang);
-    router.push(newPath);
+  const getHref = (lang: string) => {
+    if (!pathname) return `/${lang}`;
+    return getTranslatedPath(pathname, currentLang, lang);
   };
 
   return (
     <div className="flex items-center gap-1 bg-surface2 border border-border rounded-xl p-1">
-      <button
-        onClick={() => switchLanguage('en')}
+      <a
+        href={getHref('en')}
         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
           currentLang === 'en'
-            ? 'bg-prism-b/20 text-prism-b'
+            ? 'bg-prism-b/20 text-prism-b pointer-events-none'
             : 'text-muted hover:text-foreground'
         }`}
       >
         EN
-      </button>
-      <button
-        onClick={() => switchLanguage('tr')}
+      </a>
+      <a
+        href={getHref('tr')}
         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
           currentLang === 'tr'
-            ? 'bg-prism-r/20 text-prism-r'
+            ? 'bg-prism-r/20 text-prism-r pointer-events-none'
             : 'text-muted hover:text-foreground'
         }`}
       >
         TR
-      </button>
+      </a>
     </div>
   );
 }
