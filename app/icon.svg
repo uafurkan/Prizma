@@ -1,24 +1,18 @@
-<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="#ff4d6d" />
-      <stop offset="20%" stopColor="#ff8c42" />
-      <stop offset="40%" stopColor="#ffd166" />
-      <stop offset="60%" stopColor="#06d6a0" />
-      <stop offset="80%" stopColor="#4d9fff" />
-      <stop offset="100%" stopColor="#b56cff" />
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4d6d">
+        <animate attributeName="stop-color" values="#ff4d6d;#ff8c42;#ffd166;#06d6a0;#4d9fff;#b56cff;#ff4d6d" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" stop-color="#06d6a0">
+        <animate attributeName="stop-color" values="#06d6a0;#4d9fff;#b56cff;#ff4d6d;#ff8c42;#ffd166;#06d6a0" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#b56cff">
+        <animate attributeName="stop-color" values="#b56cff;#ff4d6d;#ff8c42;#ffd166;#06d6a0;#4d9fff;#b56cff" dur="4s" repeatCount="indefinite"/>
+      </stop>
     </linearGradient>
   </defs>
-  <polygon
-    points="50,15 15,80 85,80"
-    stroke="url(#rainbow)"
-    stroke-width="10"
-    style="transform-origin: 50% 55%; animation: spin-slow 8s linear infinite;"
-  />
-  <style>
-    @keyframes spin-slow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-  </style>
+  <polygon points="50,8 8,85 92,85" fill="url(#g1)" stroke="none">
+    <animateTransform attributeName="transform" type="rotate" from="0 50 55" to="360 50 55" dur="8s" repeatCount="indefinite"/>
+  </polygon>
 </svg>
