@@ -68,7 +68,7 @@ export default async function RootLayout({
                   className="font-extrabold text-2xl tracking-tighter bg-gradient-to-r from-prism-r via-prism-o via-prism-y via-prism-g via-prism-b to-prism-p bg-clip-text text-transparent group-hover:opacity-90 transition-opacity animate-gradient-text select-none"
                   style={{ WebkitTouchCallout: 'none' }}
                 >
-                  PRİZMA
+                  {lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}
                 </span>
               </Link>
               {/* Desktop Nav */}
