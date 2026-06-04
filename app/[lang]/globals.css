@@ -22,6 +22,12 @@
 
   --background: var(--bg);
   --foreground: var(--text);
+
+  /* Mobile Menu specific colors (Light Mode) */
+  --mobile-menu-bg: #ffd166;
+  --mobile-menu-text: #000000;
+  --mobile-menu-active: #0d1424;
+  --mobile-menu-close: #000000;
 }
 
 .dark {
@@ -42,6 +48,12 @@
   --p: #b56cff;
 
   --prism: linear-gradient(135deg, #ff4d6d, #ff8c42, #ffd166, #06d6a0, #4d9fff, #b56cff);
+
+  /* Mobile Menu specific colors (Dark Mode) */
+  --mobile-menu-bg: #0d1424;
+  --mobile-menu-text: #e2e8f0; /* slate-200 */
+  --mobile-menu-active: var(--y); /* prism-y */
+  --mobile-menu-close: #ffffff;
 }
 
 @theme {

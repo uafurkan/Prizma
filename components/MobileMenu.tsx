@@ -63,14 +63,14 @@ export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
       {/* Full Screen Overlay Menu */}
       {mounted && createPortal(
         <div
-          className={`fixed inset-0 z-[9999] bg-[#ffd166] dark:bg-[#0d1424] flex flex-col items-center justify-center transition-all duration-300 ease-in-out ${
+          className={`fixed inset-0 z-[9999] bg-[var(--mobile-menu-bg)] flex flex-col items-center justify-center transition-all duration-300 ease-in-out ${
             isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
           }`}
         >
           {/* Close Icon */}
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute top-6 right-6 text-black dark:text-white p-2 focus:outline-none"
+            className="absolute top-6 right-6 text-[var(--mobile-menu-close)] p-2 focus:outline-none hover:opacity-80 transition-opacity"
             aria-label="Close Menu"
           >
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,8 +82,8 @@ export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
           <nav className="flex flex-col items-center gap-8 w-full px-6">
             <Link
               href={`/${lang}`}
-              className={`text-2xl font-serif tracking-wider transition-colors ${
-                pathname === `/${lang}` ? 'text-[#0d1424] dark:text-prism-y' : 'text-black dark:text-slate-200 hover:text-black/70 dark:hover:text-white'
+              className={`text-2xl font-serif tracking-wider transition-all ${
+                pathname === `/${lang}` ? 'text-[var(--mobile-menu-active)]' : 'text-[var(--mobile-menu-text)] hover:opacity-70'
               }`}
             >
               {dict.common.home || 'Home'}
@@ -97,8 +97,8 @@ export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
                 <Link
                   key={cat.slug}
                   href={catPath}
-                  className={`text-2xl font-serif tracking-wider transition-colors ${
-                    isActive ? 'text-[#0d1424] dark:text-prism-y' : 'text-black dark:text-slate-200 hover:text-black/70 dark:hover:text-white'
+                  className={`text-2xl font-serif tracking-wider transition-all ${
+                    isActive ? 'text-[var(--mobile-menu-active)]' : 'text-[var(--mobile-menu-text)] hover:opacity-70'
                   }`}
                 >
                   {cat.name}
