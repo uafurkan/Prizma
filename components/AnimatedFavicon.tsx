@@ -83,16 +83,13 @@ export default function AnimatedFavicon() {
     }
 
     const startTime = performance.now();
-    let lastFrame = 0;
 
-    function render(now: number) {
+    function render() {
       if (isCancelled) return;
 
       try {
-        if (now - lastFrame >= 100) { // ~10fps to avoid browser throttling
-          lastFrame = now;
-
-          const elapsed = now - startTime;
+        const now = performance.now();
+        const elapsed = now - startTime;
           const angle = (elapsed / ROTATION_DURATION) * Math.PI * 2;
           const hueDeg = (elapsed / HUE_ROTATE_DURATION) * 360;
 
@@ -139,22 +136,16 @@ export default function AnimatedFavicon() {
           ctx!.strokeStyle = g3; ctx!.stroke();
 
           updateLinks(canvas.toDataURL('image/png'));
-        }
       } catch (err) {
         console.error("Favicon animation error:", err);
-        // Continue animation even if an error occurs in one frame
-      }
-
-      if (!isCancelled) {
-        animFrameId = requestAnimationFrame(render);
       }
     }
 
-    animFrameId = requestAnimationFrame(render);
+    const intervalId = window.setInterval(render, 100);
 
     return () => {
       isCancelled = true;
-      cancelAnimationFrame(animFrameId);
+      window.clearInterval(intervalId);
     };
   }, []);
 
