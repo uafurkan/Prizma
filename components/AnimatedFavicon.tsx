@@ -63,24 +63,23 @@ export default function AnimatedFavicon() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    function getOrCreateLink(): HTMLLinkElement {
-      let link = document.querySelector("link[rel='icon'][data-prizma]") as HTMLLinkElement | null;
-      
-      // Always clean up any rogue icons injected by Next.js metadata during navigation
-      document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']").forEach(el => {
-        if (!el.hasAttribute('data-prizma')) el.remove();
-      });
-
-      if (!link) {
-        link = document.createElement('link');
+    function updateLinks(dataUrl: string) {
+      let links = document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']");
+      if (links.length === 0) {
+        const link = document.createElement('link');
         link.rel = 'icon';
         link.type = 'image/png';
         link.setAttribute('data-prizma', 'true');
-        if (document.head) {
-          document.head.appendChild(link);
-        }
+        if (document.head) document.head.appendChild(link);
+        links = document.querySelectorAll("link[rel='icon'][data-prizma]");
       }
-      return link;
+      
+      links.forEach(link => {
+        const l = link as HTMLLinkElement;
+        l.href = dataUrl;
+        l.type = 'image/png';
+        l.removeAttribute('media');
+      });
     }
 
     const startTime = performance.now();
@@ -139,8 +138,7 @@ export default function AnimatedFavicon() {
           ctx!.beginPath(); ctx!.moveTo(pts[2][0], pts[2][1]); ctx!.lineTo(pts[0][0], pts[0][1]);
           ctx!.strokeStyle = g3; ctx!.stroke();
 
-          const link = getOrCreateLink();
-          link.href = canvas.toDataURL('image/png');
+          updateLinks(canvas.toDataURL('image/png'));
         }
       } catch (err) {
         console.error("Favicon animation error:", err);
