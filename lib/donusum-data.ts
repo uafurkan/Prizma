@@ -9,7 +9,8 @@ export type ConverterType =
   | 'mammoth'
   | 'sheetjs'
   | 'jszip'
-  | 'subsrt';
+  | 'subsrt'
+  | 'whisper';
 
 export interface Secenek {
   id: string;
@@ -455,6 +456,107 @@ export const DONUSUM_DATA: DonusumCift[] = [
     aciklama: { en: 'Convert your lossless FLAC files to MP3 format.', tr: 'Kayıpsız FLAC dosyalarınızı MP3 formatına dönüştürün.' },
     populer: false,
     ffmpegArgs: ['-acodec', 'libmp3lame', '-b:a', '320k'],
+  },
+
+  {
+    slug: 'mp3-to-txt',
+    from: 'MP3',
+    to: 'TXT',
+    fromExt: 'mp3',
+    toExt: 'txt',
+    kategori: 'ses',
+    converter: 'whisper',
+    baslik: { en: 'MP3 → TXT (Speech to Text)', tr: 'MP3 → TXT (Sesi Yazıya Dök)' },
+    aciklama: { en: 'Transcribe your MP3 audio files to text using AI directly in your browser.', tr: 'MP3 ses dosyalarınızı tarayıcınızda yapay zeka ile yazıya dökün.' },
+    populer: true,
+    secenekler: [
+      {
+        id: 'language',
+        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        type: 'select',
+        default: 'turkish',
+        options: [
+          { value: 'turkish', label: 'Türkçe' },
+          { value: 'english', label: 'English' },
+          { value: 'auto', label: 'Auto Detect' }
+        ]
+      }
+    ]
+  },
+  {
+    slug: 'wav-to-txt',
+    from: 'WAV',
+    to: 'TXT',
+    fromExt: 'wav',
+    toExt: 'txt',
+    kategori: 'ses',
+    converter: 'whisper',
+    baslik: { en: 'WAV → TXT (Speech to Text)', tr: 'WAV → TXT (Sesi Yazıya Dök)' },
+    aciklama: { en: 'Transcribe your WAV audio files to text using AI directly in your browser.', tr: 'WAV ses dosyalarınızı tarayıcınızda yapay zeka ile yazıya dökün.' },
+    populer: false,
+    secenekler: [
+      {
+        id: 'language',
+        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        type: 'select',
+        default: 'turkish',
+        options: [
+          { value: 'turkish', label: 'Türkçe' },
+          { value: 'english', label: 'English' },
+          { value: 'auto', label: 'Auto Detect' }
+        ]
+      }
+    ]
+  },
+  {
+    slug: 'ogg-to-txt',
+    from: 'OGG',
+    to: 'TXT',
+    fromExt: 'ogg',
+    toExt: 'txt',
+    kategori: 'ses',
+    converter: 'whisper',
+    baslik: { en: 'OGG → TXT (Speech to Text)', tr: 'OGG → TXT (Sesi Yazıya Dök)' },
+    aciklama: { en: 'Transcribe your OGG audio files to text using AI.', tr: 'OGG ses dosyalarınızı yapay zeka ile yazıya dökün.' },
+    populer: false,
+    secenekler: [
+      {
+        id: 'language',
+        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        type: 'select',
+        default: 'turkish',
+        options: [
+          { value: 'turkish', label: 'Türkçe' },
+          { value: 'english', label: 'English' },
+          { value: 'auto', label: 'Auto Detect' }
+        ]
+      }
+    ]
+  },
+  {
+    slug: 'm4a-to-txt',
+    from: 'M4A',
+    to: 'TXT',
+    fromExt: 'm4a',
+    toExt: 'txt',
+    kategori: 'ses',
+    converter: 'whisper',
+    baslik: { en: 'M4A → TXT (Speech to Text)', tr: 'M4A → TXT (Sesi Yazıya Dök)' },
+    aciklama: { en: 'Transcribe your M4A audio files to text using AI.', tr: 'M4A ses dosyalarınızı yapay zeka ile yazıya dökün.' },
+    populer: false,
+    secenekler: [
+      {
+        id: 'language',
+        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        type: 'select',
+        default: 'turkish',
+        options: [
+          { value: 'turkish', label: 'Türkçe' },
+          { value: 'english', label: 'English' },
+          { value: 'auto', label: 'Auto Detect' }
+        ]
+      }
+    ]
   },
 
   // ===== BELGE =====

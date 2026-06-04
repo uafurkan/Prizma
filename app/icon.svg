@@ -1,0 +1,24 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#ff4d6d" />
+      <stop offset="20%" stopColor="#ff8c42" />
+      <stop offset="40%" stopColor="#ffd166" />
+      <stop offset="60%" stopColor="#06d6a0" />
+      <stop offset="80%" stopColor="#4d9fff" />
+      <stop offset="100%" stopColor="#b56cff" />
+    </linearGradient>
+  </defs>
+  <polygon
+    points="50,15 15,80 85,80"
+    stroke="url(#rainbow)"
+    stroke-width="10"
+    style="transform-origin: 50% 55%; animation: spin-slow 8s linear infinite;"
+  />
+  <style>
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</svg>

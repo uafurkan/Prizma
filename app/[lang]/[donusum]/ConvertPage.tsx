@@ -16,6 +16,7 @@ import { convertViaCanvas, convertHEIC, imagesToPDF, pdfToImages } from '@/lib/c
 import { docxToHTML, textToPDF, mergePDFs, splitPDF, excelToCSV, csvToExcel } from '@/lib/converters/document';
 import { filesToZip, extractZip } from '@/lib/converters/archive';
 import { convertSubtitle } from '@/lib/converters/subtitle';
+import { convertSpeechToText } from '@/lib/converters/speech-to-text';
 import { useGlobalFiles } from '@/components/FileProvider';
 import { getDictionary } from '@/dictionaries';
 
@@ -235,6 +236,31 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
             });
           }
           setLocalProgress(90);
+          break;
+        }
+        case 'whisper': {
+          setLocalProgress(5);
+          for (const file of files) {
+            const langOption = options['language'] ? String(options['language']) : 'turkish';
+            const res = await convertSpeechToText(
+              file,
+              { language: langOption },
+              (data) => {
+                if (data.status === 'progress' && data.progress) {
+                  // Downloading model progress (5% to 50%)
+                  setLocalProgress(5 + (data.progress * 0.45));
+                } else if (data.status === 'ready') {
+                  setLocalProgress(50);
+                } else if (data.status === 'decoding') {
+                  setLocalProgress(60);
+                } else if (data.status === 'inferencing') {
+                  setLocalProgress(75);
+                }
+              }
+            );
+            finalResults.push(res);
+          }
+          setLocalProgress(95);
           break;
         }
         case 'pdf-lib': {
