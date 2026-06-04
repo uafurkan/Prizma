@@ -123,6 +123,11 @@
   .animate-spin-slow {
     animation: spin-slow 20s linear infinite;
   }
+
+  .animate-gradient-text {
+    background-size: 300% 300%;
+    animation: gradient-move 12s ease infinite;
+  }
 }
 
 @layer components {
@@ -184,6 +189,14 @@
   @keyframes spin-slow {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
+  }
+
+  @keyframes gradient-move {
+    0% { background-position: 0% 0%; }
+    25% { background-position: 100% 0%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+    100% { background-position: 0% 0%; }
   }
 
   /* ── Input Styles ── */

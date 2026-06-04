@@ -53,7 +53,7 @@ export default function RootLayout({
           <header className="border-b border-[#1c1c2e] bg-[#06060c]/85 backdrop-blur-md sticky top-0 z-50">
             <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
               <Link href="/" className="group flex items-center gap-2">
-                <span className="font-extrabold text-2xl tracking-tighter bg-gradient-to-r from-[#ff4d6d] via-[#ff8c42] via-[#ffd166] via-[#06d6a0] via-[#4d9fff] to-[#b56cff] bg-clip-text text-transparent group-hover:opacity-90 transition-opacity">
+                <span className="font-extrabold text-2xl tracking-tighter bg-gradient-to-r from-[#ff4d6d] via-[#ff8c42] via-[#ffd166] via-[#06d6a0] via-[#4d9fff] to-[#b56cff] bg-clip-text text-transparent group-hover:opacity-90 transition-opacity animate-gradient-text">
                   PRİZMA
                 </span>
               </Link>
