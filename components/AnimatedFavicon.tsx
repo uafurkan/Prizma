@@ -83,8 +83,6 @@ export default function AnimatedFavicon() {
     }
 
     const startTime = performance.now();
-    let animFrameId: number;
-    let lastRenderTime = 0;
 
     function render() {
       if (isCancelled) return;
