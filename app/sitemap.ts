@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { DONUSUM_DATA, KATEGORILER } from '@/lib/donusum-data';
+import { DONUSUM_DATA, KATEGORILER, getCategoryPath } from '@/lib/donusum-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app';
@@ -14,13 +14,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Category routes
-  const categoryRoutes = KATEGORILER.map((cat) => ({
-    url: `${baseUrl}/kategori/${cat.slug}`,
+  // Category routes (Both TR and EN)
+  const categoryRoutesTR = KATEGORILER.map((cat) => ({
+    url: `${baseUrl}${getCategoryPath('tr', cat.slug)}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
+  const categoryRoutesEN = KATEGORILER.map((cat) => ({
+    url: `${baseUrl}${getCategoryPath('en', cat.slug)}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+  const categoryRoutes = [...categoryRoutesTR, ...categoryRoutesEN];
 
   // Conversion routes
   const conversionRoutes = DONUSUM_DATA.map((d) => ({

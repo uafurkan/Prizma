@@ -89,11 +89,24 @@ export const KATEGORILER: Kategori[] = [
   {
     slug: 'altyazi',
     baslik: { en: 'Subtitle', tr: 'Altyazı' },
-    aciklama: { en: 'Convert between SRT, VTT, ASS, SUB and other subtitle formats.', tr: 'SRT, VTT, ASS, SUB ve diğer altyazı formatları arasında dönüştürme yapın.' },
-    ikon: '💬',
-    renk: '#b56cff',
+    aciklama: { en: 'Convert SRT, VTT, SUB subtitle files.', tr: 'SRT, VTT, SUB altyazı dosyalarını dönüştürün.' },
+    ikon: '📝',
+    renk: '#ffb703',
   },
 ];
+
+export function getCategoryPath(lang: string, catSlug: string): string {
+  if (lang === 'tr') return `/tr/kategori/${catSlug}`;
+  const enMap: Record<string, string> = {
+    'goruntu': 'image',
+    'video': 'video',
+    'ses': 'audio',
+    'belge': 'document',
+    'arsiv': 'archive',
+    'altyazi': 'subtitle'
+  };
+  return `/en/category/${enMap[catSlug] || catSlug}`;
+}
 
 export const DONUSUM_DATA: DonusumCift[] = [
   // ===== GÖRÜNTÜ =====

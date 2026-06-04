@@ -2,7 +2,7 @@ import Link from 'next/link';
 import UniversalConverter from '@/components/UniversalConverter';
 import AdSlot from '@/components/AdSlot';
 import FormatBadge from '@/components/FormatBadge';
-import { KATEGORILER, DONUSUM_DATA } from '@/lib/donusum-data';
+import { KATEGORILER, DONUSUM_DATA, getCategoryPath } from '@/lib/donusum-data';
 import { getDictionary } from '@/dictionaries';
 import SearchBar from '@/components/SearchBar';
 
@@ -102,7 +102,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             return (
               <Link
                 key={c.slug}
-                href={`/${lang}/kategori/${c.slug}`}
+                href={getCategoryPath(lang, c.slug)}
                 className="group relative overflow-hidden rounded-2xl border border-[#1c1c2e] bg-[#0d0d18] p-6 hover:bg-[#12121e] hover:border-[#5a5a7a]/50 transition-all duration-300 flex flex-col justify-between min-h-[160px]"
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#e8e8f4]/5 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
