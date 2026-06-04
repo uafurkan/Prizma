@@ -59,7 +59,10 @@ export default function UniversalConverter() {
   };
 
   const availablePairs = detectedExt 
-    ? DONUSUM_DATA.filter(d => d.fromExt.toLowerCase() === detectedExt || d.fromExt === '*')
+    ? DONUSUM_DATA.filter(d => 
+        d.fromExt.toLowerCase() === detectedExt || 
+        (d.fromExt === '*' && files.length > 1)
+      )
     : [];
 
   return (
