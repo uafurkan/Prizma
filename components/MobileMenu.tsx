@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { getCategoryPath } from '@/lib/donusum-data';
@@ -13,7 +14,12 @@ interface MobileMenuProps {
 
 export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname() || '';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Prevent scroll when menu is open
   useEffect(() => {
@@ -55,55 +61,58 @@ export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
       </button>
 
       {/* Full Screen Overlay Menu */}
-      <div
-        className={`fixed inset-0 z-[100] bg-[#0d1424] flex flex-col items-center justify-center transition-all duration-300 ease-in-out ${
-          isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
-        }`}
-      >
-        {/* Close Icon */}
-        <button
-          onClick={() => setIsOpen(false)}
-          className="absolute top-6 right-6 text-white p-2 focus:outline-none"
-          aria-label="Close Menu"
+      {mounted && createPortal(
+        <div
+          className={`fixed inset-0 z-[9999] bg-[#0d1424] flex flex-col items-center justify-center transition-all duration-300 ease-in-out ${
+            isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+          }`}
         >
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        {/* Menu Links */}
-        <nav className="flex flex-col items-center gap-8 w-full px-6">
-          <Link
-            href={`/${lang}`}
-            className={`text-2xl font-serif tracking-wider transition-colors ${
-              pathname === `/${lang}` ? 'text-prism-y' : 'text-slate-200 hover:text-white'
-            }`}
+          {/* Close Icon */}
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-6 right-6 text-white p-2 focus:outline-none"
+            aria-label="Close Menu"
           >
-            {dict.common.home || 'Home'}
-          </Link>
-          
-          {categories.map((cat) => {
-            const catPath = getCategoryPath(lang, cat.slug);
-            const isActive = pathname === catPath || pathname.startsWith(`${catPath}/`);
-            
-            return (
-              <Link
-                key={cat.slug}
-                href={catPath}
-                className={`text-2xl font-serif tracking-wider transition-colors ${
-                  isActive ? 'text-prism-y' : 'text-slate-200 hover:text-white'
-                }`}
-              >
-                {cat.name}
-              </Link>
-            );
-          })}
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
 
-          <div className="flex items-center gap-6 mt-8 pt-8 border-t border-slate-700/50">
-            {children}
-          </div>
-        </nav>
-      </div>
+          {/* Menu Links */}
+          <nav className="flex flex-col items-center gap-8 w-full px-6">
+            <Link
+              href={`/${lang}`}
+              className={`text-2xl font-serif tracking-wider transition-colors ${
+                pathname === `/${lang}` ? 'text-prism-y' : 'text-slate-200 hover:text-white'
+              }`}
+            >
+              {dict.common.home || 'Home'}
+            </Link>
+            
+            {categories.map((cat) => {
+              const catPath = getCategoryPath(lang, cat.slug);
+              const isActive = pathname === catPath || pathname.startsWith(`${catPath}/`);
+              
+              return (
+                <Link
+                  key={cat.slug}
+                  href={catPath}
+                  className={`text-2xl font-serif tracking-wider transition-colors ${
+                    isActive ? 'text-prism-y' : 'text-slate-200 hover:text-white'
+                  }`}
+                >
+                  {cat.name}
+                </Link>
+              );
+            })}
+
+            <div className="flex items-center gap-6 mt-8 pt-8 border-t border-slate-700/50">
+              {children}
+            </div>
+          </nav>
+        </div>,
+        document.body
+      )}
     </>
   );
 }
