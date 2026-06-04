@@ -55,11 +55,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <section className="flex flex-col gap-4 text-center md:text-left pt-6">
         <div className="flex items-center justify-center md:justify-start gap-4">
           <span className="text-4xl md:text-5xl">{kategori.ikon}</span>
-          <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-[#e8e8f4] to-[#5a5a7a] bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-foreground to-muted bg-clip-text text-transparent">
             {baslik}
           </h1>
         </div>
-        <p className="text-[#5a5a7a] md:text-lg max-w-2xl font-medium">
+        <p className="text-muted md:text-lg max-w-2xl font-medium">
           {aciklama}
         </p>
       </section>
@@ -76,16 +76,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <Link
                 key={d.slug}
                 href={`/${lang}/${d.slug}`}
-                className="group relative overflow-hidden rounded-2xl border border-[#1c1c2e] bg-[#0d0d18] p-5 hover:border-[#5a5a7a]/50 hover:bg-[#12121e] transition-all duration-300 flex flex-col justify-between"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-5 hover:border-muted/50 hover:bg-surface2 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="flex items-center gap-3 mb-2">
                   <FormatBadge format={d.from} size="sm" />
-                  <svg className="w-4 h-4 text-[#5a5a7a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                   <FormatBadge format={d.to} size="sm" />
                 </div>
-                <p className="text-xs text-[#5a5a7a] line-clamp-2 mt-2 leading-relaxed">
+                <p className="text-xs text-muted line-clamp-2 mt-2 leading-relaxed">
                   {dAciklama}
                 </p>
               </Link>

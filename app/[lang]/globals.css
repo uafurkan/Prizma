@@ -2,13 +2,14 @@
 
 /* ── PRİZMA Design System ── */
 :root {
-  --bg: #06060c;
-  --surface: #0d0d18;
-  --surface2: #12121e;
-  --border: #1c1c2e;
-  --text: #e8e8f4;
-  --muted: #5a5a7a;
-  --code-bg: #090912;
+  /* Light Mode (Creamy White Default) */
+  --bg: #fdfbf7;
+  --surface: #f7f4ea;
+  --surface2: #ebe5d5;
+  --border: #d8d2c2;
+  --text: #1a1a24;
+  --muted: #7a7a94;
+  --code-bg: #f4f1e8;
 
   --r: #ff4d6d;
   --o: #ff8c42;
@@ -21,6 +22,17 @@
 
   --background: var(--bg);
   --foreground: var(--text);
+}
+
+.dark {
+  /* Dark Mode */
+  --bg: #06060c;
+  --surface: #0d0d18;
+  --surface2: #12121e;
+  --border: #1c1c2e;
+  --text: #e8e8f4;
+  --muted: #5a5a7a;
+  --code-bg: #090912;
 }
 
 @theme {
@@ -159,10 +171,10 @@
 
   /* ── Glassmorphism ── */
   .glass {
-    background: rgba(13, 13, 24, 0.7);
+    background: rgba(var(--surface-rgb, 13, 13, 24), 0.7);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(var(--text-rgb, 255, 255, 255), 0.06);
   }
 
   /* ── Keyframes ── */

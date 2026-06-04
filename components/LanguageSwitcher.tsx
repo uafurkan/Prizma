@@ -14,13 +14,13 @@ export default function LanguageSwitcher({ currentLang }: { currentLang: string 
   };
 
   return (
-    <div className="flex items-center gap-1 bg-[#12121e] border border-[#1c1c2e] rounded-xl p-1">
+    <div className="flex items-center gap-1 bg-surface2 border border-border rounded-xl p-1">
       <button
         onClick={() => switchLanguage('en')}
         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
           currentLang === 'en'
-            ? 'bg-[#4d9fff]/20 text-[#4d9fff]'
-            : 'text-[#5a5a7a] hover:text-[#e8e8f4]'
+            ? 'bg-prism-b/20 text-prism-b'
+            : 'text-muted hover:text-foreground'
         }`}
       >
         EN
@@ -29,8 +29,8 @@ export default function LanguageSwitcher({ currentLang }: { currentLang: string 
         onClick={() => switchLanguage('tr')}
         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
           currentLang === 'tr'
-            ? 'bg-[#ff4d6d]/20 text-[#ff4d6d]'
-            : 'text-[#5a5a7a] hover:text-[#e8e8f4]'
+            ? 'bg-prism-r/20 text-prism-r'
+            : 'text-muted hover:text-foreground'
         }`}
       >
         TR

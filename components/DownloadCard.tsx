@@ -82,13 +82,13 @@ export default function DownloadCard({ results, onReset }: DownloadCardProps) {
     const diffPercentage = Math.abs(100 - ratio).toFixed(0);
 
     return (
-      <div className="relative overflow-hidden rounded-2xl border border-[#1c1c2e] bg-[#0d0d18] p-6 flex flex-col gap-6 animate-fade-in">
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-surface p-6 flex flex-col gap-6 animate-fade-in">
         {/* Glow effect */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[#06d6a0]/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-prism-g/5 rounded-full blur-3xl" />
 
         <div className="flex flex-col md:flex-row items-center gap-6">
           {/* Thumbnail / Icon */}
-          <div className="w-24 h-24 rounded-xl border border-[#1c1c2e] bg-[#06060c] flex items-center justify-center flex-shrink-0 overflow-hidden relative">
+          <div className="w-24 h-24 rounded-xl border border-border bg-background flex items-center justify-center flex-shrink-0 overflow-hidden relative">
             {thumb ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={thumb} alt="Önizleme" className="object-cover w-full h-full" />
@@ -100,25 +100,25 @@ export default function DownloadCard({ results, onReset }: DownloadCardProps) {
           <div className="flex-1 w-full flex flex-col gap-3">
             {/* Editable Filename */}
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-[#5a5a7a] font-mono">Dosya Adı</label>
+              <label className="text-xs text-muted font-mono">Dosya Adı</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => handleRename(0, e.target.value)}
-                className="w-full bg-[#06060c] border border-[#1c1c2e] hover:border-[#5a5a7a]/50 text-[#e8e8f4] px-4 py-2 rounded-xl text-sm font-semibold outline-none focus:border-[#4d9fff] font-mono"
+                className="w-full bg-background border border-border hover:border-muted/50 text-foreground px-4 py-2 rounded-xl text-sm font-semibold outline-none focus:border-prism-b font-mono"
               />
             </div>
 
             {/* Size Comparison */}
             <div className="flex items-center gap-2 text-xs font-mono">
-              <span className="text-[#5a5a7a]">{formatFileSize(r.originalSize)}</span>
-              <span className="text-[#5a5a7a]">→</span>
-              <span className={isSmaller ? 'text-[#06d6a0] font-bold' : 'text-[#ff4d6d] font-bold'}>
+              <span className="text-muted">{formatFileSize(r.originalSize)}</span>
+              <span className="text-muted">→</span>
+              <span className={isSmaller ? 'text-prism-g font-bold' : 'text-prism-r font-bold'}>
                 {formatFileSize(r.convertedSize)}
               </span>
               <span
                 className={`px-2 py-0.5 rounded text-[10px] ${
-                  isSmaller ? 'bg-[#06d6a0]/15 text-[#06d6a0]' : 'bg-[#ff4d6d]/15 text-[#ff4d6d]'
+                  isSmaller ? 'bg-prism-g/15 text-prism-g' : 'bg-prism-r/15 text-prism-r'
                 }`}
               >
                 {isSmaller ? `%${diffPercentage} daha küçük` : `%${diffPercentage} daha büyük`}
@@ -151,12 +151,12 @@ export default function DownloadCard({ results, onReset }: DownloadCardProps) {
 
   // Multiple files
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#1c1c2e] bg-[#0d0d18] p-6 flex flex-col gap-6 animate-fade-in">
-      <div className="flex items-center justify-between gap-4 border-b border-[#1c1c2e] pb-4">
-        <h3 className="font-bold text-[#e8e8f4]">Dönüştürülen Dosyalar ({results.length})</h3>
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-surface p-6 flex flex-col gap-6 animate-fade-in">
+      <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
+        <h3 className="font-bold text-foreground">Dönüştürülen Dosyalar ({results.length})</h3>
         <button
           onClick={handleDownloadAllZip}
-          className="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-[#06d6a0]/15 text-[#06d6a0] hover:bg-[#06d6a0]/25 flex items-center gap-1.5"
+          className="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-prism-g/15 text-prism-g hover:bg-prism-g/25 flex items-center gap-1.5"
         >
           📦 Tümünü ZIP Olarak İndir
         </button>
@@ -166,26 +166,26 @@ export default function DownloadCard({ results, onReset }: DownloadCardProps) {
         {results.map((r, i) => (
           <div
             key={i}
-            className="flex items-center justify-between gap-4 p-3 bg-[#06060c] border border-[#1c1c2e] rounded-xl hover:border-[#5a5a7a]/30 transition-colors"
+            className="flex items-center justify-between gap-4 p-3 bg-background border border-border rounded-xl hover:border-muted/30 transition-colors"
           >
             <div className="flex-1 min-w-0 flex flex-col gap-1">
               <input
                 type="text"
                 value={fileNames[i] || r.filename}
                 onChange={(e) => handleRename(i, e.target.value)}
-                className="bg-transparent border-none text-[#e8e8f4] font-semibold text-sm outline-none focus:bg-[#12121e] px-1 py-0.5 rounded w-full font-mono"
+                className="bg-transparent border-none text-foreground font-semibold text-sm outline-none focus:bg-surface2 px-1 py-0.5 rounded w-full font-mono"
               />
-              <div className="flex items-center gap-2 text-[10px] font-mono text-[#5a5a7a]">
+              <div className="flex items-center gap-2 text-[10px] font-mono text-muted">
                 <span>{formatFileSize(r.originalSize)}</span>
                 <span>→</span>
-                <span className={r.convertedSize < r.originalSize ? 'text-[#06d6a0]' : 'text-[#ff4d6d]'}>
+                <span className={r.convertedSize < r.originalSize ? 'text-prism-g' : 'text-prism-r'}>
                   {formatFileSize(r.convertedSize)}
                 </span>
               </div>
             </div>
             <button
               onClick={() => handleDownloadSingle(i)}
-              className="p-2 rounded-lg bg-[#12121e] border border-[#1c1c2e] text-[#5a5a7a] hover:text-[#06d6a0] hover:border-[#06d6a0]/30 transition-colors flex-shrink-0"
+              className="p-2 rounded-lg bg-surface2 border border-border text-muted hover:text-prism-g hover:border-prism-g/30 transition-colors flex-shrink-0"
               title="Dosyayı İndir"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -196,7 +196,7 @@ export default function DownloadCard({ results, onReset }: DownloadCardProps) {
         ))}
       </div>
 
-      <div className="pt-2 border-t border-[#1c1c2e] flex justify-end">
+      <div className="pt-2 border-t border-border flex justify-end">
         <button
           onClick={onReset}
           className="btn-secondary w-full sm:w-auto"

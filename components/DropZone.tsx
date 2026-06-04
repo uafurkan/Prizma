@@ -35,8 +35,8 @@ export default function DropZone({ accept, multiple = false, onFiles, label }: D
     <div
       className={`relative group cursor-pointer rounded-2xl border-2 border-dashed transition-all duration-300 ${
         dragOver
-          ? 'border-[#4d9fff] bg-[#4d9fff]/10 shadow-[0_0_40px_rgba(77,159,255,0.2)]'
-          : 'border-[#1c1c2e] hover:border-[#5a5a7a]/60 bg-[#0d0d18]/50 hover:bg-[#12121e]/50'
+          ? 'border-prism-b bg-prism-b/10 shadow-[0_0_40px_rgba(77,159,255,0.2)]'
+          : 'border-border hover:border-muted/60 bg-surface/50 hover:bg-surface2/50'
       }`}
       onDragOver={(e) => {
         e.preventDefault();
@@ -59,13 +59,13 @@ export default function DropZone({ accept, multiple = false, onFiles, label }: D
         <div
           className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
             dragOver
-              ? 'bg-[#4d9fff]/20 scale-110'
-              : 'bg-[#12121e] group-hover:bg-[#1c1c2e]'
+              ? 'bg-prism-b/20 scale-110'
+              : 'bg-surface2 group-hover:bg-border'
           }`}
         >
           <svg
             className={`w-8 h-8 transition-colors duration-300 ${
-              dragOver ? 'text-[#4d9fff]' : 'text-[#5a5a7a] group-hover:text-[#e8e8f4]'
+              dragOver ? 'text-prism-b' : 'text-muted group-hover:text-foreground'
             }`}
             fill="none"
             viewBox="0 0 24 24"
@@ -80,10 +80,10 @@ export default function DropZone({ accept, multiple = false, onFiles, label }: D
           </svg>
         </div>
         <div className="text-center">
-          <p className="text-[#e8e8f4] font-semibold font-sans text-lg">
+          <p className="text-foreground font-semibold font-sans text-lg">
             {label || 'Dosyanızı sürükleyin veya tıklayın'}
           </p>
-          <p className="text-[#5a5a7a] text-sm mt-1">
+          <p className="text-muted text-sm mt-1">
             {multiple ? 'Birden fazla dosya seçebilirsiniz' : 'veya dosya seçmek için tıklayın'}
           </p>
         </div>

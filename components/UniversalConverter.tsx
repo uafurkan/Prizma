@@ -71,15 +71,15 @@ export default function UniversalConverter({ lang }: { lang: string }) {
   return (
     <div className="flex flex-col md:flex-row items-stretch w-full max-w-4xl mx-auto gap-4 relative animate-fade-in">
       {/* Middle Arrow Icon (absolute on desktop, hidden on mobile) */}
-      <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 bg-[#12121e] rounded-full border-4 border-[#06060c] text-[#5a5a7a]">
+      <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 bg-surface2 rounded-full border-4 border-background text-muted">
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
         </svg>
       </div>
 
       {/* LEFT PANEL: Source */}
-      <div className="flex-1 bg-[#0d0d18] border border-[#1c1c2e] rounded-3xl p-6 flex flex-col relative overflow-hidden transition-all shadow-xl">
-        <h3 className="text-sm font-bold text-[#5a5a7a] mb-4 uppercase tracking-wider flex items-center gap-2">
+      <div className="flex-1 bg-surface border border-border rounded-3xl p-6 flex flex-col relative overflow-hidden transition-all shadow-xl">
+        <h3 className="text-sm font-bold text-muted mb-4 uppercase tracking-wider flex items-center gap-2">
           <span>📄</span> {dict.common.sourceFile}
         </h3>
         
@@ -94,7 +94,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
         {files.length === 0 ? (
           <div 
             className={`flex-1 min-h-[180px] border-2 border-dashed rounded-2xl flex flex-col items-center justify-center gap-3 p-6 text-center cursor-pointer transition-colors ${
-              dragActive ? 'border-[#4d9fff] bg-[#4d9fff]/5' : 'border-[#1c1c2e] hover:border-[#5a5a7a] hover:bg-[#12121e]'
+              dragActive ? 'border-prism-b bg-prism-b/5' : 'border-border hover:border-muted hover:bg-surface2'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -102,31 +102,31 @@ export default function UniversalConverter({ lang }: { lang: string }) {
             onDrop={handleDrop}
             onClick={() => inputRef.current?.click()}
           >
-            <div className="w-12 h-12 rounded-full bg-[#1c1c2e] flex items-center justify-center mb-2">
-              <svg className="w-6 h-6 text-[#5a5a7a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-12 h-12 rounded-full bg-border flex items-center justify-center mb-2">
+              <svg className="w-6 h-6 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <p className="text-[#e8e8f4] font-bold">{dict.common.dropFilesHere}</p>
-            <p className="text-xs text-[#5a5a7a]">{dict.common.orClickToSelect}</p>
+            <p className="text-foreground font-bold">{dict.common.dropFilesHere}</p>
+            <p className="text-xs text-muted">{dict.common.orClickToSelect}</p>
           </div>
         ) : (
-          <div className="flex-1 flex flex-col justify-center items-center text-center gap-4 py-6 bg-[#06060c] rounded-2xl border border-[#1c1c2e]">
-             <div className="w-20 h-20 rounded-2xl bg-[#12121e] border border-[#1c1c2e] flex items-center justify-center relative shadow-inner">
-                <span className="text-xs font-black text-[#e8e8f4] absolute bottom-3 uppercase tracking-wider">{detectedExt}</span>
-                <svg className="w-8 h-8 text-[#5a5a7a] absolute top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex-1 flex flex-col justify-center items-center text-center gap-4 py-6 bg-background rounded-2xl border border-border">
+             <div className="w-20 h-20 rounded-2xl bg-surface2 border border-border flex items-center justify-center relative shadow-inner">
+                <span className="text-xs font-black text-foreground absolute bottom-3 uppercase tracking-wider">{detectedExt}</span>
+                <svg className="w-8 h-8 text-muted absolute top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
              </div>
              <div>
-               <p className="font-bold text-[#e8e8f4] truncate max-w-[200px] mx-auto text-sm">{files[0].name}</p>
+               <p className="font-bold text-foreground truncate max-w-[200px] mx-auto text-sm">{files[0].name}</p>
                {files.length > 1 && (
-                 <p className="text-xs text-[#4d9fff] font-bold mt-1">{dict.common.andMore.replace('{count}', (files.length - 1).toString())}</p>
+                 <p className="text-xs text-prism-b font-bold mt-1">{dict.common.andMore.replace('{count}', (files.length - 1).toString())}</p>
                )}
              </div>
              <button 
                 onClick={() => { setFiles([]); setDetectedExt(''); setTargetSlug(''); }}
-                className="text-xs text-[#ff4d6d] hover:text-white transition-colors bg-[#ff4d6d]/10 px-4 py-2 rounded-lg font-bold mt-2"
+                className="text-xs text-prism-r hover:text-white transition-colors bg-prism-r/10 px-4 py-2 rounded-lg font-bold mt-2"
              >
                 {dict.common.changeFile}
              </button>
@@ -135,28 +135,28 @@ export default function UniversalConverter({ lang }: { lang: string }) {
       </div>
 
       {/* RIGHT PANEL: Target */}
-      <div className="flex-1 bg-[#0d0d18] border border-[#1c1c2e] rounded-3xl p-6 flex flex-col relative transition-all shadow-xl">
-        <h3 className="text-sm font-bold text-[#5a5a7a] mb-4 uppercase tracking-wider flex items-center gap-2">
+      <div className="flex-1 bg-surface border border-border rounded-3xl p-6 flex flex-col relative transition-all shadow-xl">
+        <h3 className="text-sm font-bold text-muted mb-4 uppercase tracking-wider flex items-center gap-2">
           <span>🎯</span> {dict.common.targetFormat}
         </h3>
         
         {files.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center gap-3 text-[#5a5a7a] min-h-[180px]">
+          <div className="flex-1 flex flex-col items-center justify-center gap-3 text-muted min-h-[180px]">
             <svg className="w-8 h-8 opacity-40 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
             <p className="text-sm font-medium">{dict.common.uploadFirst}</p>
           </div>
         ) : availablePairs.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center bg-[#ff4d6d]/5 border border-[#ff4d6d]/20 rounded-2xl">
+          <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center bg-prism-r/5 border border-prism-r/20 rounded-2xl">
             <span className="text-3xl mb-1">⚠️</span>
-            <p className="text-sm text-[#ff4d6d] font-bold">{dict.common.unsupportedFormat}</p>
-            <p className="text-xs text-[#5a5a7a]">{dict.common.noConversionFound.replace('{ext}', detectedExt)}</p>
+            <p className="text-sm text-prism-r font-bold">{dict.common.unsupportedFormat}</p>
+            <p className="text-xs text-muted">{dict.common.noConversionFound.replace('{ext}', detectedExt)}</p>
           </div>
         ) : (
           <div className="flex flex-col h-full">
             <div className="flex-1">
-              <p className="text-xs font-bold text-[#e8e8f4] mb-3">{dict.common.selectTargetFormat}</p>
+              <p className="text-xs font-bold text-foreground mb-3">{dict.common.selectTargetFormat}</p>
               <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-1">
                 {availablePairs.map((pair) => (
                   <button
@@ -164,8 +164,8 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                     onClick={() => setTargetSlug(pair.slug)}
                     className={`flex flex-col items-center justify-center gap-1.5 p-3.5 rounded-xl border transition-all ${
                       targetSlug === pair.slug 
-                        ? 'border-[#4d9fff] bg-[#4d9fff]/10 shadow-[0_0_15px_rgba(77,159,255,0.15)]' 
-                        : 'border-[#1c1c2e] hover:border-[#5a5a7a] hover:bg-[#12121e] bg-[#06060c]'
+                        ? 'border-prism-b bg-prism-b/10 shadow-[0_0_15px_rgba(77,159,255,0.15)]' 
+                        : 'border-border hover:border-muted hover:bg-surface2 bg-background'
                     }`}
                   >
                     <span 
@@ -187,8 +187,8 @@ export default function UniversalConverter({ lang }: { lang: string }) {
               onClick={onConvertClick}
               className={`mt-4 w-full py-4 rounded-xl font-black text-sm uppercase tracking-wide transition-all flex items-center justify-center gap-2 ${
                 targetSlug 
-                  ? 'bg-gradient-to-r from-[#4d9fff] to-[#b56cff] text-white hover:shadow-[0_0_20px_rgba(77,159,255,0.3)] hover:opacity-90' 
-                  : 'bg-[#1c1c2e] text-[#5a5a7a] cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-prism-b to-prism-p text-white hover:shadow-[0_0_20px_rgba(77,159,255,0.3)] hover:opacity-90' 
+                  : 'bg-border text-muted cursor-not-allowed'
               }`}
             >
               {dict.common.convert}

@@ -431,35 +431,35 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       <section className="flex flex-col items-center text-center gap-4 pt-6">
         <div className="flex items-center gap-3 md:gap-5 justify-center">
           <FormatBadge format={cift.from} size="lg" />
-          <svg className="w-6 h-6 text-[#5a5a7a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-6 h-6 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
           <FormatBadge format={cift.to} size="lg" />
         </div>
         
-        <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-[#e8e8f4] to-[#5a5a7a] bg-clip-text text-transparent mt-2">
+        <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-foreground to-muted bg-clip-text text-transparent mt-2">
           {baslik}
         </h1>
         
-        <p className="text-[#5a5a7a] font-medium max-w-xl">
+        <p className="text-muted font-medium max-w-xl">
           {aciklama}
         </p>
 
         {/* Privacy badge */}
-        <div className="flex items-center gap-1.5 text-xs text-[#5a5a7a] bg-[#0d0d18] border border-[#1c1c2e] px-4 py-1.5 rounded-full mt-2 font-semibold">
+        <div className="flex items-center gap-1.5 text-xs text-muted bg-surface border border-border px-4 py-1.5 rounded-full mt-2 font-semibold">
           <span>🔒</span> {dict.security.shieldText}
         </div>
       </section>
 
       {/* FFmpeg Support check / warning */}
       {cift.converter === 'ffmpeg' && !ffmpegSupported ? (
-        <div className="p-6 rounded-2xl border border-[#ff4d6d]/30 bg-[#ff4d6d]/5 text-center flex flex-col gap-3 max-w-xl mx-auto w-full">
+        <div className="p-6 rounded-2xl border border-prism-r/30 bg-prism-r/5 text-center flex flex-col gap-3 max-w-xl mx-auto w-full">
           <span className="text-3xl">⚠️</span>
-          <h3 className="font-bold text-[#ff4d6d] text-lg">Tarayıcınız Bu Dönüşümü Desteklemiyor</h3>
-          <p className="text-sm text-[#5a5a7a] leading-relaxed">
+          <h3 className="font-bold text-prism-r text-lg">Tarayıcınız Bu Dönüşümü Desteklemiyor</h3>
+          <p className="text-sm text-muted leading-relaxed">
             Bu dönüşüm için gerekli olan SharedArrayBuffer özelliği tarayıcınızda etkin değil. Chrome, Firefox veya Edge kullanmanızı öneririz.
           </p>
-          <p className="text-xs text-[#5a5a7a] bg-[#06060c] p-3 rounded-lg font-mono leading-relaxed mt-2 text-left">
+          <p className="text-xs text-muted bg-background p-3 rounded-lg font-mono leading-relaxed mt-2 text-left">
             iOS / Safari için: Ayarlar &gt; Safari &gt; Gelişmiş &gt; Deneysel Özellikler altından SharedArrayBuffer&apos;ı etkinleştirebilirsiniz.
           </p>
         </div>
@@ -467,16 +467,16 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
         <>
           {/* FFmpeg loader session banner */}
           {showInfoBanner && (
-            <div className="p-4 rounded-xl border border-[#4d9fff]/20 bg-[#4d9fff]/5 text-sm flex items-center justify-between gap-4 max-w-xl mx-auto w-full animate-fade-in">
+            <div className="p-4 rounded-xl border border-prism-b/20 bg-prism-b/5 text-sm flex items-center justify-between gap-4 max-w-xl mx-auto w-full animate-fade-in">
               <div className="flex items-start gap-2.5">
                 <span className="text-base mt-0.5">ℹ️</span>
-                <p className="text-[#5a5a7a] leading-normal text-xs">
+                <p className="text-muted leading-normal text-xs">
                   Bu dönüşüm ilk kullanımda ~25MB boyutunda FFmpeg dönüştürme dosyaları indirir. Sonraki dönüşümleriniz cihaz önbelleği sayesinde anında gerçekleşir.
                 </p>
               </div>
               <button
                 onClick={handleDismissBanner}
-                className="text-xs text-[#4d9fff] hover:underline font-bold flex-shrink-0"
+                className="text-xs text-prism-b hover:underline font-bold flex-shrink-0"
               >
                 Anladım
               </button>
@@ -485,15 +485,15 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
           {/* Options Panel (rendered only if cift.secenekler exists & files are loaded) */}
           {cift.secenekler && files.length > 0 && results.length === 0 && !isConverting && !isLoadingFfmpeg && (
-            <div className="p-6 rounded-2xl border border-[#1c1c2e] bg-[#0d0d18] max-w-xl mx-auto w-full flex flex-col gap-5 animate-fade-in">
-              <h3 className="font-bold text-sm text-[#e8e8f4] border-b border-[#1c1c2e] pb-2">Dönüştürme Ayarları</h3>
+            <div className="p-6 rounded-2xl border border-border bg-surface max-w-xl mx-auto w-full flex flex-col gap-5 animate-fade-in">
+              <h3 className="font-bold text-sm text-foreground border-b border-border pb-2">Dönüştürme Ayarları</h3>
               {cift.secenekler.map((opt) => {
                 const optLabel = opt.label[lang as 'en'|'tr'] || opt.label['en'];
                 return (
                   <div key={opt.id} className="flex flex-col gap-2">
                     <div className="flex justify-between items-center text-xs font-semibold">
-                      <span className="text-[#e8e8f4]">{optLabel}</span>
-                      <span className="text-[#5a5a7a] font-mono">
+                      <span className="text-foreground">{optLabel}</span>
+                      <span className="text-muted font-mono">
                         {options[opt.id] ?? opt.default}
                         {opt.unit}
                       </span>
@@ -514,7 +514,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                       <select
                         value={(options[opt.id] as string) || (opt.default as string)}
                         onChange={(e) => handleOptionChange(opt.id, e.target.value)}
-                        className="w-full bg-[#06060c] text-[#e8e8f4] text-xs font-semibold"
+                        className="w-full bg-background text-foreground text-xs font-semibold"
                       >
                         {opt.options.map((o) => {
                           return (
@@ -535,7 +535,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
           <div className="max-w-xl mx-auto w-full flex flex-col gap-6">
             {/* Error Message */}
             {activeError && (
-              <div className="p-4 rounded-xl border border-[#ff4d6d]/20 bg-[#ff4d6d]/5 text-xs text-[#ff4d6d] font-semibold text-center animate-fade-in">
+              <div className="p-4 rounded-xl border border-prism-r/20 bg-prism-r/5 text-xs text-prism-r font-semibold text-center animate-fade-in">
                 ⚠️ Hata: {activeError}
               </div>
             )}
@@ -552,17 +552,17 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                 
                 {files.length > 0 && (
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-xs text-[#5a5a7a] font-mono border-b border-[#1c1c2e] pb-1.5 px-1">
+                    <div className="flex items-center justify-between text-xs text-muted font-mono border-b border-border pb-1.5 px-1">
                       <span>Seçilen Dosyalar ({files.length})</span>
-                      <button onClick={handleReset} className="hover:text-[#ff4d6d] transition-colors">
+                      <button onClick={handleReset} className="hover:text-prism-r transition-colors">
                         Temizle
                       </button>
                     </div>
                     <div className="max-h-36 overflow-y-auto flex flex-col gap-1.5">
                       {files.map((file, i) => (
-                        <div key={i} className="flex justify-between items-center text-xs p-2 bg-[#0d0d18] border border-[#1c1c2e] rounded-xl font-mono text-[#e8e8f4]">
+                        <div key={i} className="flex justify-between items-center text-xs p-2 bg-surface border border-border rounded-xl font-mono text-foreground">
                           <span className="truncate max-w-[70%]">{file.name}</span>
-                          <span className="text-[#5a5a7a] flex-shrink-0">{formatFileSize(file.size)}</span>
+                          <span className="text-muted flex-shrink-0">{formatFileSize(file.size)}</span>
                         </div>
                       ))}
                     </div>
@@ -580,21 +580,21 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
             {/* Loading/Converting States */}
             {(isConverting || isLoadingFfmpeg) && (
-              <div className="p-10 rounded-2xl border border-[#1c1c2e] bg-[#0d0d18] flex flex-col items-center justify-center gap-6 text-center shadow-xl animate-fade-in">
+              <div className="p-10 rounded-2xl border border-border bg-surface flex flex-col items-center justify-center gap-6 text-center shadow-xl animate-fade-in">
                 {isLoadingFfmpeg ? (
                   <>
-                    <div className="w-12 h-12 rounded-full border-2 border-t-[#4d9fff] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+                    <div className="w-12 h-12 rounded-full border-2 border-t-prism-b border-r-transparent border-b-transparent border-l-transparent animate-spin" />
                     <div className="flex flex-col gap-1">
-                      <h4 className="font-bold text-[#e8e8f4]">Dönüştürme Motoru Yükleniyor...</h4>
-                      <p className="text-xs text-[#5a5a7a]">Dönüştürücü kütüphaneler kuruluyor, bu işlem 3-5 saniye sürebilir.</p>
+                      <h4 className="font-bold text-foreground">Dönüştürme Motoru Yükleniyor...</h4>
+                      <p className="text-xs text-muted">Dönüştürücü kütüphaneler kuruluyor, bu işlem 3-5 saniye sürebilir.</p>
                     </div>
                   </>
                 ) : (
                   <>
                     <ProgressRing progress={progressValue} size={90} />
                     <div className="flex flex-col gap-1">
-                      <h4 className="font-bold text-[#e8e8f4]">Dosyalar Dönüştürülüyor</h4>
-                      <p className="text-xs text-[#5a5a7a] font-mono">Lütfen bu sayfayı kapatmayın.</p>
+                      <h4 className="font-bold text-foreground">Dosyalar Dönüştürülüyor</h4>
+                      <p className="text-xs text-muted font-mono">Lütfen bu sayfayı kapatmayın.</p>
                     </div>
                   </>
                 )}
@@ -621,27 +621,27 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       <section className="flex flex-col gap-5 max-w-2xl mx-auto w-full pt-6">
         <h2 className="text-xl md:text-2xl font-bold text-center">Sıkça Sorulan Sorular</h2>
         <div className="flex flex-col gap-4">
-          <div className="p-5 rounded-xl border border-[#1c1c2e] bg-[#0d0d18] flex flex-col gap-2">
-            <h4 className="font-bold text-[#e8e8f4] text-sm">
+          <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
+            <h4 className="font-bold text-foreground text-sm">
               {cift.from}&apos;den {cift.to}&apos;ye dönüşüm nasıl yapılır?
             </h4>
-            <p className="text-xs text-[#5a5a7a] leading-relaxed">
+            <p className="text-xs text-muted leading-relaxed">
               Tek yapmanız gereken {cift.from} dosyanızı yukarıdaki yükleme alanına sürüklemek ve &apos;Dönüştür&apos; butonuna tıklamaktır. İşlem tarayıcınızda yerel olarak gerçekleşir ve saniyeler içinde tamamlanır. Ardından dönüştürülen dosyayı cihazınıza indirebilirsiniz.
             </p>
           </div>
-          <div className="p-5 rounded-xl border border-[#1c1c2e] bg-[#0d0d18] flex flex-col gap-2">
-            <h4 className="font-bold text-[#e8e8f4] text-sm">
+          <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
+            <h4 className="font-bold text-foreground text-sm">
               Dosyalarım dönüştürücüye yüklendiğinde gizli kalıyor mu?
             </h4>
-            <p className="text-xs text-[#5a5a7a] leading-relaxed">
+            <p className="text-xs text-muted leading-relaxed">
               Evet, tamamen. PRİZMA sıfır sunucu mimarisiyle çalışır. Yani yüklediğiniz dosyalar hiçbir sunucuya transfer edilmez; tüm işlem kendi cihazınızın tarayıcısında, belleğinde gerçekleşir. Bu yüzden dosyalarınız %100 güvendedir ve gizlidir.
             </p>
           </div>
-          <div className="p-5 rounded-xl border border-[#1c1c2e] bg-[#0d0d18] flex flex-col gap-2">
-            <h4 className="font-bold text-[#e8e8f4] text-sm">
+          <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
+            <h4 className="font-bold text-foreground text-sm">
               Bu dönüşüm işlemi için ödeme yapmam gerekiyor mu?
             </h4>
-            <p className="text-xs text-[#5a5a7a] leading-relaxed">
+            <p className="text-xs text-muted leading-relaxed">
               Hayır, platformumuzdaki tüm dönüşüm araçları tamamen ücretsizdir ve herhangi bir kayıt veya üyelik gerektirmeden sınırsızca kullanılabilir.
             </p>
           </div>
