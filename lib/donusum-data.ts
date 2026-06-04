@@ -8,7 +8,8 @@ export type ConverterType =
   | 'pdf-lib'
   | 'mammoth'
   | 'sheetjs'
-  | 'jszip';
+  | 'jszip'
+  | 'subsrt';
 
 export interface Secenek {
   id: string;
@@ -38,7 +39,7 @@ export interface DonusumCift {
   ffmpegArgs?: string[];
 }
 
-export type KategoriSlug = 'goruntu' | 'video' | 'ses' | 'belge' | 'arsiv';
+export type KategoriSlug = 'goruntu' | 'video' | 'ses' | 'belge' | 'arsiv' | 'altyazi';
 
 export interface Kategori {
   slug: KategoriSlug;
@@ -83,6 +84,13 @@ export const KATEGORILER: Kategori[] = [
     aciklama: 'ZIP arşivleri oluşturun ve çıkartın.',
     ikon: '📦',
     renk: '#4d9fff',
+  },
+  {
+    slug: 'altyazi',
+    baslik: 'Altyazı',
+    aciklama: 'SRT, VTT, ASS, SUB ve diğer altyazı formatları arasında dönüştürme yapın.',
+    ikon: '💬',
+    renk: '#b56cff',
   },
 ];
 
@@ -575,6 +583,68 @@ export const DONUSUM_DATA: DonusumCift[] = [
     aciklama: 'ZIP arşivlerini çıkartın ve dosyalarınıza erişin.',
     populer: false,
   },
+
+  // ===== ALTYAZI =====
+  {
+    slug: 'srt-to-vtt',
+    from: 'SRT',
+    to: 'VTT',
+    fromExt: 'srt',
+    toExt: 'vtt',
+    kategori: 'altyazi',
+    converter: 'subsrt',
+    baslik: 'SRT → VTT Dönüştürücü',
+    aciklama: 'SRT altyazı dosyalarınızı HTML5 uyumlu WebVTT (VTT) formatına dönüştürün.',
+    populer: true,
+  },
+  {
+    slug: 'vtt-to-srt',
+    from: 'VTT',
+    to: 'SRT',
+    fromExt: 'vtt',
+    toExt: 'srt',
+    kategori: 'altyazi',
+    converter: 'subsrt',
+    baslik: 'VTT → SRT Dönüştürücü',
+    aciklama: 'VTT altyazılarınızı en yaygın format olan SRT\'ye dönüştürün.',
+    populer: true,
+  },
+  {
+    slug: 'srt-to-ass',
+    from: 'SRT',
+    to: 'ASS',
+    fromExt: 'srt',
+    toExt: 'ass',
+    kategori: 'altyazi',
+    converter: 'subsrt',
+    baslik: 'SRT → ASS Dönüştürücü',
+    aciklama: 'SRT dosyalarınızı gelişmiş stil desteği olan ASS formatına dönüştürün.',
+    populer: false,
+  },
+  {
+    slug: 'ass-to-srt',
+    from: 'ASS',
+    to: 'SRT',
+    fromExt: 'ass',
+    toExt: 'srt',
+    kategori: 'altyazi',
+    converter: 'subsrt',
+    baslik: 'ASS → SRT Dönüştürücü',
+    aciklama: 'ASS dosyalarınızı standart SRT formatına dönüştürün.',
+    populer: false,
+  },
+  {
+    slug: 'sub-to-srt',
+    from: 'SUB',
+    to: 'SRT',
+    fromExt: 'sub',
+    toExt: 'srt',
+    kategori: 'altyazi',
+    converter: 'subsrt',
+    baslik: 'SUB → SRT Dönüştürücü',
+    aciklama: 'Eski SUB altyazılarınızı yaygın SRT formatına dönüştürün.',
+    populer: false,
+  },
 ];
 
 // Yardımcı fonksiyonlar
@@ -635,6 +705,10 @@ export function getFormatRenk(format: string): string {
     ZIP: '#ffd166',
     Görseller: '#b56cff',
     Dosyalar: '#4d9fff',
+    SRT: '#ff4d6d',
+    VTT: '#06d6a0',
+    ASS: '#b56cff',
+    SUB: '#ffd166',
   };
   return map[format] || '#e8e8f4';
 }

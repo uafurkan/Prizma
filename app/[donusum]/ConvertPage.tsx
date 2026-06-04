@@ -15,6 +15,7 @@ import { getFFmpegArgs, getClipArgs } from '@/lib/converters/video-audio';
 import { convertViaCanvas, convertHEIC, imagesToPDF, pdfToImages } from '@/lib/converters/image';
 import { docxToHTML, textToPDF, mergePDFs, splitPDF, excelToCSV, csvToExcel } from '@/lib/converters/document';
 import { filesToZip, extractZip } from '@/lib/converters/archive';
+import { convertSubtitle } from '@/lib/converters/subtitle';
 import { useGlobalFiles } from '@/components/FileProvider';
 
 interface ConvertPageProps {
@@ -206,6 +207,20 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
           setLocalProgress(30);
           for (const file of files) {
             const res = await convertHEIC(file, cift.toExt as 'jpg' | 'png' | 'webp');
+            finalResults.push({
+              blob: res.blob,
+              filename: res.filename,
+              originalSize: res.originalSize,
+              convertedSize: res.convertedSize,
+            });
+          }
+          setLocalProgress(90);
+          break;
+        }
+        case 'subsrt': {
+          setLocalProgress(30);
+          for (const file of files) {
+            const res = await convertSubtitle(file, cift.toExt);
             finalResults.push({
               blob: res.blob,
               filename: res.filename,
