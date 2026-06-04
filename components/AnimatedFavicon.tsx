@@ -79,9 +79,9 @@ export default function AnimatedFavicon() {
       prevLinks.forEach(el => {
         if (el !== link) el.remove();
       });
-    }
-
     const startTime = performance.now();
+    let animFrameId: number;
+    let lastRenderTime = 0;
 
     function render() {
       if (isCancelled) return;
@@ -140,10 +140,29 @@ export default function AnimatedFavicon() {
       }
     }
 
-    const intervalId = window.setInterval(render, 100);
+    function loop(now: number) {
+      if (isCancelled) return;
+      // 30fps limiti (yaklaşık 33ms). 60fps tarayıcıyı yorabilir.
+      if (now - lastRenderTime >= 33) {
+        render();
+        lastRenderTime = now;
+      }
+      animFrameId = requestAnimationFrame(loop);
+    }
+
+    animFrameId = requestAnimationFrame(loop);
+
+    // Arka plan sekmeleri için fallback (rAF arka planda durur)
+    const intervalId = window.setInterval(() => {
+      if (isCancelled) return;
+      if (document.hidden) {
+        render();
+      }
+    }, 100);
 
     return () => {
       isCancelled = true;
+      cancelAnimationFrame(animFrameId);
       window.clearInterval(intervalId);
     };
   }, []);
