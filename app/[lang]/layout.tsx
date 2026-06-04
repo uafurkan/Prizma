@@ -64,7 +64,10 @@ export default async function RootLayout({
           <header className="border-b border-border bg-background/85 backdrop-blur-md sticky top-0 z-50">
             <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
               <Link href={`/${lang}`} className="group flex items-center gap-2">
-                <span className="font-extrabold text-2xl tracking-tighter bg-gradient-to-r from-prism-r via-prism-o via-prism-y via-prism-g via-prism-b to-prism-p bg-clip-text text-transparent group-hover:opacity-90 transition-opacity animate-gradient-text">
+                <span 
+                  className="font-extrabold text-2xl tracking-tighter bg-gradient-to-r from-prism-r via-prism-o via-prism-y via-prism-g via-prism-b to-prism-p bg-clip-text text-transparent group-hover:opacity-90 transition-opacity animate-gradient-text select-none"
+                  style={{ WebkitTouchCallout: 'none' }}
+                >
                   PRİZMA
                 </span>
               </Link>
