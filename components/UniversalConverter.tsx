@@ -5,7 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useGlobalFiles } from '@/components/FileProvider';
 import { DONUSUM_DATA, getFormatRenk } from '@/lib/donusum-data';
 
-export default function UniversalConverter() {
+import { getDictionary } from '@/dictionaries';
+
+export default function UniversalConverter({ lang }: { lang: string }) {
+  const dict = getDictionary(lang);
   const [dragActive, setDragActive] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [detectedExt, setDetectedExt] = useState<string>('');
@@ -55,7 +58,7 @@ export default function UniversalConverter() {
   const onConvertClick = () => {
     if (!targetSlug || files.length === 0) return;
     setGlobalFiles(files);
-    router.push(`/${targetSlug}`);
+    router.push(`/${lang}/${targetSlug}`);
   };
 
   const availablePairs = detectedExt 
@@ -77,7 +80,7 @@ export default function UniversalConverter() {
       {/* LEFT PANEL: Source */}
       <div className="flex-1 bg-[#0d0d18] border border-[#1c1c2e] rounded-3xl p-6 flex flex-col relative overflow-hidden transition-all shadow-xl">
         <h3 className="text-sm font-bold text-[#5a5a7a] mb-4 uppercase tracking-wider flex items-center gap-2">
-          <span>📄</span> Kaynak Dosya
+          <span>📄</span> {dict.common.sourceFile}
         </h3>
         
         <input
@@ -104,8 +107,8 @@ export default function UniversalConverter() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <p className="text-[#e8e8f4] font-bold">Dosyaları buraya sürükleyin</p>
-            <p className="text-xs text-[#5a5a7a]">veya seçmek için tıklayın</p>
+            <p className="text-[#e8e8f4] font-bold">{dict.common.dropFilesHere}</p>
+            <p className="text-xs text-[#5a5a7a]">{dict.common.orClickToSelect}</p>
           </div>
         ) : (
           <div className="flex-1 flex flex-col justify-center items-center text-center gap-4 py-6 bg-[#06060c] rounded-2xl border border-[#1c1c2e]">
@@ -118,14 +121,14 @@ export default function UniversalConverter() {
              <div>
                <p className="font-bold text-[#e8e8f4] truncate max-w-[200px] mx-auto text-sm">{files[0].name}</p>
                {files.length > 1 && (
-                 <p className="text-xs text-[#4d9fff] font-bold mt-1">ve {files.length - 1} dosya daha</p>
+                 <p className="text-xs text-[#4d9fff] font-bold mt-1">{dict.common.andMore.replace('{count}', (files.length - 1).toString())}</p>
                )}
              </div>
              <button 
                 onClick={() => { setFiles([]); setDetectedExt(''); setTargetSlug(''); }}
                 className="text-xs text-[#ff4d6d] hover:text-white transition-colors bg-[#ff4d6d]/10 px-4 py-2 rounded-lg font-bold mt-2"
              >
-                Dosyayı Değiştir
+                {dict.common.changeFile}
              </button>
           </div>
         )}
@@ -134,7 +137,7 @@ export default function UniversalConverter() {
       {/* RIGHT PANEL: Target */}
       <div className="flex-1 bg-[#0d0d18] border border-[#1c1c2e] rounded-3xl p-6 flex flex-col relative transition-all shadow-xl">
         <h3 className="text-sm font-bold text-[#5a5a7a] mb-4 uppercase tracking-wider flex items-center gap-2">
-          <span>🎯</span> Hedef Format
+          <span>🎯</span> {dict.common.targetFormat}
         </h3>
         
         {files.length === 0 ? (
@@ -142,18 +145,18 @@ export default function UniversalConverter() {
             <svg className="w-8 h-8 opacity-40 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
-            <p className="text-sm font-medium">Önce sol tarafa bir dosya yükleyin</p>
+            <p className="text-sm font-medium">{dict.common.uploadFirst}</p>
           </div>
         ) : availablePairs.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center bg-[#ff4d6d]/5 border border-[#ff4d6d]/20 rounded-2xl">
             <span className="text-3xl mb-1">⚠️</span>
-            <p className="text-sm text-[#ff4d6d] font-bold">Desteklenmeyen Format</p>
-            <p className="text-xs text-[#5a5a7a]">.{detectedExt} dosyası için bir dönüşüm bulunamadı.</p>
+            <p className="text-sm text-[#ff4d6d] font-bold">{dict.common.unsupportedFormat}</p>
+            <p className="text-xs text-[#5a5a7a]">{dict.common.noConversionFound.replace('{ext}', detectedExt)}</p>
           </div>
         ) : (
           <div className="flex flex-col h-full">
             <div className="flex-1">
-              <p className="text-xs font-bold text-[#e8e8f4] mb-3">Dönüştürülecek formatı seçin:</p>
+              <p className="text-xs font-bold text-[#e8e8f4] mb-3">{dict.common.selectTargetFormat}</p>
               <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-1">
                 {availablePairs.map((pair) => (
                   <button
@@ -188,7 +191,7 @@ export default function UniversalConverter() {
                   : 'bg-[#1c1c2e] text-[#5a5a7a] cursor-not-allowed'
               }`}
             >
-              Hemen Dönüştür
+              {dict.common.convert}
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>

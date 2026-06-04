@@ -2,34 +2,50 @@ import { notFound } from 'next/navigation';
 import { DONUSUM_DATA, getDonusumBySlug } from '@/lib/donusum-data';
 import ConvertPage from './ConvertPage';
 import type { Metadata } from 'next';
+import { getDictionary } from '@/dictionaries';
 
 interface PageProps {
-  params: Promise<{ donusum: string }>;
+  params: Promise<{ lang: string; donusum: string }>;
 }
 
 export async function generateStaticParams() {
-  return DONUSUM_DATA.map((d) => ({
-    donusum: d.slug,
-  }));
+  const locales = ['en', 'tr'];
+  const params: { lang: string; donusum: string }[] = [];
+  
+  locales.forEach(lang => {
+    DONUSUM_DATA.forEach(d => {
+      params.push({ lang, donusum: d.slug });
+    });
+  });
+  
+  return params;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { donusum } = await params;
+  const { lang, donusum } = await params;
   const cift = getDonusumBySlug(donusum);
   if (!cift) return {};
+  
+  const dict = getDictionary(lang);
+  const baslik = cift.baslik[lang as 'en'|'tr'] || cift.baslik['en'];
+  const aciklama = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
 
   return {
-    title: `${cift.from} → ${cift.to} Dönüştürücü`,
-    description: `${cift.from} dosyalarını anında ${cift.to}'ye çevirin. 100% tarayıcıda, sunucuya dosya gönderilmez. Ücretsiz, kayıt gerektirmez.`,
+    title: `${cift.from} → ${cift.to} | PRİZMA`,
+    description: aciklama,
   };
 }
 
 export default async function Page({ params }: PageProps) {
-  const { donusum } = await params;
+  const { lang, donusum } = await params;
   const cift = getDonusumBySlug(donusum);
   if (!cift) {
     notFound();
   }
+  
+  const dict = getDictionary(lang);
+  const title = cift.baslik[lang as 'en'|'tr'] || cift.baslik['en'];
+  const desc = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
 
   // Schema definitions
   const softwareAppSchema = {
@@ -48,26 +64,26 @@ export default async function Page({ params }: PageProps) {
   const howToSchema = {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: `${cift.from} dosyasını ${cift.to} formatına dönüştürme`,
-    description: `Dosyalarınızı internet sunucularına göndermeden yerel olarak ${cift.from}'den ${cift.to}'ye çevirin.`,
+    name: title,
+    description: desc,
     step: [
       {
         '@type': 'HowToStep',
-        name: 'Dosyanızı Yükleyin',
-        text: `Cihazınızdan .${cift.fromExt} uzantılı dosyayı yükleyin.`,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${cift.slug}`,
+        name: dict.howTo.step1Title,
+        text: dict.howTo.step1Desc,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/${cift.slug}`,
       },
       {
         '@type': 'HowToStep',
-        name: 'Dönüştürme İşlemini Başlatın',
-        text: 'Eğer varsa seçenekleri ayarlayın ve Dönüştür butonuna tıklayın.',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${cift.slug}`,
+        name: dict.howTo.step2Title,
+        text: dict.howTo.step2Desc,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/${cift.slug}`,
       },
       {
         '@type': 'HowToStep',
-        name: 'Yeni Dosyanızı İndirin',
-        text: 'İşlem bittiğinde dönüştürülen dosyayı anında bilgisayarınıza veya telefonunuza indirin.',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${cift.slug}`,
+        name: dict.howTo.step3Title,
+        text: dict.howTo.step3Desc,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/${cift.slug}`,
       },
     ],
   };
@@ -82,7 +98,7 @@ export default async function Page({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
-      <ConvertPage cift={cift} />
+      <ConvertPage cift={cift} lang={lang} />
     </>
   );
 }

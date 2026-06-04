@@ -4,7 +4,7 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { DONUSUM_DATA, getFormatRenk } from '@/lib/donusum-data';
 
-export default function SearchBar() {
+export default function SearchBar({ lang }: { lang: string }) {
   const [query, setQuery] = useState('');
   const [focused, setFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -12,14 +12,16 @@ export default function SearchBar() {
   const results = useMemo(() => {
     if (query.length < 2) return [];
     const q = query.toLowerCase();
-    return DONUSUM_DATA.filter(
-      (d) =>
-        d.baslik.toLowerCase().includes(q) ||
+    return DONUSUM_DATA.filter((d) => {
+      const baslik = d.baslik[lang as 'en'|'tr'] || d.baslik['en'];
+      return (
+        baslik.toLowerCase().includes(q) ||
         d.from.toLowerCase().includes(q) ||
         d.to.toLowerCase().includes(q) ||
         d.slug.includes(q)
-    ).slice(0, 8);
-  }, [query]);
+      );
+    }).slice(0, 8);
+  }, [query, lang]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -66,39 +68,38 @@ export default function SearchBar() {
       {/* Sonuçlar dropdown */}
       {focused && results.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-[#0d0d18] border border-[#1c1c2e] rounded-2xl overflow-hidden shadow-2xl z-50 backdrop-blur-xl">
-          {results.map((d) => (
+          {results.map((res) => (
             <Link
-              key={d.slug}
-              href={`/${d.slug}`}
-              onClick={() => {
-                setFocused(false);
-                setQuery('');
-              }}
-              className="flex items-center gap-3 px-5 py-3.5 hover:bg-[#12121e] transition-colors group"
+              key={res.slug}
+              href={`/${lang}/${res.slug}`}
+              className="flex items-center justify-between p-3 rounded-xl hover:bg-[#12121e] transition-colors group/item"
+              onClick={() => setFocused(false)}
             >
-              <span
-                className="text-xs font-bold px-2.5 py-1 rounded-md font-mono"
-                style={{
-                  color: getFormatRenk(d.from),
-                  backgroundColor: `${getFormatRenk(d.from)}15`,
-                }}
-              >
-                {d.from}
-              </span>
-              <svg className="w-4 h-4 text-[#5a5a7a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-              <span
-                className="text-xs font-bold px-2.5 py-1 rounded-md font-mono"
-                style={{
-                  color: getFormatRenk(d.to),
-                  backgroundColor: `${getFormatRenk(d.to)}15`,
-                }}
-              >
-                {d.to}
-              </span>
-              <span className="text-sm text-[#5a5a7a] group-hover:text-[#e8e8f4] transition-colors ml-auto">
-                {d.baslik}
+              <div className="flex items-center gap-2">
+                <span
+                  className="text-xs font-bold px-2.5 py-1 rounded-md font-mono"
+                  style={{
+                    color: getFormatRenk(res.from),
+                    backgroundColor: `${getFormatRenk(res.from)}15`,
+                  }}
+                >
+                  {res.from}
+                </span>
+                <svg className="w-4 h-4 text-[#5a5a7a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+                <span
+                  className="text-xs font-bold px-2.5 py-1 rounded-md font-mono"
+                  style={{
+                    color: getFormatRenk(res.to),
+                    backgroundColor: `${getFormatRenk(res.to)}15`,
+                  }}
+                >
+                  {res.to}
+                </span>
+              </div>
+              <span className="font-bold text-sm text-[#e8e8f4] group-hover/item:text-[#4d9fff] transition-colors">
+                {res.baslik[lang as 'en'|'tr'] || res.baslik['en']}
               </span>
             </Link>
           ))}

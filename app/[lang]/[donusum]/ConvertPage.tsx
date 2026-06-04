@@ -17,9 +17,11 @@ import { docxToHTML, textToPDF, mergePDFs, splitPDF, excelToCSV, csvToExcel } fr
 import { filesToZip, extractZip } from '@/lib/converters/archive';
 import { convertSubtitle } from '@/lib/converters/subtitle';
 import { useGlobalFiles } from '@/components/FileProvider';
+import { getDictionary } from '@/dictionaries';
 
 interface ConvertPageProps {
   cift: DonusumCift;
+  lang: string;
 }
 
 interface ResultItem {
@@ -39,7 +41,11 @@ function formatFileSize(bytes: number): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-export default function ConvertPage({ cift }: ConvertPageProps) {
+export default function ConvertPage({ cift, lang }: ConvertPageProps) {
+  const dict = getDictionary(lang);
+  const baslik = cift.baslik[lang as 'en'|'tr'] || cift.baslik['en'];
+  const aciklama = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
+
   const [files, setFiles] = useState<File[]>([]);
   const [results, setResults] = useState<ResultItem[]>([]);
   const [options, setOptions] = useState<Record<string, string | number | boolean>>({});
@@ -406,16 +412,16 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
         </div>
         
         <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-[#e8e8f4] to-[#5a5a7a] bg-clip-text text-transparent mt-2">
-          {cift.baslik}
+          {baslik}
         </h1>
         
         <p className="text-[#5a5a7a] font-medium max-w-xl">
-          {cift.aciklama}
+          {aciklama}
         </p>
 
         {/* Privacy badge */}
         <div className="flex items-center gap-1.5 text-xs text-[#5a5a7a] bg-[#0d0d18] border border-[#1c1c2e] px-4 py-1.5 rounded-full mt-2 font-semibold">
-          <span>🔒</span> Dosyalarınız yalnızca tarayıcınızda işlenir — sunucuya gönderilmez.
+          <span>🔒</span> {dict.security.shieldText}
         </div>
       </section>
 
@@ -455,15 +461,17 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
           {cift.secenekler && files.length > 0 && results.length === 0 && !isConverting && !isLoadingFfmpeg && (
             <div className="p-6 rounded-2xl border border-[#1c1c2e] bg-[#0d0d18] max-w-xl mx-auto w-full flex flex-col gap-5 animate-fade-in">
               <h3 className="font-bold text-sm text-[#e8e8f4] border-b border-[#1c1c2e] pb-2">Dönüştürme Ayarları</h3>
-              {cift.secenekler.map((opt) => (
-                <div key={opt.id} className="flex flex-col gap-2">
-                  <div className="flex justify-between items-center text-xs font-semibold">
-                    <span className="text-[#e8e8f4]">{opt.label}</span>
-                    <span className="text-[#5a5a7a] font-mono">
-                      {options[opt.id] ?? opt.default}
-                      {opt.unit}
-                    </span>
-                  </div>
+              {cift.secenekler.map((opt) => {
+                const optLabel = opt.label[lang as 'en'|'tr'] || opt.label['en'];
+                return (
+                  <div key={opt.id} className="flex flex-col gap-2">
+                    <div className="flex justify-between items-center text-xs font-semibold">
+                      <span className="text-[#e8e8f4]">{optLabel}</span>
+                      <span className="text-[#5a5a7a] font-mono">
+                        {options[opt.id] ?? opt.default}
+                        {opt.unit}
+                      </span>
+                    </div>
                   
                   {opt.type === 'range' && (
                     <input
@@ -477,20 +485,23 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
                   )}
 
                   {opt.type === 'select' && opt.options && (
-                    <select
-                      value={(options[opt.id] as string) || (opt.default as string)}
-                      onChange={(e) => handleOptionChange(opt.id, e.target.value)}
-                      className="w-full bg-[#06060c] text-[#e8e8f4] text-xs font-semibold"
-                    >
-                      {opt.options.map((o) => (
-                        <option key={o.value} value={o.value}>
-                          {o.label}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </div>
-              ))}
+                      <select
+                        value={(options[opt.id] as string) || (opt.default as string)}
+                        onChange={(e) => handleOptionChange(opt.id, e.target.value)}
+                        className="w-full bg-[#06060c] text-[#e8e8f4] text-xs font-semibold"
+                      >
+                        {opt.options.map((o) => {
+                          return (
+                            <option key={o.value} value={o.value}>
+                              {o.label}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
 
@@ -577,7 +588,7 @@ export default function ConvertPage({ cift }: ConvertPageProps) {
 
       {/* Related Grid */}
       {relatedConversions.length > 0 && (
-        <RelatedGrid items={relatedConversions} title="Diğer Popüler Dönüşümler" />
+        <RelatedGrid items={relatedConversions} title="Diğer Popüler Dönüşümler" lang={lang} />
       )}
 
       {/* Accordion SSS */}

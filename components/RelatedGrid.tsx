@@ -2,26 +2,29 @@ import Link from 'next/link';
 import FormatBadge from '@/components/FormatBadge';
 import type { DonusumCift } from '@/lib/donusum-data';
 
-interface RelatedGridProps {
+export interface RelatedGridProps {
   items: DonusumCift[];
   title?: string;
+  lang: string;
 }
 
-export default function RelatedGrid({ items, title = 'İlgili Dönüşümler' }: RelatedGridProps) {
-  if (items.length === 0) return null;
+export default function RelatedGrid({ items, title = "Diğer Dönüşümler", lang }: RelatedGridProps) {
+  if (!items.length) return null;
 
   return (
-    <section>
-      <h2 className="text-xl font-bold font-sans text-[#e8e8f4] mb-6">
+    <section className="flex flex-col gap-6">
+      <h2 className="text-xl md:text-2xl font-bold font-sans text-center md:text-left">
         {title}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {items.map((d) => (
-          <Link
-            key={d.slug}
-            href={`/${d.slug}`}
-            className="group relative overflow-hidden rounded-2xl border border-[#1c1c2e] bg-[#0d0d18] p-5 hover:border-[#5a5a7a]/50 hover:bg-[#12121e] transition-all duration-300"
-          >
+        {items.map((d) => {
+          const aciklama = d.aciklama[lang as 'en'|'tr'] || d.aciklama['en'];
+          return (
+            <Link
+              key={d.slug}
+              href={`/${lang}/${d.slug}`}
+              className="group flex flex-col p-4 rounded-xl border border-[#1c1c2e] bg-[#12121e] hover:border-[#5a5a7a]/50 hover:bg-[#1a1a2e] transition-colors gap-3"
+            >
             <div className="flex items-center gap-3 mb-3">
               <FormatBadge format={d.from} size="sm" />
               <svg className="w-4 h-4 text-[#5a5a7a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -29,11 +32,12 @@ export default function RelatedGrid({ items, title = 'İlgili Dönüşümler' }:
               </svg>
               <FormatBadge format={d.to} size="sm" />
             </div>
-            <p className="text-sm text-[#5a5a7a] group-hover:text-[#e8e8f4]/70 transition-colors line-clamp-2">
-              {d.aciklama}
+            <p className="text-xs text-[#5a5a7a] line-clamp-2 leading-relaxed">
+              {aciklama}
             </p>
           </Link>
-        ))}
+        );
+        })}
       </div>
     </section>
   );

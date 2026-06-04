@@ -1,0 +1,68 @@
+export const tr = {
+  common: {
+    home: 'Ana Sayfa',
+    categories: 'Kategorilere Göz Atın',
+    popular: 'Popüler Dönüşümler',
+    convert: 'Hemen Dönüştür',
+    sourceFile: 'Kaynak Dosya',
+    targetFormat: 'Hedef Format',
+    dropFilesHere: 'Dosyaları buraya sürükleyin',
+    orClickToSelect: 'veya seçmek için tıklayın',
+    unsupportedFormat: 'Desteklenmeyen Format',
+    noConversionFound: '.{ext} dosyası için bir dönüşüm bulunamadı.',
+    selectTargetFormat: 'Dönüştürülecek formatı seçin:',
+    uploadFirst: 'Önce sol tarafa bir dosya yükleyin',
+    changeFile: 'Dosyayı Değiştir',
+    andMore: 've {count} dosya daha',
+    allRightsReserved: 'Tüm hakları saklıdır.',
+    sitemap: 'Site Haritası',
+    howItWorks: 'Nasıl Çalışır?',
+    secureAndPrivate: 'Güvenli ve Gizli',
+    faq: 'Sıkça Sorulan Sorular',
+    pairCount: '{count} araç',
+  },
+  hero: {
+    badge1: '100% Tarayıcıda',
+    badge2: 'Anında',
+    badge3: 'Boyut Limiti Yok',
+    title1: 'Her Dosyayı Dönüştür',
+    title2: 'Anında, Ücretsiz, Gizli',
+    subtitle: 'Video, ses, görüntü ve belgelerinizi doğrudan tarayıcınızda dönüştürün. Dosyalarınız hiçbir zaman bir sunucuya yüklenmez, gizliliğiniz tamamen korunur.'
+  },
+  howTo: {
+    step1Title: 'Dosyayı Seç',
+    step1Desc: 'Dönüştürmek istediğiniz dosyaları cihazınızdan seçin veya sürükleyip bırakın.',
+    step2Title: 'Seçenekleri Ayarla',
+    step2Desc: 'Gerekirse dönüştürme kalitesi, bit hızı gibi detayları belirleyin ve Dönüştür\'e tıklayın.',
+    step3Title: 'Hemen İndir',
+    step3Desc: 'Saniyeler içinde tamamlanan dönüşüm sonrası dosyanızı anında indirin.'
+  },
+  security: {
+    subtitle: 'Güvenli ve Gizli',
+    title: 'Dosyalarınız Neden Güvende?',
+    desc: 'Geleneksel dönüştürücüler dosyalarınızı uzak bir sunucuya yükler ve orada işler. PRİZMA ise dönüştürme motorlarını doğrudan tarayıcınıza getirir.',
+    list1: 'Dosyalar asla cihazınızı terk etmez',
+    list2: 'Sunucu maliyeti olmadığı için 100% ücretsizdir',
+    list3: 'Sayfayı kapattığınızda tüm veriler silinir',
+    list4: 'Üyelik, kayıt veya kısıtlamalar yoktur',
+    shieldText: 'Görseller, videolar, ses dosyaları ve belgeler tamamen yerel bellekte işlenir.'
+  },
+  faqSection: {
+    q1: 'PRİZMA tamamen ücretsiz mi?',
+    a1: 'Evet. Dönüştürme işlemleri uzak sunucularda değil tamamen sizin tarayıcınızda ve kendi bilgisayarınızın gücüyle yapıldığı için sunucu maliyetimiz yoktur. Bu sayede platformumuz sınırsız ve ücretsiz kalabilmektedir.',
+    q2: 'Dosya boyutu sınırı var mı?',
+    a2: 'Herhangi bir yapay sınırımız bulunmamaktadır. Ancak işlemler tarayıcınızın belleğinde (RAM) yapıldığından, bilgisayarınızın veya telefonunuzun tarayıcıya ayırdığı bellek miktarı dönüştürebileceğiniz maksimum boyutu belirler. Genellikle görüntüler ve belgeler için sınırsız, video ve ses dosyalarında ise yüzlerce megabaytlık dosyalar rahatlıkla dönüştürülebilir.',
+    q3: 'Dönüştürme işlemi ne kadar sürüyor?',
+    a3: 'Görüntüler ve küçük belgeler saniyeler içinde dönüştürülür. Video ve ses gibi karmaşık formatlar için ilk kullanımda yaklaşık 25MB boyutunda bir dönüştürme motoru (FFmpeg) indirilir. İndirme tamamlandıktan sonra dönüştürme işlemi donanım gücünüze bağlı olarak yerel hızda tamamlanır. Sonraki dönüşümler motor önbelleğe alındığı için anında başlar.',
+    q4: 'Dosyalarım çalınabilir veya kopyalanabilir mi?',
+    a4: 'İnternet bağlantınızı keserek bile sitemizi kullanabilirsiniz! İşlemler tamamen yerel yapıldığından dosyalarınızın bir sunucuya gitmesi ve dolayısıyla çalınması teknik olarak imkansızdır.'
+  },
+  kategoriler: {
+    goruntu: 'Görüntü',
+    video: 'Video',
+    ses: 'Ses',
+    belge: 'Belge',
+    arsiv: 'Arşiv',
+    altyazi: 'Altyazı',
+  }
+};
