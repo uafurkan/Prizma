@@ -172,7 +172,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                       className="text-sm font-black px-2 py-1 rounded-md font-mono"
                       style={{ 
                         color: getFormatRenk(pair.to), 
-                        backgroundColor: targetSlug === pair.slug ? 'transparent' : `${getFormatRenk(pair.to)}15` 
+                        backgroundColor: targetSlug === pair.slug ? 'transparent' : `${getFormatRenk(pair.to)}25` 
                       }}
                     >
                       {pair.to}
