@@ -863,7 +863,8 @@ export function getFormatRenk(format: string): string {
     PDF: '#ff4d6d',
     DOCX: '#4d9fff',
     HTML: '#ff8c42',
-    TXT: '#e8e8f4',
+    TXT: '#8a8aa3',
+    M4A: '#4d9fff',
     CSV: '#06d6a0',
     Excel: '#06d6a0',
     XLSX: '#06d6a0',
@@ -875,5 +876,5 @@ export function getFormatRenk(format: string): string {
     ASS: '#b56cff',
     SUB: '#ffd166',
   };
-  return map[format] || '#e8e8f4';
+  return map[format] || '#8a8aa3';
 }
