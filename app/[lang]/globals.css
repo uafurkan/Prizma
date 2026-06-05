@@ -3,10 +3,10 @@
 /* ── PRİZMA Design System ── */
 :root {
   /* Light Mode (Creamy White Default) */
-  --bg: #fdfbf7;
-  --surface: #f5f1e6;
-  --surface2: #e8e2d0;
-  --border: #cec7b3;
+  --bg: #fcfaf5;
+  --surface: #f0e8d5;
+  --surface2: #e2d6bc;
+  --border: #c9bc9f;
   --text: #1a1a24;
   --muted: #5e5e78;
   --code-bg: #f4f1e8;

@@ -16,10 +16,13 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains',
 });
 
-export const metadata: Metadata = {
-  title: 'PRİZMA | The Universal File Converter',
-  description: 'Instantly convert files securely in your browser.',
-};
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  return {
+    title: lang === 'tr' ? 'PRİZMA | Evrensel Dosya Dönüştürücü' : 'PRIZMA | The Universal File Converter',
+    description: lang === 'tr' ? 'Dosyalarınızı tarayıcınızda güvenle ve anında dönüştürün.' : 'Instantly convert files securely in your browser.',
+  };
+}
 
 import { FileProvider } from '@/components/FileProvider';
 import { getDictionary } from '@/dictionaries';
@@ -76,7 +79,7 @@ export default async function RootLayout({
               </Link>
               {/* Desktop Nav */}
               <nav className="hidden md:flex items-center gap-4 md:gap-6 max-w-[65%] whitespace-nowrap">
-                <ThemeToggle />
+                <ThemeToggle dict={dict} />
                 <LanguageSwitcher currentLang={lang} />
                 <HeaderNav lang={lang} dict={dict} />
                 <a href="https://github.com/uafurkan/Prizma" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-muted hover:text-foreground transition-colors flex items-center gap-2 group">
@@ -88,7 +91,7 @@ export default async function RootLayout({
 
               {/* Mobile Nav */}
               <MobileMenu lang={lang} dict={dict}>
-                <ThemeToggle />
+                <ThemeToggle dict={dict} />
                 <LanguageSwitcher currentLang={lang} />
               </MobileMenu>
             </div>
@@ -101,7 +104,7 @@ export default async function RootLayout({
           <footer className="border-t border-border bg-surface py-8 text-center">
             <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-muted">
-                &copy; {new Date().getFullYear()} PRİZMA. {dict.common.allRightsReserved}
+                &copy; {new Date().getFullYear()} {lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}. {dict.common.allRightsReserved}
               </p>
               <div className="flex gap-6 text-sm text-muted">
                 <Link href={`/${lang}`} className="hover:text-foreground transition-colors">

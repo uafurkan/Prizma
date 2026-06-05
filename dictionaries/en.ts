@@ -28,6 +28,14 @@ export const en = {
     downloadFile: 'Download File',
     newConversion: 'New Conversion',
     multipleFiles: 'You can select multiple files',
+    convertedFiles: 'Converted Files',
+    downloadAllZip: 'Download All as ZIP',
+    startNewConversion: 'Start New Conversion',
+    relatedConversions: 'Other Conversions',
+    toggleTheme: 'Toggle Theme',
+    switchToLight: 'Switch to Light Theme',
+    switchToDark: 'Switch to Dark Theme',
+    otherPopularConversions: 'Other Popular Conversions',
   },
   hero: {
     badge1: '100% In Browser',
@@ -96,5 +104,10 @@ export const en = {
     faq2Desc: 'Yes, absolutely. PRIZMA operates with a zero-server architecture. This means your uploaded files are never transferred to any server; the entire process happens in your own device\'s browser and memory. Therefore, your files are 100% secure and private.',
     faq3Title: 'Do I have to pay for this conversion process?',
     faq3Desc: 'No, all conversion tools on our platform are completely free and can be used unlimitedly without requiring any registration or membership.',
+    errorTitle: 'An Error Occurred During Conversion',
+    errorDesc: 'An unexpected error occurred during the file conversion process. Your browser or file might not be suitable for this operation.',
+    errorDetails: 'Error Details',
+    tryAgain: 'Try Again',
+    backToHome: 'Back to Home',
   }
 };

@@ -430,11 +430,11 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       {/* Header */}
       <section className="flex flex-col items-center text-center gap-4 pt-6">
         <div className="flex items-center gap-3 md:gap-5 justify-center">
-          <FormatBadge format={cift.from} size="lg" />
+          <FormatBadge format={cift.from} size="lg" lang={lang} />
           <svg className="w-6 h-6 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
-          <FormatBadge format={cift.to} size="lg" />
+          <FormatBadge format={cift.to} size="lg" lang={lang} />
         </div>
         
         <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-foreground to-muted bg-clip-text text-transparent mt-2">
@@ -615,7 +615,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
       {/* Related Grid */}
       {relatedConversions.length > 0 && (
-        <RelatedGrid items={relatedConversions} title="Diğer Popüler Dönüşümler" lang={lang} />
+        <RelatedGrid items={relatedConversions} title={dict.common.otherPopularConversions} lang={lang} dict={dict} />
       )}
 
       {/* Accordion SSS */}

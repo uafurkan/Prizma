@@ -158,6 +158,15 @@ export function getTranslatedPath(pathname: string, currentLang: string, targetL
   return newPath;
 }
 
+export function getTranslatedFormat(format: string, lang: string): string {
+  if (lang === 'tr') return format;
+  const enMap: Record<string, string> = {
+    'Görseller': 'Images',
+    'Dosyalar': 'Files',
+  };
+  return enMap[format] || format;
+}
+
 export const DONUSUM_DATA: DonusumCift[] = [
   // ===== GÖRÜNTÜ =====
   {

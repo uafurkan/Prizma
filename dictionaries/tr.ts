@@ -28,6 +28,14 @@ export const tr = {
     downloadFile: 'Dosyayı İndir',
     newConversion: 'Yeni Dönüşüm',
     multipleFiles: 'Birden fazla dosya seçebilirsiniz',
+    convertedFiles: 'Dönüştürülen Dosyalar',
+    downloadAllZip: 'Tümünü ZIP Olarak İndir',
+    startNewConversion: 'Yeni Dönüşüm Başlat',
+    relatedConversions: 'Diğer Dönüşümler',
+    toggleTheme: 'Temayı Değiştir',
+    switchToLight: 'Açık Temaya Geç',
+    switchToDark: 'Koyu Temaya Geç',
+    otherPopularConversions: 'Diğer Popüler Dönüşümler',
   },
   hero: {
     badge1: '100% Tarayıcıda',
@@ -96,5 +104,10 @@ export const tr = {
     faq2Desc: 'Evet, tamamen. PRİZMA sıfır sunucu mimarisiyle çalışır. Yani yüklediğiniz dosyalar hiçbir sunucuya transfer edilmez; tüm işlem kendi cihazınızın tarayıcısında, belleğinde gerçekleşir. Bu yüzden dosyalarınız %100 güvendedir ve gizlidir.',
     faq3Title: 'Bu dönüşüm işlemi için ödeme yapmam gerekiyor mu?',
     faq3Desc: 'Hayır, platformumuzdaki tüm dönüşüm araçları tamamen ücretsizdir ve herhangi bir kayıt veya üyelik gerektirmeden sınırsızca kullanılabilir.',
+    errorTitle: 'Dönüşüm Sırasında Bir Hata Oluştu',
+    errorDesc: 'Dosya dönüştürme işlemi sırasında beklenmeyen bir hata meydana geldi. Tarayıcınız veya dosyanız bu işlem için uygun olmayabilir.',
+    errorDetails: 'Hata Detayları',
+    tryAgain: 'Tekrar Dene',
+    backToHome: 'Ana Sayfaya Dön',
   }
 };

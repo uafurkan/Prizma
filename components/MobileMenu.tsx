@@ -86,7 +86,7 @@ export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
                 pathname === `/${lang}` ? 'text-[var(--mobile-menu-active)]' : 'text-[var(--mobile-menu-text)] hover:opacity-70'
               }`}
             >
-              {dict.common.home || 'Home'}
+              {dict.common.home}
             </Link>
             
             {categories.map((cat) => {

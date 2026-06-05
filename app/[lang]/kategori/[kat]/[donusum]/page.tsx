@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { DONUSUM_DATA, getDonusumBySlug } from '@/lib/donusum-data';
+import { DONUSUM_DATA, getDonusumBySlug, getTranslatedFormat } from '@/lib/donusum-data';
 import ConvertPage from './ConvertPage';
 import type { Metadata } from 'next';
 import { getDictionary } from '@/dictionaries';
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const aciklama = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
 
   return {
-    title: `${cift.from} → ${cift.to} | PRİZMA`,
+    title: `${getTranslatedFormat(cift.from, lang)} → ${getTranslatedFormat(cift.to, lang)} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`,
     description: aciklama,
   };
 }
@@ -54,7 +54,7 @@ export default async function Page({ params }: PageProps) {
   const softwareAppSchema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: `${cift.from} to ${cift.to} Converter`,
+    name: `${getTranslatedFormat(cift.from, lang)} to ${getTranslatedFormat(cift.to, lang)} Converter`,
     operatingSystem: 'All',
     applicationCategory: 'UtilityApplication',
     offers: {

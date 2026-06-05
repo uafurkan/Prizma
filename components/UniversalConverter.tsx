@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGlobalFiles } from '@/components/FileProvider';
-import { DONUSUM_DATA, getFormatRenk } from '@/lib/donusum-data';
+import { DONUSUM_DATA, getFormatRenk, getTranslatedFormat } from '@/lib/donusum-data';
 
 import { getDictionary } from '@/dictionaries';
 
@@ -175,7 +175,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                         backgroundColor: targetSlug === pair.slug ? 'transparent' : `${getFormatRenk(pair.to)}25` 
                       }}
                     >
-                      {pair.to}
+                      {getTranslatedFormat(pair.to, lang)}
                     </span>
                   </button>
                 ))}

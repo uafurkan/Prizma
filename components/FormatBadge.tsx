@@ -1,11 +1,12 @@
-import { getFormatRenk } from '@/lib/donusum-data';
+import { getFormatRenk, getTranslatedFormat } from '@/lib/donusum-data';
 
 interface FormatBadgeProps {
   format: string;
   size?: 'sm' | 'md' | 'lg';
+  lang?: string;
 }
 
-export default function FormatBadge({ format, size = 'md' }: FormatBadgeProps) {
+export default function FormatBadge({ format, size = 'md', lang }: FormatBadgeProps) {
   const renk = getFormatRenk(format);
 
   const sizes = {
@@ -23,7 +24,7 @@ export default function FormatBadge({ format, size = 'md' }: FormatBadgeProps) {
         border: `1.5px solid ${renk}50`,
       }}
     >
-      {format}
+      {lang ? getTranslatedFormat(format, lang) : format}
     </span>
   );
 }

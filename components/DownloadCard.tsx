@@ -101,7 +101,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
           <div className="flex-1 w-full flex flex-col gap-3">
             {/* Editable Filename */}
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-muted font-mono">{dict?.common?.fileName || 'Dosya Adı'}</label>
+              <label className="text-xs text-muted font-mono">{dict?.common?.fileName}</label>
               <input
                 type="text"
                 value={name}
@@ -122,7 +122,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
                   isSmaller ? 'bg-prism-g/15 text-prism-g' : 'bg-prism-r/15 text-prism-r'
                 }`}
               >
-                {isSmaller ? `%${diffPercentage} ${dict?.common?.smaller || 'daha küçük'}` : `%${diffPercentage} ${dict?.common?.larger || 'daha büyük'}`}
+                {isSmaller ? `%${diffPercentage} ${dict?.common?.smaller}` : `%${diffPercentage} ${dict?.common?.larger}`}
               </span>
             </div>
           </div>
@@ -137,13 +137,13 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
-            {dict?.common?.downloadFile || 'Dosyayı İndir'}
+            {dict?.common?.downloadFile}
           </button>
           <button
             onClick={onReset}
             className="btn-secondary"
           >
-            {dict?.common?.newConversion || 'Yeni Dönüşüm'}
+            {dict?.common?.newConversion}
           </button>
         </div>
       </div>
@@ -154,12 +154,12 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
   return (
     <div className="relative overflow-hidden rounded-2xl border border-border bg-surface p-6 flex flex-col gap-6 animate-fade-in">
       <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
-        <h3 className="font-bold text-foreground">{dict?.common?.convertedFiles || 'Dönüştürülen Dosyalar'} ({results.length})</h3>
+        <h3 className="font-bold text-foreground">{dict?.common?.convertedFiles} ({results.length})</h3>
         <button
           onClick={handleDownloadAllZip}
           className="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-prism-g/15 text-prism-g hover:bg-prism-g/25 flex items-center gap-1.5"
         >
-          📦 {dict?.common?.downloadAllZip || 'Tümünü ZIP Olarak İndir'}
+          📦 {dict?.common?.downloadAllZip}
         </button>
       </div>
 
@@ -187,7 +187,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
             <button
               onClick={() => handleDownloadSingle(i)}
               className="p-2 rounded-lg bg-surface2 border border-border text-muted hover:text-prism-g hover:border-prism-g/30 transition-colors flex-shrink-0"
-              title={dict?.common?.downloadFile || 'Dosyayı İndir'}
+              title={dict?.common?.downloadFile}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -202,7 +202,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
           onClick={onReset}
           className="btn-secondary w-full sm:w-auto"
         >
-          {dict?.common?.startNewConversion || 'Yeni Dönüşüm Başlat'}
+          {dict?.common?.startNewConversion}
         </button>
       </div>
     </div>

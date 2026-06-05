@@ -82,10 +82,10 @@ export default function DropZone({ accept, multiple = false, onFiles, label, dic
         </div>
         <div className="text-center">
           <p className="text-foreground font-semibold font-sans text-lg">
-            {label || dict?.common?.dropFilesHere || 'Dosyanızı sürükleyin veya tıklayın'}
+            {label || dict?.common?.dropFilesHere}
           </p>
           <p className="text-muted text-sm mt-1">
-            {multiple ? (dict?.common?.multipleFiles || 'Birden fazla dosya seçebilirsiniz') : (dict?.common?.orClickToSelect || 'veya dosya seçmek için tıklayın')}
+            {multiple ? dict?.common?.multipleFiles : dict?.common?.orClickToSelect}
           </p>
         </div>
       </div>

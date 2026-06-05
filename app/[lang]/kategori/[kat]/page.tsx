@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const aciklama = kategori.aciklama[lang as 'en'|'tr'] || kategori.aciklama['en'];
 
   return {
-    title: `${baslik} | PRİZMA`,
+    title: `${baslik} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`,
     description: aciklama,
   };
 }
@@ -79,11 +79,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-5 hover:border-muted/50 hover:bg-surface2 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <FormatBadge format={d.from} size="sm" />
+                  <FormatBadge format={d.from} size="sm" lang={lang} />
                   <svg className="w-4 h-4 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                  <FormatBadge format={d.to} size="sm" />
+                  <FormatBadge format={d.to} size="sm" lang={lang} />
                 </div>
                 <p className="text-xs text-muted line-clamp-2 mt-2 leading-relaxed">
                   {dAciklama}
