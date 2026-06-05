@@ -83,7 +83,7 @@ export default function SearchBar({ lang }: { lang: string }) {
                   className="text-xs font-bold px-2.5 py-1 rounded-md font-mono"
                   style={{
                     color: getFormatRenk(res.from),
-                    backgroundColor: `${getFormatRenk(res.from)}25`,
+                    backgroundColor: `color-mix(in srgb, ${getFormatRenk(res.from)} 25%, transparent)`,
                   }}
                 >
                   {res.from}
@@ -95,7 +95,7 @@ export default function SearchBar({ lang }: { lang: string }) {
                   className="text-xs font-bold px-2.5 py-1 rounded-md font-mono"
                   style={{
                     color: getFormatRenk(res.to),
-                    backgroundColor: `${getFormatRenk(res.to)}25`,
+                    backgroundColor: `color-mix(in srgb, ${getFormatRenk(res.to)} 25%, transparent)`,
                   }}
                 >
                   {res.to}

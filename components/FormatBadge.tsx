@@ -20,8 +20,8 @@ export default function FormatBadge({ format, size = 'md', lang }: FormatBadgePr
       className={`inline-flex items-center font-bold rounded-lg font-mono ${sizes[size]} transition-all`}
       style={{
         color: renk,
-        backgroundColor: `${renk}25`,
-        border: `1.5px solid ${renk}50`,
+        backgroundColor: `color-mix(in srgb, ${renk} 25%, transparent)`,
+        border: `1.5px solid color-mix(in srgb, ${renk} 50%, transparent)`,
       }}
     >
       {lang ? getTranslatedFormat(format, lang) : format}
