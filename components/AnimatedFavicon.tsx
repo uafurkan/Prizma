@@ -76,10 +76,15 @@ export default function AnimatedFavicon() {
     // Eski/istenmeyen ikonları temizle
     document.querySelectorAll("link[rel='icon']:not(#dynamic-prizma-favicon), link[rel='shortcut icon']:not(#dynamic-prizma-favicon)").forEach(el => el.remove());
 
-    function updateLinks(dataUrl: string) {
-      if (faviconLink) {
-        faviconLink.href = dataUrl;
+    let oldUrl = '';
+    function updateLinks(blob: Blob | null) {
+      if (!blob || !faviconLink) return;
+      const url = URL.createObjectURL(blob);
+      faviconLink.href = url;
+      if (oldUrl) {
+        URL.revokeObjectURL(oldUrl);
       }
+      oldUrl = url;
     }
 
     const startTime = performance.now();
@@ -135,7 +140,10 @@ export default function AnimatedFavicon() {
           ctx!.beginPath(); ctx!.moveTo(pts[2][0], pts[2][1]); ctx!.lineTo(pts[0][0], pts[0][1]);
           ctx!.strokeStyle = g3; ctx!.stroke();
 
-          updateLinks(canvas.toDataURL('image/png'));
+          canvas.toBlob((blob) => {
+            if (isCancelled) return;
+            updateLinks(blob);
+          }, 'image/png');
       } catch (err) {
         console.error("Favicon animation error:", err);
       }
@@ -161,6 +169,9 @@ export default function AnimatedFavicon() {
       isCancelled = true;
       cancelAnimationFrame(animFrameId);
       window.clearInterval(intervalId);
+      if (oldUrl) {
+        URL.revokeObjectURL(oldUrl);
+      }
     };
   }, []);
 
