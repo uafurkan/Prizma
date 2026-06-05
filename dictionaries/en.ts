@@ -56,7 +56,7 @@ export const en = {
   security: {
     subtitle: 'Safe and Private',
     title: 'Why are your files safe?',
-    desc: 'Traditional converters upload your files to a remote server and process them there. PRİZMA brings the conversion engines directly into your browser.',
+    desc: 'Traditional converters upload your files to a remote server and process them there. PRIZMA brings the conversion engines directly into your browser.',
     list1: 'Files never leave your device',
     list2: '100% free since there are no server costs',
     list3: 'All data is cleared when you close the page',
@@ -64,7 +64,7 @@ export const en = {
     shieldText: 'Images, videos, audio files, and documents are processed entirely in local memory.'
   },
   faqSection: {
-    q1: 'Is PRİZMA completely free?',
+    q1: 'Is PRIZMA completely free?',
     a1: 'Yes. Since conversions happen directly in your browser using your device\'s power, we have no server costs. This allows us to remain unlimited and free.',
     q2: 'Is there a file size limit?',
     a2: 'We do not have any artificial limits. However, since processing happens in browser memory (RAM), the maximum file size depends on your device. Usually, images and documents are limitless, and videos/audio up to hundreds of megabytes can be converted comfortably.',
