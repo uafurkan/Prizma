@@ -4,7 +4,10 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { DONUSUM_DATA, getFormatRenk, getDonusumPath } from '@/lib/donusum-data';
 
+import { getDictionary } from '@/dictionaries';
+
 export default function SearchBar({ lang }: { lang: string }) {
+  const dict = getDictionary(lang);
   const [query, setQuery] = useState('');
   const [focused, setFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -57,7 +60,7 @@ export default function SearchBar({ lang }: { lang: string }) {
         </svg>
         <input
           type="text"
-          placeholder="Dönüşüm ara... (ör. JPG, PDF, MP4)"
+          placeholder={dict.common.searchPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setFocused(true)}
@@ -108,7 +111,7 @@ export default function SearchBar({ lang }: { lang: string }) {
 
       {focused && query.length >= 2 && results.length === 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-surface border border-border rounded-2xl p-6 text-center shadow-2xl z-50">
-          <p className="text-muted text-sm">Sonuç bulunamadı. Farklı bir arama deneyin.</p>
+          <p className="text-muted text-sm">{dict.common.noResults}</p>
         </div>
       )}
     </div>

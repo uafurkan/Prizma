@@ -7,9 +7,10 @@ interface DropZoneProps {
   multiple?: boolean;
   onFiles: (files: File[]) => void;
   label?: string;
+  dict?: any;
 }
 
-export default function DropZone({ accept, multiple = false, onFiles, label }: DropZoneProps) {
+export default function DropZone({ accept, multiple = false, onFiles, label, dict }: DropZoneProps) {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -81,10 +82,10 @@ export default function DropZone({ accept, multiple = false, onFiles, label }: D
         </div>
         <div className="text-center">
           <p className="text-foreground font-semibold font-sans text-lg">
-            {label || 'Dosyanızı sürükleyin veya tıklayın'}
+            {label || dict?.common?.dropFilesHere || 'Dosyanızı sürükleyin veya tıklayın'}
           </p>
           <p className="text-muted text-sm mt-1">
-            {multiple ? 'Birden fazla dosya seçebilirsiniz' : 'veya dosya seçmek için tıklayın'}
+            {multiple ? (dict?.common?.multipleFiles || 'Birden fazla dosya seçebilirsiniz') : (dict?.common?.orClickToSelect || 'veya dosya seçmek için tıklayın')}
           </p>
         </div>
       </div>

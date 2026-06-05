@@ -110,7 +110,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
     });
 
     if (validFiles.length === 0) {
-      setLocalError(`Lütfen yalnızca .${cift.fromExt} uzantılı dosyalar yükleyin.`);
+      setLocalError(dict.convertPage.onlyExtFiles.replace('{ext}', cift.fromExt));
       setFiles([]);
       return;
     }
@@ -184,7 +184,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
           ]);
         }
       } catch (err) {
-        setLocalError((err as Error).message || 'Dönüştürme sırasında hata oluştu.');
+        setLocalError((err as Error).message || dict.convertPage.conversionError);
       }
       return;
     }
@@ -383,7 +383,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
           break;
         }
         default:
-          throw new Error('Dönüştürücü bulunamadı.');
+          throw new Error(dict.convertPage.conversionError);
       }
 
       // Track Vercel analytics
@@ -397,7 +397,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       setLocalProgress(100);
       setResults(finalResults);
     } catch (err) {
-      setLocalError((err as Error).message || 'Dönüştürme sırasında hata oluştu.');
+      setLocalError((err as Error).message || dict.convertPage.conversionError);
       
       // Track Vercel analytics error
       try {
@@ -455,12 +455,12 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       {cift.converter === 'ffmpeg' && !ffmpegSupported ? (
         <div className="p-6 rounded-2xl border border-prism-r/30 bg-prism-r/5 text-center flex flex-col gap-3 max-w-xl mx-auto w-full">
           <span className="text-3xl">⚠️</span>
-          <h3 className="font-bold text-prism-r text-lg">Tarayıcınız Bu Dönüşümü Desteklemiyor</h3>
+          <h3 className="font-bold text-prism-r text-lg">{dict.convertPage.browserNotSupported}</h3>
           <p className="text-sm text-muted leading-relaxed">
-            Bu dönüşüm için gerekli olan SharedArrayBuffer özelliği tarayıcınızda etkin değil. Chrome, Firefox veya Edge kullanmanızı öneririz.
+            {dict.convertPage.sabDesc}
           </p>
           <p className="text-xs text-muted bg-background p-3 rounded-lg font-mono leading-relaxed mt-2 text-left">
-            iOS / Safari için: Ayarlar &gt; Safari &gt; Gelişmiş &gt; Deneysel Özellikler altından SharedArrayBuffer&apos;ı etkinleştirebilirsiniz.
+            {dict.convertPage.safariDesc}
           </p>
         </div>
       ) : (
@@ -471,14 +471,14 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
               <div className="flex items-start gap-2.5">
                 <span className="text-base mt-0.5">ℹ️</span>
                 <p className="text-muted leading-normal text-xs">
-                  Bu dönüşüm ilk kullanımda ~25MB boyutunda FFmpeg dönüştürme dosyaları indirir. Sonraki dönüşümleriniz cihaz önbelleği sayesinde anında gerçekleşir.
+                  {dict.convertPage.ffmpegBannerText}
                 </p>
               </div>
               <button
                 onClick={handleDismissBanner}
                 className="text-xs text-prism-b hover:underline font-bold flex-shrink-0"
               >
-                Anladım
+                {dict.convertPage.gotIt}
               </button>
             </div>
           )}
@@ -486,7 +486,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
           {/* Options Panel (rendered only if cift.secenekler exists & files are loaded) */}
           {cift.secenekler && files.length > 0 && results.length === 0 && !isConverting && !isLoadingFfmpeg && (
             <div className="p-6 rounded-2xl border border-border bg-surface max-w-xl mx-auto w-full flex flex-col gap-5 animate-fade-in">
-              <h3 className="font-bold text-sm text-foreground border-b border-border pb-2">Dönüştürme Ayarları</h3>
+              <h3 className="font-bold text-sm text-foreground border-b border-border pb-2">{dict.convertPage.conversionSettings}</h3>
               {cift.secenekler.map((opt) => {
                 const optLabel = opt.label[lang as 'en'|'tr'] || opt.label['en'];
                 return (
@@ -536,7 +536,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
             {/* Error Message */}
             {activeError && (
               <div className="p-4 rounded-xl border border-prism-r/20 bg-prism-r/5 text-xs text-prism-r font-semibold text-center animate-fade-in">
-                ⚠️ Hata: {activeError}
+                {dict.convertPage.error} {activeError}
               </div>
             )}
 
@@ -547,15 +547,16 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                   accept={cift.fromExt === '*' ? '*' : `.${cift.fromExt}`}
                   multiple={!!cift.cokluDosya}
                   onFiles={handleFiles}
-                  label={`${cift.from} dosyasını sürükleyin veya seçin`}
+                  label={dict.common.dropFilesHere}
+                  dict={dict}
                 />
                 
                 {files.length > 0 && (
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between text-xs text-muted font-mono border-b border-border pb-1.5 px-1">
-                      <span>Seçilen Dosyalar ({files.length})</span>
+                      <span>{dict.convertPage.selectedFiles} ({files.length})</span>
                       <button onClick={handleReset} className="hover:text-prism-r transition-colors">
-                        Temizle
+                        {dict.convertPage.clear}
                       </button>
                     </div>
                     <div className="max-h-36 overflow-y-auto flex flex-col gap-1.5">
@@ -571,7 +572,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                       onClick={handleConvert}
                       className="btn-primary w-full mt-2"
                     >
-                      Dönüştür
+                      {dict.convertPage.convertBtn}
                     </button>
                   </div>
                 )}
@@ -585,16 +586,16 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                   <>
                     <div className="w-12 h-12 rounded-full border-2 border-t-prism-b border-r-transparent border-b-transparent border-l-transparent animate-spin" />
                     <div className="flex flex-col gap-1">
-                      <h4 className="font-bold text-foreground">Dönüştürme Motoru Yükleniyor...</h4>
-                      <p className="text-xs text-muted">Dönüştürücü kütüphaneler kuruluyor, bu işlem 3-5 saniye sürebilir.</p>
+                      <h4 className="font-bold text-foreground">{dict.convertPage.engineLoading}</h4>
+                      <p className="text-xs text-muted">{dict.convertPage.engineDesc}</p>
                     </div>
                   </>
                 ) : (
                   <>
                     <ProgressRing progress={progressValue} size={90} />
                     <div className="flex flex-col gap-1">
-                      <h4 className="font-bold text-foreground">Dosyalar Dönüştürülüyor</h4>
-                      <p className="text-xs text-muted font-mono">Lütfen bu sayfayı kapatmayın.</p>
+                      <h4 className="font-bold text-foreground">{dict.convertPage.convertingFiles}</h4>
+                      <p className="text-xs text-muted font-mono">{dict.convertPage.doNotClose}</p>
                     </div>
                   </>
                 )}
@@ -603,7 +604,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
             {/* Results Screen */}
             {results.length > 0 && (
-              <DownloadCard results={results} onReset={handleReset} />
+              <DownloadCard results={results} onReset={handleReset} dict={dict} />
             )}
           </div>
         </>
@@ -619,30 +620,30 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
       {/* Accordion SSS */}
       <section className="flex flex-col gap-5 max-w-2xl mx-auto w-full pt-6">
-        <h2 className="text-xl md:text-2xl font-bold text-center">Sıkça Sorulan Sorular</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-center">{dict.common.faq}</h2>
         <div className="flex flex-col gap-4">
           <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
             <h4 className="font-bold text-foreground text-sm">
-              {cift.from}&apos;den {cift.to}&apos;ye dönüşüm nasıl yapılır?
+              {dict.convertPage.faq1Title.replace('{from}', cift.from).replace('{to}', cift.to)}
             </h4>
             <p className="text-xs text-muted leading-relaxed">
-              Tek yapmanız gereken {cift.from} dosyanızı yukarıdaki yükleme alanına sürüklemek ve &apos;Dönüştür&apos; butonuna tıklamaktır. İşlem tarayıcınızda yerel olarak gerçekleşir ve saniyeler içinde tamamlanır. Ardından dönüştürülen dosyayı cihazınıza indirebilirsiniz.
+              {dict.convertPage.faq1Desc.replace('{from}', cift.from)}
             </p>
           </div>
           <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
             <h4 className="font-bold text-foreground text-sm">
-              Dosyalarım dönüştürücüye yüklendiğinde gizli kalıyor mu?
+              {dict.convertPage.faq2Title}
             </h4>
             <p className="text-xs text-muted leading-relaxed">
-              Evet, tamamen. PRİZMA sıfır sunucu mimarisiyle çalışır. Yani yüklediğiniz dosyalar hiçbir sunucuya transfer edilmez; tüm işlem kendi cihazınızın tarayıcısında, belleğinde gerçekleşir. Bu yüzden dosyalarınız %100 güvendedir ve gizlidir.
+              {dict.convertPage.faq2Desc}
             </p>
           </div>
           <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
             <h4 className="font-bold text-foreground text-sm">
-              Bu dönüşüm işlemi için ödeme yapmam gerekiyor mu?
+              {dict.convertPage.faq3Title}
             </h4>
             <p className="text-xs text-muted leading-relaxed">
-              Hayır, platformumuzdaki tüm dönüşüm araçları tamamen ücretsizdir ve herhangi bir kayıt veya üyelik gerektirmeden sınırsızca kullanılabilir.
+              {dict.convertPage.faq3Desc}
             </p>
           </div>
         </div>
