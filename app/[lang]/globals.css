@@ -11,14 +11,14 @@
   --muted: #5e5e78;
   --code-bg: #f4f1e8;
 
-  --r: #e8405a;
-  --o: #e67a35;
-  --y: #d4a630;
-  --g: #05b888;
-  --b: #3d8ae8;
-  --p: #9d55e8;
+  --r: #c51b38;
+  --o: #b24b00;
+  --y: #966900;
+  --g: #037d5c;
+  --b: #165cb4;
+  --p: #6f20be;
 
-  --prism: linear-gradient(135deg, #e8405a, #e67a35, #d4a630, #05b888, #3d8ae8, #9d55e8);
+  --prism: linear-gradient(135deg, #c51b38, #b24b00, #966900, #037d5c, #165cb4, #6f20be);
 
   --background: var(--bg);
   --foreground: var(--text);
