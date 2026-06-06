@@ -309,7 +309,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                 convertedSize: res.blob.size,
               });
             }
-          } else if (cift.slug === 'word-to-pdf') {
+          } else if (cift.slug === 'word-to-pdf' || cift.slug === 'docx-to-pdf') {
             for (const file of files) {
               const htmlDoc = await docxToHTML(file);
               const mockFile = new File([htmlDoc.blob], file.name.replace(/\.docx?$/i, '.html'), { type: 'text/html' });
@@ -375,7 +375,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
               originalSize: files.reduce((acc, f) => acc + f.size, 0),
               convertedSize: zipBlob.size,
             });
-          } else if (cift.slug === 'zip-ac') {
+          } else if (cift.slug === 'zip-ac' || cift.slug === 'extract-zip') {
             const entries = await extractZip(files[0]);
             finalResults = entries.map((entry) => ({
               blob: entry.blob,
