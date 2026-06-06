@@ -51,11 +51,16 @@ export async function convertSpeechToText(
     onProgress({ status: 'inferencing' });
   }
 
-  // Run the model
-  const output = await transcriber(audioData, {
-    language: options.language || 'turkish',
+  const transcriberOptions: any = {
     task: 'transcribe',
-  });
+  };
+  
+  if (options.language && options.language !== 'auto') {
+    transcriberOptions.language = options.language;
+  }
+
+  // Run the model
+  const output = await transcriber(audioData, transcriberOptions);
 
   const text = output.text;
   

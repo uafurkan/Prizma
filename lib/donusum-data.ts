@@ -176,6 +176,77 @@ export function getTranslatedFormat(format: string, lang: string): string {
   return enMap[format] || format;
 }
 
+export const WHISPER_LANGUAGES = [
+  { value: 'auto', label: 'Auto Detect / Otomatik Algıla' },
+  { value: 'turkish', label: 'Türkçe (Turkish)' },
+  { value: 'english', label: 'English' },
+  { value: 'spanish', label: 'Español (Spanish)' },
+  { value: 'french', label: 'Français (French)' },
+  { value: 'german', label: 'Deutsch (German)' },
+  { value: 'italian', label: 'Italiano (Italian)' },
+  { value: 'portuguese', label: 'Português (Portuguese)' },
+  { value: 'russian', label: 'Русский (Russian)' },
+  { value: 'chinese', label: '中文 (Chinese)' },
+  { value: 'japanese', label: '日本語 (Japanese)' },
+  { value: 'korean', label: '한국어 (Korean)' },
+  { value: 'arabic', label: 'العربية (Arabic)' },
+  { value: 'dutch', label: 'Nederlands (Dutch)' },
+  { value: 'polish', label: 'Polski (Polish)' },
+  { value: 'greek', label: 'Ελληνικά (Greek)' },
+  { value: 'hindi', label: 'हिन्दी (Hindi)' },
+  { value: 'swedish', label: 'Svenska (Swedish)' },
+  { value: 'ukrainian', label: 'Українська (Ukrainian)' },
+  { value: 'vietnamese', label: 'Tiếng Việt (Vietnamese)' },
+  { value: 'indonesian', label: 'Bahasa Indonesia (Indonesian)' },
+  { value: 'malay', label: 'Bahasa Melayu (Malay)' },
+  { value: 'thai', label: 'ไทย (Thai)' },
+  { value: 'czech', label: 'Čeština (Czech)' },
+  { value: 'danish', label: 'Dansk (Danish)' },
+  { value: 'finnish', label: 'Suomi (Finnish)' },
+  { value: 'hebrew', label: 'עברית (Hebrew)' },
+  { value: 'hungarian', label: 'Magyar (Hungarian)' },
+  { value: 'norwegian', label: 'Norsk (Norwegian)' },
+  { value: 'romanian', label: 'Română (Romanian)' },
+  { value: 'slovak', label: 'Slovenčina (Slovak)' },
+  { value: 'catalan', label: 'Català (Catalan)' },
+  { value: 'bulgarian', label: 'Български (Bulgarian)' },
+  { value: 'croatian', label: 'Hrvatski (Croatian)' },
+  { value: 'serbian', label: 'Српски (Serbian)' },
+  { value: 'slovenian', label: 'Slovenščina (Slovenian)' },
+  { value: 'lithuanian', label: 'Lietuvių (Lithuanian)' },
+  { value: 'latvian', label: 'Latviešu (Latvian)' },
+  { value: 'estonian', label: 'Eesti (Estonian)' },
+  { value: 'azerbaijani', label: 'Azərbaycanca (Azerbaijani)' },
+  { value: 'georgian', label: 'Ქართული (Georgia)' },
+  { value: 'armenian', label: 'Հայերեն (Armenian)' },
+  { value: 'persian', label: 'فارسی (Persian)' },
+  { value: 'urdu', label: 'اردو (Urdu)' },
+  { value: 'bengali', label: 'বাংলা (Bengali)' },
+  { value: 'tamil', label: 'தமிழ் (Tamil)' },
+  { value: 'telugu', label: 'తెలుగు (Telugu)' },
+  { value: 'malayalam', label: 'മലയാളം (Malayalam)' },
+  { value: 'kannada', label: 'ಕನ್ನಡ (Kannada)' },
+  { value: 'marathi', label: 'मराठी (Marathi)' },
+  { value: 'gujarati', label: 'ગુજરાતી (Gujarati)' },
+  { value: 'punjabi', label: 'ਪੰਜਾਬੀ (Punjabi)' },
+  { value: 'kazakh', label: 'Қазақша (Kazakh)' },
+  { value: 'uzbek', label: 'Oʻzbekcha (Uzbek)' },
+  { value: 'albanian', label: 'Shqip (Albanian)' },
+  { value: 'bosnian', label: 'Bosanski (Bosnian)' },
+  { value: 'macedonian', label: 'Македонски (Macedonian)' },
+  { value: 'welsh', label: 'Cymraeg (Welsh)' },
+  { value: 'icelandic', label: 'Íslenska (Icelandic)' },
+  { value: 'galician', label: 'Galego (Galician)' },
+  { value: 'basque', label: 'Euskara (Basque)' },
+  { value: 'swahili', label: 'Kiswahili (Swahili)' },
+  { value: 'tagalog', label: 'Tagalog (Tagalog/Filipino)' },
+  { value: 'afrikaans', label: 'Afrikaans' },
+  { value: 'latin', label: 'Latina (Latin)' },
+  { value: 'mongolian', label: 'Монгол (Mongolian)' },
+  { value: 'nepali', label: 'नेपाली (Nepali)' },
+  { value: 'belarusian', label: 'Беларуская (Belarusian)' }
+];
+
 export const DONUSUM_DATA: DonusumCift[] = [
   // ===== GÖRÜNTÜ =====
   {
@@ -2181,12 +2252,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
         id: 'language',
         label: { en: 'Audio Language', tr: 'Ses Dili' },
         type: 'select',
-        default: 'turkish',
-        options: [
-          { value: 'turkish', label: 'Türkçe' },
-          { value: 'english', label: 'English' },
-          { value: 'auto', label: 'Auto Detect' }
-        ]
+        default: 'auto',
+        options: WHISPER_LANGUAGES
       }
     ]
   },
@@ -2206,12 +2273,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
         id: 'language',
         label: { en: 'Audio Language', tr: 'Ses Dili' },
         type: 'select',
-        default: 'turkish',
-        options: [
-          { value: 'turkish', label: 'Türkçe' },
-          { value: 'english', label: 'English' },
-          { value: 'auto', label: 'Auto Detect' }
-        ]
+        default: 'auto',
+        options: WHISPER_LANGUAGES
       }
     ]
   },
@@ -2231,12 +2294,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
         id: 'language',
         label: { en: 'Audio Language', tr: 'Ses Dili' },
         type: 'select',
-        default: 'turkish',
-        options: [
-          { value: 'turkish', label: 'Türkçe' },
-          { value: 'english', label: 'English' },
-          { value: 'auto', label: 'Auto Detect' }
-        ]
+        default: 'auto',
+        options: WHISPER_LANGUAGES
       }
     ]
   },
@@ -2256,12 +2315,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
         id: 'language',
         label: { en: 'Audio Language', tr: 'Ses Dili' },
         type: 'select',
-        default: 'turkish',
-        options: [
-          { value: 'turkish', label: 'Türkçe' },
-          { value: 'english', label: 'English' },
-          { value: 'auto', label: 'Auto Detect' }
-        ]
+        default: 'auto',
+        options: WHISPER_LANGUAGES
       }
     ]
   },
@@ -2281,12 +2336,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
         id: 'language',
         label: { en: 'Audio Language', tr: 'Ses Dili' },
         type: 'select',
-        default: 'turkish',
-        options: [
-          { value: 'turkish', label: 'Türkçe' },
-          { value: 'english', label: 'English' },
-          { value: 'auto', label: 'Auto Detect' }
-        ]
+        default: 'auto',
+        options: WHISPER_LANGUAGES
       }
     ]
   },
@@ -2306,12 +2357,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
         id: 'language',
         label: { en: 'Audio Language', tr: 'Ses Dili' },
         type: 'select',
-        default: 'turkish',
-        options: [
-          { value: 'turkish', label: 'Türkçe' },
-          { value: 'english', label: 'English' },
-          { value: 'auto', label: 'Auto Detect' }
-        ]
+        default: 'auto',
+        options: WHISPER_LANGUAGES
       }
     ]
   },
@@ -2331,12 +2378,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
         id: 'language',
         label: { en: 'Audio Language', tr: 'Ses Dili' },
         type: 'select',
-        default: 'turkish',
-        options: [
-          { value: 'turkish', label: 'Türkçe' },
-          { value: 'english', label: 'English' },
-          { value: 'auto', label: 'Auto Detect' }
-        ]
+        default: 'auto',
+        options: WHISPER_LANGUAGES
       }
     ]
   },
@@ -2356,12 +2399,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
         id: 'language',
         label: { en: 'Audio Language', tr: 'Ses Dili' },
         type: 'select',
-        default: 'turkish',
-        options: [
-          { value: 'turkish', label: 'Türkçe' },
-          { value: 'english', label: 'English' },
-          { value: 'auto', label: 'Auto Detect' }
-        ]
+        default: 'auto',
+        options: WHISPER_LANGUAGES
       }
     ]
   },
