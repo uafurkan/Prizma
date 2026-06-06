@@ -22,7 +22,9 @@ export default function UniversalConverter({ lang }: { lang: string }) {
   const router = useRouter();
   const { setGlobalFiles } = useGlobalFiles();
 
-  // Extract all unique source formats except quick ones
+  const [sourceSearch, setSourceSearch] = useState('');
+
+  // Extract all unique source formats
   const allSourceFormats = useMemo(() => {
     const formats = new Set<string>();
     DONUSUM_DATA.forEach(d => {
@@ -30,11 +32,13 @@ export default function UniversalConverter({ lang }: { lang: string }) {
         formats.add(d.fromExt.toLowerCase());
       }
     });
-    const exclude = ['jpg', 'png', 'mp4', 'pdf'];
-    return Array.from(formats)
-      .filter(f => !exclude.includes(f))
-      .sort();
+    return Array.from(formats).sort();
   }, []);
+
+  const filteredSourceFormats = useMemo(() => {
+    if (!sourceSearch) return allSourceFormats;
+    return allSourceFormats.filter(ext => ext.includes(sourceSearch.toLowerCase()));
+  }, [allSourceFormats, sourceSearch]);
 
   const activeSource = files.length > 0 ? detectedExt : (sourceFormat === 'detect' ? '' : sourceFormat);
 
@@ -148,9 +152,6 @@ export default function UniversalConverter({ lang }: { lang: string }) {
     router.push(getDonusumPath(lang, targetSlug));
   };
 
-  const isSourceInDropdown = sourceFormat !== 'detect' && !['jpg', 'png', 'mp4', 'pdf'].includes(sourceFormat);
-  const isTargetInDropdown = targetTabs.slice(3).some(t => t.slug === targetSlug);
-  const activeTargetLabel = targetTabs.find(t => t.slug === targetSlug)?.label || '';
 
   return (
     <div className="flex flex-col md:flex-row items-stretch w-full max-w-4xl mx-auto gap-4 relative animate-fade-in">
@@ -163,66 +164,73 @@ export default function UniversalConverter({ lang }: { lang: string }) {
 
       {/* LEFT PANEL: Source */}
       <div className="flex-1 bg-surface border border-border rounded-3xl p-6 flex flex-col relative overflow-hidden transition-all shadow-xl">
-        {/* LEFT PANEL HEADER / TOOLBAR */}
-        <div className="flex items-center border-b border-border -mx-6 px-6 pb-3 mb-4 overflow-x-auto scrollbar-none gap-1">
-          {/* Detect Format Tab */}
+        {/* Source Selector Button */}
+        <div className="relative mb-4">
           <button
-            onClick={() => selectSourceFormat('detect')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all shrink-0 ${
-              sourceFormat === 'detect'
-                ? 'bg-prism-b/10 text-prism-b border border-prism-b/30'
-                : 'text-muted hover:text-foreground hover:bg-surface2'
-            }`}
+            onClick={() => setShowSourceDropdown(!showSourceDropdown)}
+            className="w-full border border-border rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer bg-surface2/50 hover:bg-surface2 hover:border-muted/50 transition-colors text-sm font-semibold text-foreground text-left"
           >
-            {sourceFormat === 'detect' && detectedExt
-              ? `${detectedExt.toUpperCase()} (${lang === 'tr' ? 'Algılandı' : 'Detected'})`
-              : (lang === 'tr' ? 'Dosya Türünü Algıla' : 'Detect Format')}
+            <span>
+              {files.length > 0
+                ? sourceFormat === 'detect'
+                  ? `${detectedExt.toUpperCase()} (${lang === 'tr' ? 'Algılandı' : 'Detected'})`
+                  : sourceFormat.toUpperCase()
+                : sourceFormat === 'detect'
+                ? (lang === 'tr' ? 'Dosya Türünü Algıla' : 'Detect Format')
+                : sourceFormat.toUpperCase()}
+            </span>
+            <svg className={`w-4 h-4 text-muted transition-transform ${showSourceDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </button>
 
-          {/* Quick Source Tabs */}
-          {['jpg', 'png', 'mp4', 'pdf'].map((ext) => (
-            <button
-              key={ext}
-              onClick={() => selectSourceFormat(ext)}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all shrink-0 ${
-                sourceFormat === ext
-                  ? 'bg-prism-b/10 text-prism-b border border-prism-b/30'
-                  : 'text-muted hover:text-foreground hover:bg-surface2'
-              }`}
-            >
-              {ext.toUpperCase()}
-            </button>
-          ))}
-
-          {/* Source Dropdown for remaining formats */}
-          <div className="relative shrink-0">
-            <button
-              onClick={() => setShowSourceDropdown(!showSourceDropdown)}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1 ${
-                isSourceInDropdown
-                  ? 'bg-prism-b/10 text-prism-b border border-prism-b/30'
-                  : 'text-muted hover:text-foreground hover:bg-surface2'
-              }`}
-            >
-              <span>{isSourceInDropdown ? sourceFormat.toUpperCase() : (lang === 'tr' ? 'Diğer' : 'Other')}</span>
-              <svg className={`w-3 h-3 transition-transform ${showSourceDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {showSourceDropdown && (
-              <>
-                <div className="fixed inset-0 z-30" onClick={() => setShowSourceDropdown(false)} />
-                <div className="absolute left-0 mt-2 z-40 bg-surface2 border border-border rounded-xl shadow-2xl p-2 w-72 max-h-64 overflow-y-auto">
+          {showSourceDropdown && (
+            <>
+              {/* Backdrop */}
+              <div className="fixed inset-0 z-30" onClick={() => setShowSourceDropdown(false)} />
+              
+              {/* Dropdown Menu */}
+              <div className="absolute left-0 right-0 mt-2 z-40 bg-surface2 border border-border rounded-2xl shadow-2xl p-4 flex flex-col gap-3 max-h-80">
+                {/* Search Input */}
+                <input
+                  type="text"
+                  placeholder={lang === 'tr' ? 'Format ara...' : 'Search format...'}
+                  value={sourceSearch}
+                  onChange={(e) => setSourceSearch(e.target.value)}
+                  className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:border-prism-b"
+                />
+                
+                <div className="overflow-y-auto flex-1 pr-1 flex flex-col gap-2 scrollbar-none">
+                  {/* Detect Format option */}
+                  {(!sourceSearch || (lang === 'tr' ? 'algıla' : 'detect').includes(sourceSearch.toLowerCase())) && (
+                    <button
+                      onClick={() => {
+                        selectSourceFormat('detect');
+                        setShowSourceDropdown(false);
+                        setSourceSearch('');
+                      }}
+                      className={`w-full text-left px-3 py-2.5 text-xs font-bold rounded-lg transition-colors flex items-center justify-between ${
+                        sourceFormat === 'detect'
+                          ? 'bg-prism-b/10 text-prism-b'
+                          : 'text-muted hover:text-foreground hover:bg-surface'
+                      }`}
+                    >
+                      <span>{lang === 'tr' ? 'Dosya Türünü Algıla' : 'Detect Format'}</span>
+                      {sourceFormat === 'detect' && <span className="text-xs">✓</span>}
+                    </button>
+                  )}
+                  
+                  {/* Grid of other formats */}
                   <div className="grid grid-cols-4 gap-1">
-                    {allSourceFormats.map((ext) => (
+                    {filteredSourceFormats.map((ext) => (
                       <button
                         key={ext}
                         onClick={() => {
                           selectSourceFormat(ext);
                           setShowSourceDropdown(false);
+                          setSourceSearch('');
                         }}
-                        className={`px-2 py-2.5 text-[10px] font-black rounded-lg transition-all text-center uppercase ${
+                        className={`px-2 py-2.5 text-[10px] font-black rounded-lg transition-colors text-center uppercase ${
                           sourceFormat === ext
                             ? 'bg-prism-b/10 text-prism-b border border-prism-b/20'
                             : 'text-muted hover:text-foreground hover:bg-surface'
@@ -233,9 +241,9 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                     ))}
                   </div>
                 </div>
-              </>
-            )}
-          </div>
+              </div>
+            </>
+          )}
         </div>
 
         <input
@@ -302,74 +310,57 @@ export default function UniversalConverter({ lang }: { lang: string }) {
 
       {/* RIGHT PANEL: Target */}
       <div className="flex-1 bg-surface border border-border rounded-3xl p-6 flex flex-col relative transition-all shadow-xl">
-        {/* RIGHT PANEL HEADER / TOOLBAR */}
-        <div className="flex items-center border-b border-border -mx-6 px-6 pb-3 mb-4 overflow-x-auto scrollbar-none">
-          {activeSource === '' ? (
-            <div className="text-xs font-bold text-muted py-1.5">
-              {lang === 'tr' ? 'Hedef Format' : 'Target Format'}
-            </div>
-          ) : (
-            <div className="flex items-center gap-1 w-full">
-              {/* Target Tabs */}
-              {targetTabs.slice(0, 3).map((tab) => (
-                <button
-                  key={tab.slug}
-                  onClick={() => setTargetSlug(tab.slug)}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all shrink-0 ${
-                    targetSlug === tab.slug
-                      ? 'bg-prism-b/10 text-prism-b border border-prism-b/30'
-                      : 'text-muted hover:text-foreground hover:bg-surface2'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+        {/* Target Selector Button */}
+        <div className="relative mb-4">
+          <button
+            disabled={activeSource === ''}
+            onClick={() => setShowTargetDropdown(!showTargetDropdown)}
+            className={`w-full border rounded-xl px-4 py-3 flex items-center justify-between transition-colors text-sm font-semibold text-left ${
+              activeSource === ''
+                ? 'border-border bg-surface2/20 text-muted cursor-not-allowed'
+                : 'border-border bg-surface2/50 hover:bg-surface2 hover:border-muted/50 text-foreground cursor-pointer'
+            }`}
+          >
+            <span>
+              {activeSource === ''
+                ? (lang === 'tr' ? 'Hedef Format' : 'Target Format')
+                : targetSlug
+                ? (targetTabs.find(t => t.slug === targetSlug)?.label || '')
+                : (lang === 'tr' ? 'Hedef Format Seçin' : 'Select Target Format')}
+            </span>
+            <svg className={`w-4 h-4 text-muted transition-transform ${showTargetDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
 
-              {/* Target Dropdown for remaining formats */}
-              {targetTabs.length > 3 && (
-                <div className="relative shrink-0">
-                  <button
-                    onClick={() => setShowTargetDropdown(!showTargetDropdown)}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1 ${
-                      isTargetInDropdown
-                        ? 'bg-prism-b/10 text-prism-b border border-prism-b/30'
-                        : 'text-muted hover:text-foreground hover:bg-surface2'
-                    }`}
-                  >
-                    <span>{isTargetInDropdown ? activeTargetLabel : (lang === 'tr' ? 'Diğer' : 'Other')}</span>
-                    <svg className={`w-3 h-3 transition-transform ${showTargetDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  
-                  {showTargetDropdown && (
-                    <>
-                      <div className="fixed inset-0 z-30" onClick={() => setShowTargetDropdown(false)} />
-                      <div className="absolute left-0 mt-2 z-40 bg-surface2 border border-border rounded-xl shadow-2xl p-2 w-44 max-h-48 overflow-y-auto">
-                        <div className="flex flex-col gap-1">
-                          {targetTabs.slice(3).map((tab) => (
-                            <button
-                              key={tab.slug}
-                              onClick={() => {
-                                setTargetSlug(tab.slug);
-                                setShowTargetDropdown(false);
-                              }}
-                              className={`w-full text-left px-3 py-2 text-xs font-bold rounded-lg transition-all ${
-                                targetSlug === tab.slug
-                                  ? 'bg-prism-b/10 text-prism-b'
-                                  : 'text-muted hover:text-foreground hover:bg-surface'
-                              }`}
-                            >
-                              {tab.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
+          {showTargetDropdown && activeSource !== '' && (
+            <>
+              {/* Backdrop */}
+              <div className="fixed inset-0 z-30" onClick={() => setShowTargetDropdown(false)} />
+              
+              {/* Dropdown Menu */}
+              <div className="absolute left-0 right-0 mt-2 z-40 bg-surface2 border border-border rounded-2xl shadow-2xl p-3 max-h-60 overflow-y-auto">
+                <div className="flex flex-col gap-1">
+                  {targetTabs.map((tab) => (
+                    <button
+                      key={tab.slug}
+                      onClick={() => {
+                        setTargetSlug(tab.slug);
+                        setShowTargetDropdown(false);
+                      }}
+                      className={`w-full text-left px-3 py-2.5 text-xs font-bold rounded-lg transition-colors flex items-center justify-between ${
+                        targetSlug === tab.slug
+                          ? 'bg-prism-b/10 text-prism-b'
+                          : 'text-muted hover:text-foreground hover:bg-surface'
+                      }`}
+                    >
+                      <span>{tab.label}</span>
+                      {targetSlug === tab.slug && <span className="text-xs">✓</span>}
+                    </button>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
+            </>
           )}
         </div>
         
