@@ -110,17 +110,24 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       return false;
     });
 
-    const hasLargeFile = validFiles.some(f => f.size > 1024 * 1024 * 1024);
-    setShowSizeWarning(hasLargeFile);
-
     if (validFiles.length === 0) {
       setLocalError(dict.convertPage.onlyExtFiles.replace('{ext}', cift.fromExt));
       setFiles([]);
       return;
     }
 
+    const hasTooLargeFile = validFiles.some(f => f.size >= 2 * 1024 * 1024 * 1024);
+    if (hasTooLargeFile) {
+      setLocalError(dict.convertPage.maxFileSizeError);
+      setFiles([]);
+      return;
+    }
+
+    const hasLargeFile = validFiles.some(f => f.size > 1024 * 1024 * 1024);
+    setShowSizeWarning(hasLargeFile);
+
     setFiles(validFiles);
-  }, [cift.fromExt]);
+  }, [cift.fromExt, dict.convertPage.onlyExtFiles, dict.convertPage.maxFileSizeError]);
 
   // Handle Global Files (from Universal Converter)
   useEffect(() => {

@@ -83,6 +83,7 @@ export const en = {
   },
   convertPage: {
     onlyExtFiles: 'Please upload only .{ext} files.',
+    maxFileSizeError: 'Files larger than 2GB cannot be processed directly in the browser due to browser engine limitations. Please use a smaller file.',
     conversionError: 'An error occurred during conversion.',
     conversionSettings: 'Conversion Settings',
     error: '⚠️ Error:',

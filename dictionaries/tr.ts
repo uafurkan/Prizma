@@ -83,6 +83,7 @@ export const tr = {
   },
   convertPage: {
     onlyExtFiles: 'Lütfen yalnızca .{ext} uzantılı dosyalar yükleyin.',
+    maxFileSizeError: 'Tarayıcı sınırlamaları nedeniyle 2 GB\'den büyük dosyalar doğrudan işlenemez. Lütfen daha küçük bir dosya kullanın.',
     conversionError: 'Dönüştürme sırasında hata oluştu.',
     conversionSettings: 'Dönüştürme Ayarları',
     error: '⚠️ Hata:',
