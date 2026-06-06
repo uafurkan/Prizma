@@ -80,6 +80,7 @@ export const tr = {
     belge: 'Belge',
     arsiv: 'Arşiv',
     altyazi: 'Altyazı',
+    desifre: 'Ses Deşifre',
   },
   convertPage: {
     onlyExtFiles: 'Lütfen yalnızca .{ext} uzantılı dosyalar yükleyin.',

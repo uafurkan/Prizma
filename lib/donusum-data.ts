@@ -40,7 +40,7 @@ export interface DonusumCift {
   ffmpegArgs?: string[];
 }
 
-export type KategoriSlug = 'goruntu' | 'video' | 'ses' | 'belge' | 'arsiv' | 'altyazi';
+export type KategoriSlug = 'goruntu' | 'video' | 'ses' | 'belge' | 'arsiv' | 'altyazi' | 'desifre';
 
 export interface Kategori {
   slug: KategoriSlug;
@@ -93,6 +93,13 @@ export const KATEGORILER: Kategori[] = [
     ikon: '📝',
     renk: '#ffb703',
   },
+  {
+    slug: 'desifre',
+    baslik: { en: 'Transcription', tr: 'Ses Deşifre' },
+    aciklama: { en: 'Transcribe audio files to text using AI directly in your browser.', tr: 'Ses dosyalarındaki konuşmaları tarayıcınızda yapay zeka ile yazıya dökün.' },
+    ikon: '🎙️',
+    renk: '#06d6a0',
+  },
 ];
 
 export function getCategoryPath(lang: string, catSlug: string): string {
@@ -103,7 +110,8 @@ export function getCategoryPath(lang: string, catSlug: string): string {
     'ses': 'audio',
     'belge': 'document',
     'arsiv': 'archive',
-    'altyazi': 'subtitle'
+    'altyazi': 'subtitle',
+    'desifre': 'transcription',
   };
   return `/en/category/${enMap[catSlug] || catSlug}`;
 }
@@ -125,7 +133,8 @@ export function getTranslatedPath(pathname: string, currentLang: string, targetL
     'ses': 'audio',
     'belge': 'document',
     'arsiv': 'archive',
-    'altyazi': 'subtitle'
+    'altyazi': 'subtitle',
+    'desifre': 'transcription',
   };
   
   const trMap: Record<string, string> = Object.entries(enMap).reduce((acc, [k, v]) => ({ ...acc, [v]: k }), {});
@@ -2162,7 +2171,7 @@ export const DONUSUM_DATA: DonusumCift[] = [
     to: 'TXT',
     fromExt: 'mp3',
     toExt: 'txt',
-    kategori: 'ses',
+    kategori: 'desifre',
     converter: 'whisper',
     baslik: { en: 'MP3 → TXT (Speech to Text)', tr: 'MP3 → TXT (Sesi Yazıya Dök)' },
     aciklama: { en: 'Transcribe your MP3 audio files to text using AI directly in your browser.', tr: 'MP3 ses dosyalarınızı tarayıcınızda yapay zeka ile yazıya dökün.' },
@@ -2187,7 +2196,7 @@ export const DONUSUM_DATA: DonusumCift[] = [
     to: 'TXT',
     fromExt: 'wav',
     toExt: 'txt',
-    kategori: 'ses',
+    kategori: 'desifre',
     converter: 'whisper',
     baslik: { en: 'WAV → TXT (Speech to Text)', tr: 'WAV → TXT (Sesi Yazıya Dök)' },
     aciklama: { en: 'Transcribe your WAV audio files to text using AI directly in your browser.', tr: 'WAV ses dosyalarınızı tarayıcınızda yapay zeka ile yazıya dökün.' },
@@ -2212,7 +2221,7 @@ export const DONUSUM_DATA: DonusumCift[] = [
     to: 'TXT',
     fromExt: 'ogg',
     toExt: 'txt',
-    kategori: 'ses',
+    kategori: 'desifre',
     converter: 'whisper',
     baslik: { en: 'OGG → TXT (Speech to Text)', tr: 'OGG → TXT (Sesi Yazıya Dök)' },
     aciklama: { en: 'Transcribe your OGG audio files to text using AI.', tr: 'OGG ses dosyalarınızı yapay zeka ile yazıya dökün.' },
@@ -2237,7 +2246,7 @@ export const DONUSUM_DATA: DonusumCift[] = [
     to: 'TXT',
     fromExt: 'm4a',
     toExt: 'txt',
-    kategori: 'ses',
+    kategori: 'desifre',
     converter: 'whisper',
     baslik: { en: 'M4A → TXT (Speech to Text)', tr: 'M4A → TXT (Sesi Yazıya Dök)' },
     aciklama: { en: 'Transcribe your M4A audio files to text using AI.', tr: 'M4A ses dosyalarınızı yapay zeka ile yazıya dökün.' },
@@ -2262,7 +2271,7 @@ export const DONUSUM_DATA: DonusumCift[] = [
     to: 'TXT',
     fromExt: 'aac',
     toExt: 'txt',
-    kategori: 'ses',
+    kategori: 'desifre',
     converter: 'whisper',
     baslik: { en: 'AAC → TXT (Speech to Text)', tr: 'AAC → TXT (Sesi Yazıya Dök)' },
     aciklama: { en: 'Transcribe your AAC audio files to text using AI.', tr: 'AAC ses dosyalarınızı yapay zeka ile yazıya dökün.' },
@@ -2287,7 +2296,7 @@ export const DONUSUM_DATA: DonusumCift[] = [
     to: 'TXT',
     fromExt: 'flac',
     toExt: 'txt',
-    kategori: 'ses',
+    kategori: 'desifre',
     converter: 'whisper',
     baslik: { en: 'FLAC → TXT (Speech to Text)', tr: 'FLAC → TXT (Sesi Yazıya Dök)' },
     aciklama: { en: 'Transcribe your FLAC audio files to text using AI.', tr: 'FLAC ses dosyalarınızı yapay zeka ile yazıya dökün.' },
@@ -2312,7 +2321,7 @@ export const DONUSUM_DATA: DonusumCift[] = [
     to: 'TXT',
     fromExt: 'opus',
     toExt: 'txt',
-    kategori: 'ses',
+    kategori: 'desifre',
     converter: 'whisper',
     baslik: { en: 'OPUS → TXT (Speech to Text)', tr: 'OPUS → TXT (Sesi Yazıya Dök)' },
     aciklama: { en: 'Transcribe your OPUS audio files to text using AI.', tr: 'OPUS ses dosyalarınızı yapay zeka ile yazıya dökün.' },
@@ -2337,7 +2346,7 @@ export const DONUSUM_DATA: DonusumCift[] = [
     to: 'TXT',
     fromExt: 'wma',
     toExt: 'txt',
-    kategori: 'ses',
+    kategori: 'desifre',
     converter: 'whisper',
     baslik: { en: 'WMA → TXT (Speech to Text)', tr: 'WMA → TXT (Sesi Yazıya Dök)' },
     aciklama: { en: 'Transcribe your WMA audio files to text using AI.', tr: 'WMA ses dosyalarınızı yapay zeka ile yazıya dökün.' },

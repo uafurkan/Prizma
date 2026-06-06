@@ -80,6 +80,7 @@ export const en = {
     belge: 'Document',
     arsiv: 'Archive',
     altyazi: 'Subtitle',
+    desifre: 'Transcription',
   },
   convertPage: {
     onlyExtFiles: 'Please upload only .{ext} files.',
