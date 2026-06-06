@@ -124,6 +124,18 @@ export function getFFmpegArgs(
 
   /* ---- Video → Video ---- */
   if (isVideo(inExt) && isVideo(outExt)) {
+    // If no custom options are specified, and we are converting between MP4 and MOV (which share H.264/AAC),
+    // we can use stream copy (remuxing) which is instant (sub-second)!
+    if (
+      !opts.videoCRF &&
+      !opts.audioBitrate &&
+      !opts.scale &&
+      ((inExt === 'mp4' && outExt === 'mov') || (inExt === 'mov' && outExt === 'mp4'))
+    ) {
+      args.push('-c:v', 'copy', '-c:a', 'copy')
+      return args
+    }
+
     const codecArgs = VIDEO_CODECS[outExt]
     if (codecArgs) args.push(...codecArgs)
 
