@@ -55,6 +55,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
   const [localError, setLocalError] = useState<string | null>(null);
   const [ffmpegSupported, setFfmpegSupported] = useState(true);
   const [showInfoBanner, setShowInfoBanner] = useState(false);
+  const [showSizeWarning, setShowSizeWarning] = useState(false);
   const { globalFiles, setGlobalFiles } = useGlobalFiles();
 
   const {
@@ -109,6 +110,9 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       return false;
     });
 
+    const hasLargeFile = validFiles.some(f => f.size > 1024 * 1024 * 1024);
+    setShowSizeWarning(hasLargeFile);
+
     if (validFiles.length === 0) {
       setLocalError(dict.convertPage.onlyExtFiles.replace('{ext}', cift.fromExt));
       setFiles([]);
@@ -132,6 +136,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
     setLocalError(null);
     setLocalProgress(0);
     setLocalConverting(false);
+    setShowSizeWarning(false);
   };
 
   const handleConvert = async () => {
@@ -568,6 +573,18 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                       ))}
                     </div>
                     
+                    {showSizeWarning && (
+                      <div className="mt-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 text-left">
+                        <svg className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <div className="text-xs text-amber-700 dark:text-amber-400">
+                          <p className="font-bold mb-0.5">{dict.convertPage?.largeFileWarningTitle || 'Large File Warning'}</p>
+                          <p>{dict.convertPage?.largeFileWarningDesc || 'You selected a file larger than 1GB. Web browsers have limited processing memory. If the conversion fails, try a smaller file.'}</p>
+                        </div>
+                      </div>
+                    )}
+
                     <button
                       onClick={handleConvert}
                       className="btn-primary w-full mt-2"
