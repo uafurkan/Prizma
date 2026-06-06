@@ -42,6 +42,7 @@ export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
     { slug: 'goruntu', name: dict.kategoriler.goruntu },
     { slug: 'video', name: dict.kategoriler.video },
     { slug: 'ses', name: dict.kategoriler.ses },
+    { slug: 'desifre', name: dict.kategoriler.desifre },
     { slug: 'belge', name: dict.kategoriler.belge },
     { slug: 'arsiv', name: dict.kategoriler.arsiv },
     { slug: 'altyazi', name: dict.kategoriler.altyazi },

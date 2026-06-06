@@ -95,7 +95,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <h2 className="text-xl md:text-2xl font-bold font-sans text-center md:text-left">
           {dict.common.categories}
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
           {KATEGORILER.map((c) => {
             const count = getCatCount(c.slug);
             const baslik = c.baslik[lang as 'en'|'tr'] || c.baslik['en'];
