@@ -10,11 +10,11 @@
 /* ---------- Codec / format mappings ---------- */
 
 const VIDEO_CODECS: Record<string, string[]> = {
-  mp4: ['-c:v', 'libx264', '-preset', 'fast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart'],
-  webm: ['-c:v', 'libvpx-vp9', '-crf', '30', '-b:v', '0', '-c:a', 'libopus', '-b:a', '128k'],
+  mp4: ['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart'],
+  webm: ['-c:v', 'libvpx-vp9', '-crf', '30', '-b:v', '0', '-deadline', 'realtime', '-cpu-used', '8', '-row-mt', '1', '-c:a', 'libopus', '-b:a', '128k'],
   avi: ['-c:v', 'mpeg4', '-q:v', '5', '-c:a', 'mp3', '-b:a', '192k'],
-  mov: ['-c:v', 'libx264', '-preset', 'fast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k'],
-  mkv: ['-c:v', 'libx264', '-preset', 'fast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k'],
+  mov: ['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k'],
+  mkv: ['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k'],
   flv: ['-c:v', 'flv1', '-q:v', '5', '-c:a', 'mp3', '-b:a', '128k'],
   wmv: ['-c:v', 'wmv2', '-q:v', '5', '-c:a', 'wmav2', '-b:a', '128k'],
 }
@@ -98,7 +98,7 @@ export function getFFmpegArgs(
       '-pix_fmt', 'yuv420p',
       '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2',
       '-c:v', 'libx264',
-      '-preset', 'fast',
+      '-preset', 'ultrafast',
       '-crf', String(opts.videoCRF ?? 23),
       '-an'  // GIFs have no audio
     )
