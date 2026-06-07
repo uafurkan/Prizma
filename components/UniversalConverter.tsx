@@ -409,7 +409,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                       className="flex flex-col items-center justify-center gap-1.5 p-3.5 rounded-xl border border-border hover:border-muted hover:bg-surface2 bg-background transition-all"
                     >
                       <span 
-                        className="text-xs font-black px-2 py-1 rounded-md text-center break-words max-w-full"
+                        className="text-xs font-bold px-2 py-1 rounded-md text-center break-words max-w-full normal-case tracking-normal leading-normal"
                         style={{ 
                           color: getFormatRenk(pair.to), 
                           backgroundColor: `color-mix(in srgb, ${getFormatRenk(pair.to)} 25%, transparent)` 
@@ -473,7 +473,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                     className="flex flex-col items-center justify-center gap-1.5 p-3.5 rounded-xl border border-border hover:border-muted hover:bg-surface2 bg-background transition-all"
                   >
                     <span 
-                      className="text-xs font-black px-2 py-1 rounded-md text-center break-words max-w-full"
+                      className="text-xs font-bold px-2 py-1 rounded-md text-center break-words max-w-full normal-case tracking-normal leading-normal"
                       style={{ 
                         color: getFormatRenk(pair.to), 
                         backgroundColor: `color-mix(in srgb, ${getFormatRenk(pair.to)} 25%, transparent)` 
