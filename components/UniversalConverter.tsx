@@ -163,7 +163,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
       </div>
 
       {/* LEFT PANEL: Source */}
-      <div className="flex-1 bg-surface border border-border rounded-3xl p-6 flex flex-col relative overflow-hidden transition-all shadow-xl">
+      <div className="flex-1 bg-surface border border-border rounded-3xl p-6 flex flex-col relative transition-all shadow-xl">
         {/* Source Selector Button */}
         <div className="relative mb-4">
           <button
@@ -379,7 +379,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
           ) : !targetSlug ? (
             <div className="flex-1 flex flex-col justify-center min-h-[180px]">
               <p className="text-xs font-bold text-foreground mb-3">{dict.common.selectTargetFormat}</p>
-              <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-1">
+              <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-2">
                 {availablePairs.map((pair) => (
                   <button
                     key={pair.slug}
@@ -440,7 +440,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
         ) : !targetSlug ? (
           <div className="flex-1 flex flex-col justify-center min-h-[180px]">
             <p className="text-xs font-bold text-foreground mb-3">{dict.common.selectTargetFormat}</p>
-            <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-1">
+            <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-2">
               {availablePairs.map((pair) => (
                 <button
                   key={pair.slug}
