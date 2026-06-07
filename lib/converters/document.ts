@@ -290,30 +290,63 @@ export async function pdfToDocx(
     const page = await pdf.getPage(i)
     const textContent = await page.getTextContent()
     
-    let lastY = -1
-    let lineStr = ''
-
-    for (const item of textContent.items) {
-      if ('str' in item && 'transform' in item) {
-        const y = Math.round(item.transform[5])
-        if (lastY === -1) lastY = y
-
-        if (Math.abs(y - lastY) > 5) {
-          if (lineStr.trim()) {
-            paragraphs.push(new Paragraph({ text: lineStr }))
-          }
-          lineStr = item.str
-        } else {
-          lineStr += item.str
-        }
-        lastY = y
+    const items = textContent.items.filter(item => 'str' in item && 'transform' in item) as any[]
+    
+    // Filter out purely empty strings and common crop marks at the edges
+    const validItems = items.filter(item => {
+      const str = item.str.trim()
+      if (!str) return false
+      // Ignore single character crop marks like L, |, _, +, etc.
+      if (str.length <= 2 && /^[┌┐└┘L_\|\+\-\\]+$/.test(str)) {
+          return false
       }
-    }
-    if (lineStr.trim()) {
-      paragraphs.push(new Paragraph({ text: lineStr }))
+      return true
+    })
+
+    const lines: { y: number, items: any[] }[] = []
+    
+    for (const item of validItems) {
+      const x = item.transform[4]
+      const y = Math.round(item.transform[5])
+      const width = item.width || 0
+      
+      let foundLine = lines.find(l => Math.abs(l.y - y) <= 5)
+      if (!foundLine) {
+        foundLine = { y, items: [] }
+        lines.push(foundLine)
+      }
+      foundLine.items.push({ x, str: item.str, width })
     }
     
-    if (i < pdf.numPages) {
+    // Sort lines top to bottom (highest Y first in PDF coordinate system)
+    lines.sort((a, b) => b.y - a.y)
+    
+    for (const line of lines) {
+      // Sort items left to right
+      line.items.sort((a, b) => a.x - b.x)
+      
+      let lineStr = ''
+      let lastRight = -1
+      
+      for (const item of line.items) {
+        if (lastRight !== -1) {
+           const gap = item.x - lastRight
+           // If there's a visible gap between items, insert a space
+           // 3 points is a reasonable minimum width for a space character
+           if (gap > 3) {
+             lineStr += ' '
+           }
+        }
+        lineStr += item.str
+        lastRight = item.x + item.width
+      }
+      
+      if (lineStr.trim()) {
+        paragraphs.push(new Paragraph({ text: lineStr }))
+      }
+    }
+    
+    if (i < pdf.numPages && paragraphs.length > 0) {
        paragraphs.push(new Paragraph({ text: '' })) // Empty paragraph to separate pages
     }
   }
