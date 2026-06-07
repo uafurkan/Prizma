@@ -628,7 +628,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
             {/* Results Screen */}
             {results.length > 0 && (
-              <DownloadCard results={results} onReset={handleReset} dict={dict} />
+              <DownloadCard results={results} onReset={handleReset} dict={dict} lang={lang} />
             )}
           </div>
         </>
