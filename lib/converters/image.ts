@@ -244,7 +244,8 @@ export async function imagesToPDF(
 
 export async function pdfToImages(
   file: File,
-  scale = 2
+  scale = 2,
+  outputExt: 'png' | 'jpg' = 'png'
 ): Promise<ConversionResult[]> {
   const pdfjsLib = await import('pdfjs-dist')
 
@@ -272,11 +273,12 @@ export async function pdfToImages(
 
     await page.render({ canvasContext: ctx, viewport, canvas } as import('pdfjs-dist/types/src/display/api').RenderParameters).promise
 
-    const blob = await canvasToBlob(canvas, 'image/png')
+    const mime = outputExt === 'jpg' ? 'image/jpeg' : 'image/png'
+    const blob = await canvasToBlob(canvas, mime)
 
     results.push({
       blob,
-      filename: `${baseName}_page_${i}.png`,
+      filename: `${baseName}_page_${i}.${outputExt}`,
       originalSize: file.size,
       convertedSize: blob.size,
       width: canvas.width,

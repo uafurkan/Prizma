@@ -280,8 +280,9 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
           if (cift.slug === 'images-to-pdf') {
             const res = await imagesToPDF(files, (options['sayfa'] as 'A4' | 'Letter' | 'auto') || 'A4');
             finalResults.push(res);
-          } else if (cift.slug === 'pdf-to-images') {
-            const images = await pdfToImages(files[0], 1.5);
+          } else if (cift.slug === 'pdf-to-images' || cift.slug === 'pdf-to-png' || cift.slug === 'pdf-to-jpg') {
+            const ext = cift.slug === 'pdf-to-jpg' ? 'jpg' : 'png';
+            const images = await pdfToImages(files[0], 1.5, ext);
             finalResults = images.map((img) => ({
               blob: img.blob,
               filename: img.filename,
