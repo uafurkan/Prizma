@@ -50,12 +50,32 @@ export default function UniversalConverter({ lang }: { lang: string }) {
     : [];
 
   const targetTabs = useMemo(() => {
-    return availablePairs.map(p => ({
-      slug: p.slug,
-      ext: p.toExt.toLowerCase(),
-      label: p.to.toUpperCase(),
-    }));
-  }, [availablePairs]);
+    // Check if there are duplicate toExt/to values in availablePairs
+    const counts: Record<string, number> = {};
+    availablePairs.forEach(p => {
+      const key = p.toExt.toLowerCase();
+      counts[key] = (counts[key] || 0) + 1;
+    });
+
+    return availablePairs.map(p => {
+      const ext = p.toExt.toLowerCase();
+      const hasDuplicate = counts[ext] > 1;
+      
+      // If there are duplicate targets for the same extension (like pdf -> pdf split, merge),
+      // we show the localized short title (e.g. 'PDF Birleştir', 'PDF Böl') or the full title.
+      // Let's use the short version or first two words of baslik
+      let label = getTranslatedFormat(p.to, lang).toUpperCase();
+      if (hasDuplicate) {
+        label = p.baslik[lang as 'tr' | 'en'] || p.baslik.tr;
+      }
+
+      return {
+        slug: p.slug,
+        ext,
+        label,
+      };
+    });
+  }, [availablePairs, lang]);
 
   const selectSourceFormat = (format: string) => {
     setSourceFormat(format);
@@ -380,23 +400,26 @@ export default function UniversalConverter({ lang }: { lang: string }) {
             <div className="flex-1 flex flex-col justify-center min-h-[180px]">
               <p className="text-xs font-bold text-foreground mb-3">{dict.common.selectTargetFormat}</p>
               <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-2">
-                {availablePairs.map((pair) => (
-                  <button
-                    key={pair.slug}
-                    onClick={() => setTargetSlug(pair.slug)}
-                    className="flex flex-col items-center justify-center gap-1.5 p-3.5 rounded-xl border border-border hover:border-muted hover:bg-surface2 bg-background transition-all"
-                  >
-                    <span 
-                      className="text-sm font-black px-2 py-1 rounded-md font-mono"
-                      style={{ 
-                        color: getFormatRenk(pair.to), 
-                        backgroundColor: `color-mix(in srgb, ${getFormatRenk(pair.to)} 25%, transparent)` 
-                      }}
+                {availablePairs.map((pair) => {
+                  const label = targetTabs.find(t => t.slug === pair.slug)?.label || getTranslatedFormat(pair.to, lang);
+                  return (
+                    <button
+                      key={pair.slug}
+                      onClick={() => setTargetSlug(pair.slug)}
+                      className="flex flex-col items-center justify-center gap-1.5 p-3.5 rounded-xl border border-border hover:border-muted hover:bg-surface2 bg-background transition-all"
                     >
-                      {getTranslatedFormat(pair.to, lang)}
-                    </span>
-                  </button>
-                ))}
+                      <span 
+                        className="text-xs font-black px-2 py-1 rounded-md text-center break-words max-w-full"
+                        style={{ 
+                          color: getFormatRenk(pair.to), 
+                          backgroundColor: `color-mix(in srgb, ${getFormatRenk(pair.to)} 25%, transparent)` 
+                        }}
+                      >
+                        {label}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : (
@@ -441,23 +464,26 @@ export default function UniversalConverter({ lang }: { lang: string }) {
           <div className="flex-1 flex flex-col justify-center min-h-[180px]">
             <p className="text-xs font-bold text-foreground mb-3">{dict.common.selectTargetFormat}</p>
             <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-2">
-              {availablePairs.map((pair) => (
-                <button
-                  key={pair.slug}
-                  onClick={() => setTargetSlug(pair.slug)}
-                  className="flex flex-col items-center justify-center gap-1.5 p-3.5 rounded-xl border border-border hover:border-muted hover:bg-surface2 bg-background transition-all"
-                >
-                  <span 
-                    className="text-sm font-black px-2 py-1 rounded-md font-mono"
-                    style={{ 
-                      color: getFormatRenk(pair.to), 
-                      backgroundColor: `color-mix(in srgb, ${getFormatRenk(pair.to)} 25%, transparent)` 
-                    }}
+              {availablePairs.map((pair) => {
+                const label = targetTabs.find(t => t.slug === pair.slug)?.label || getTranslatedFormat(pair.to, lang);
+                return (
+                  <button
+                    key={pair.slug}
+                    onClick={() => setTargetSlug(pair.slug)}
+                    className="flex flex-col items-center justify-center gap-1.5 p-3.5 rounded-xl border border-border hover:border-muted hover:bg-surface2 bg-background transition-all"
                   >
-                    {getTranslatedFormat(pair.to, lang)}
-                  </span>
-                </button>
-              ))}
+                    <span 
+                      className="text-xs font-black px-2 py-1 rounded-md text-center break-words max-w-full"
+                      style={{ 
+                        color: getFormatRenk(pair.to), 
+                        backgroundColor: `color-mix(in srgb, ${getFormatRenk(pair.to)} 25%, transparent)` 
+                      }}
+                    >
+                      {label}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         ) : (
