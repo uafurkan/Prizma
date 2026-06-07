@@ -12,13 +12,13 @@ export default function ThemeToggle({ dict }: { dict?: any }) {
   }, []);
 
   if (!mounted) {
-    return <div className="w-9 h-9 rounded-xl border border-border bg-surface flex items-center justify-center opacity-50" />;
+    return <div className="w-9 h-9 rounded-xl border border-border bg-surface flex items-center justify-center opacity-50 shrink-0" />;
   }
 
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="w-9 h-9 flex items-center justify-center rounded-xl border border-border bg-surface hover:border-b hover:text-foreground text-muted transition-colors relative overflow-hidden"
+      className="w-9 h-9 flex items-center justify-center rounded-xl border border-border bg-surface hover:border-b hover:text-foreground text-muted transition-colors relative overflow-hidden shrink-0"
       aria-label={dict?.common?.toggleTheme || "Toggle Theme"}
       title={theme === 'dark' ? (dict?.common?.switchToLight || 'Switch to Light Theme') : (dict?.common?.switchToDark || 'Switch to Dark Theme')}
     >

@@ -12,7 +12,7 @@ export default function LanguageSwitcher({ currentLang }: { currentLang: string 
   };
 
   return (
-    <div className="flex items-center gap-1 bg-surface2 border border-border rounded-xl p-1">
+    <div className="flex items-center gap-1 bg-surface2 border border-border rounded-xl p-1 shrink-0">
       <a
         href={getHref('en')}
         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
