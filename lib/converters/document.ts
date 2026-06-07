@@ -261,3 +261,74 @@ export async function csvToExcel(
     filename: outputName ?? replaceExt(file.name, 'xlsx'),
   }
 }
+
+/* ========================================================================== */
+/*  pdfToDocx – Extract text from PDF and convert to DOCX via docx/pdfjs      */
+/* ========================================================================== */
+
+export async function pdfToDocx(
+  file: File,
+  outputName?: string
+): Promise<DocConversionResult> {
+  const pdfjsLib = await import('pdfjs-dist')
+
+  if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+      'pdfjs-dist/build/pdf.worker.min.mjs',
+      import.meta.url
+    ).toString()
+  }
+
+  const { Document, Packer, Paragraph, TextRun } = await import('docx')
+
+  const arrayBuf = await file.arrayBuffer()
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuf }).promise
+  
+  const paragraphs: import('docx').Paragraph[] = []
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i)
+    const textContent = await page.getTextContent()
+    
+    let lastY = -1
+    let lineStr = ''
+
+    for (const item of textContent.items) {
+      if ('str' in item && 'transform' in item) {
+        const y = Math.round(item.transform[5])
+        if (lastY === -1) lastY = y
+
+        if (Math.abs(y - lastY) > 5) {
+          if (lineStr.trim()) {
+            paragraphs.push(new Paragraph({ text: lineStr }))
+          }
+          lineStr = item.str
+        } else {
+          lineStr += item.str
+        }
+        lastY = y
+      }
+    }
+    if (lineStr.trim()) {
+      paragraphs.push(new Paragraph({ text: lineStr }))
+    }
+    
+    if (i < pdf.numPages) {
+       paragraphs.push(new Paragraph({ text: '' })) // Empty paragraph to separate pages
+    }
+  }
+
+  const doc = new Document({
+    sections: [{
+      children: paragraphs.length > 0 ? paragraphs : [new Paragraph("No text could be extracted from this PDF. It may be an image-based scanned document.")],
+    }],
+  })
+
+  const docBlob = await Packer.toBlob(doc)
+
+  return {
+    blob: docBlob,
+    filename: outputName ?? replaceExt(file.name, 'docx'),
+  }
+}
+

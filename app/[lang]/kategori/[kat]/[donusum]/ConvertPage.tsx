@@ -13,7 +13,7 @@ import { isFFmpegSupported } from '@/lib/ffmpeg-loader';
 import { useFFmpeg } from '@/lib/use-ffmpeg';
 import { getFFmpegArgs, getClipArgs } from '@/lib/converters/video-audio';
 import { convertViaCanvas, convertHEIC, imagesToPDF, pdfToImages } from '@/lib/converters/image';
-import { docxToHTML, textToPDF, mergePDFs, splitPDF, excelToCSV, csvToExcel } from '@/lib/converters/document';
+import { docxToHTML, textToPDF, mergePDFs, splitPDF, excelToCSV, csvToExcel, pdfToDocx } from '@/lib/converters/document';
 import { filesToZip, extractZip } from '@/lib/converters/archive';
 import { convertSubtitle } from '@/lib/converters/subtitle';
 import { convertSpeechToText } from '@/lib/converters/speech-to-text';
@@ -291,6 +291,14 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
               width: img.width,
               height: img.height,
             }));
+          } else if (cift.slug === 'pdf-to-docx') {
+            const res = await pdfToDocx(files[0]);
+            finalResults.push({
+              blob: res.blob,
+              filename: res.filename,
+              originalSize: files[0].size,
+              convertedSize: res.blob.size,
+            });
           } else if (cift.slug === 'merge-pdf') {
             const res = await mergePDFs(files, 'birlestirilmis.pdf');
             finalResults.push({

@@ -2445,6 +2445,18 @@ export const DONUSUM_DATA: DonusumCift[] = [
     populer: true,
   },
   {
+    slug: 'pdf-to-docx',
+    from: 'PDF',
+    to: 'DOCX',
+    fromExt: 'pdf',
+    toExt: 'docx',
+    kategori: 'belge',
+    converter: 'pdf-lib', // Using pdf-lib for the icon/category tracking implicitly, but we use docx + pdfjs internally. We can use 'pdf-lib' as the type for now to route properly in ConvertPage
+    baslik: { en: 'PDF → Word (Text Only)', tr: 'PDF → Word (Sadece Metin)' },
+    aciklama: { en: 'Extract text from PDF and convert it to a DOCX file. Images and complex layouts are not preserved.', tr: 'PDF içindeki metinleri ayıklayıp DOCX dosyasına dönüştürür. Resimler ve karmaşık tasarımlar aktarılmaz.' },
+    populer: true,
+  },
+  {
     slug: 'merge-pdf',
     from: 'PDF',
     to: 'PDF',
