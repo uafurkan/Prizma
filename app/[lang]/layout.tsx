@@ -110,7 +110,7 @@ export default async function RootLayout({
                 <Link href={`/${lang}`} className="hover:text-foreground transition-colors">
                   {dict.common.home}
                 </Link>
-                <Link href={`/${lang}/sitemap.xml`} className="hover:text-foreground transition-colors">
+                <Link href="/sitemap.xml" className="hover:text-foreground transition-colors">
                   {dict.common.sitemap}
                 </Link>
               </div>
