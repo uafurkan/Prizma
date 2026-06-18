@@ -9,7 +9,8 @@ const enToTrMap: Record<string, string> = {
   'audio': 'ses',
   'document': 'belge',
   'archive': 'arsiv',
-  'subtitle': 'altyazi'
+  'subtitle': 'altyazi',
+  'transcription': 'desifre'
 };
 
 interface CategoryPageProps {

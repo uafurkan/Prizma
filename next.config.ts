@@ -18,7 +18,8 @@ const nextConfig: NextConfig = {
       // EN: /en/jpg-to-png → /en/category/image/jpg-to-png
       const enCatMap: Record<string, string> = {
         'goruntu': 'image', 'video': 'video', 'ses': 'audio',
-        'belge': 'document', 'arsiv': 'archive', 'altyazi': 'subtitle'
+        'belge': 'document', 'arsiv': 'archive', 'altyazi': 'subtitle',
+        'desifre': 'transcription'
       };
       redirectList.push({
         source: `/en/${d.slug}`,
