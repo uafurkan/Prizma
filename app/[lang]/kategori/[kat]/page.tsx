@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getDonusumlerByKategori, getKategoriBySlug, KATEGORILER, KategoriSlug, getDonusumPath } from '@/lib/donusum-data';
+import { getDonusumlerByKategori, getKategoriBySlug, KATEGORILER, KategoriSlug, getDonusumPath, getCategoryPath } from '@/lib/donusum-data';
 import FormatBadge from '@/components/FormatBadge';
 import AdSlot from '@/components/AdSlot';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import type { Metadata } from 'next';
-import { getDictionary } from '@/dictionaries';
 
 interface CategoryPageProps {
   params: Promise<{ lang: string; kat: string }>;
@@ -30,16 +30,31 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   const baslik = kategori.baslik[lang as 'en'|'tr'] || kategori.baslik['en'];
   const aciklama = kategori.aciklama[lang as 'en'|'tr'] || kategori.aciklama['en'];
+  const title = `${baslik} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`;
+  const canonicalPath = getCategoryPath(lang, kat);
 
   return {
-    title: `${baslik} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`,
+    title,
     description: aciklama,
+    alternates: {
+      canonical: canonicalPath,
+    },
+    openGraph: {
+      title,
+      description: aciklama,
+      url: canonicalPath,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description: aciklama,
+    },
   };
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { lang, kat } = await params;
-  const dict = getDictionary(lang);
   const kategori = getKategoriBySlug(kat as KategoriSlug);
   if (!kategori) {
     notFound();
@@ -48,11 +63,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const donusumler = getDonusumlerByKategori(kat as KategoriSlug);
   const baslik = kategori.baslik[lang as 'en'|'tr'] || kategori.baslik['en'];
   const aciklama = kategori.aciklama[lang as 'en'|'tr'] || kategori.aciklama['en'];
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.monster';
+  const breadcrumbItems = [
+    { label: lang === 'tr' ? 'Ana Sayfa' : 'Home', href: `/${lang}` },
+    { label: baslik },
+  ];
 
   return (
     <div className="flex flex-col gap-10 py-12 px-4 max-w-6xl mx-auto w-full animate-fade-in">
+      <Breadcrumbs items={breadcrumbItems} baseUrl={baseUrl} />
+
       {/* Category Header */}
-      <section className="flex flex-col gap-4 text-center md:text-left pt-6">
+      <section className="flex flex-col gap-4 text-center md:text-left pt-2">
         <div className="flex items-center justify-center md:justify-start gap-4">
           <span className="text-4xl md:text-5xl">{kategori.ikon}</span>
           <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-foreground to-muted bg-clip-text text-transparent">

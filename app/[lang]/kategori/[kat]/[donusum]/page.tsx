@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
-import { DONUSUM_DATA, getDonusumBySlug, getTranslatedFormat } from '@/lib/donusum-data';
+import { DONUSUM_DATA, getDonusumBySlug, getTranslatedFormat, getDonusumPath, getKategoriBySlug, getCategoryPath } from '@/lib/donusum-data';
 import ConvertPage from './ConvertPage';
 import type { Metadata } from 'next';
 import { getDictionary } from '@/dictionaries';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 interface PageProps {
   params: Promise<{ lang: string; kat: string; donusum: string }>;
@@ -29,13 +30,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cift = getDonusumBySlug(donusum);
   if (!cift) return {};
   
-  const dict = getDictionary(lang);
-  const baslik = cift.baslik[lang as 'en'|'tr'] || cift.baslik['en'];
   const aciklama = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
+  const title = `${getTranslatedFormat(cift.from, lang)} → ${getTranslatedFormat(cift.to, lang)} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`;
+  const canonicalPath = getDonusumPath(lang, cift.slug);
 
   return {
-    title: `${getTranslatedFormat(cift.from, lang)} → ${getTranslatedFormat(cift.to, lang)} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`,
+    title,
     description: aciklama,
+    alternates: {
+      canonical: canonicalPath,
+      languages: {
+        tr: getDonusumPath('tr', cift.slug),
+        en: getDonusumPath('en', cift.slug),
+      },
+    },
+    openGraph: {
+      title,
+      description: aciklama,
+      url: canonicalPath,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description: aciklama,
+    },
   };
 }
 
@@ -64,6 +83,17 @@ export default async function Page({ params }: PageProps) {
     },
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.monster';
+  const pageUrl = `${baseUrl}${getDonusumPath(lang, cift.slug)}`;
+
+  const kategori = getKategoriBySlug(cift.kategori);
+  const kategoriLabel = kategori ? (kategori.baslik[lang as 'en'|'tr'] || kategori.baslik['en']) : cift.kategori;
+  const breadcrumbItems = [
+    { label: lang === 'tr' ? 'Ana Sayfa' : 'Home', href: `/${lang}` },
+    { label: kategoriLabel, href: getCategoryPath(lang, cift.kategori) },
+    { label: title },
+  ];
+
   const howToSchema = {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
@@ -74,19 +104,53 @@ export default async function Page({ params }: PageProps) {
         '@type': 'HowToStep',
         name: dict.howTo.step1Title,
         text: dict.howTo.step1Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
+        url: pageUrl,
       },
       {
         '@type': 'HowToStep',
         name: dict.howTo.step2Title,
         text: dict.howTo.step2Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
+        url: pageUrl,
       },
       {
         '@type': 'HowToStep',
         name: dict.howTo.step3Title,
         text: dict.howTo.step3Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
+        url: pageUrl,
+      },
+    ],
+  };
+
+  const fromLabel = getTranslatedFormat(cift.from, lang);
+  const toLabel = getTranslatedFormat(cift.to, lang);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: dict.convertPage.faq1Title.replace('{from}', cift.from).replace('{to}', cift.to),
+        acceptedAnswer: { '@type': 'Answer', text: dict.convertPage.faq1Desc.replace('{from}', cift.from) },
+      },
+      {
+        '@type': 'Question',
+        name: dict.convertPage.faq2Title,
+        acceptedAnswer: { '@type': 'Answer', text: dict.convertPage.faq2Desc },
+      },
+      {
+        '@type': 'Question',
+        name: dict.convertPage.faq3Title,
+        acceptedAnswer: { '@type': 'Answer', text: dict.convertPage.faq3Desc },
+      },
+      {
+        '@type': 'Question',
+        name: dict.convertPage.faq4Title,
+        acceptedAnswer: { '@type': 'Answer', text: dict.convertPage.faq4Desc },
+      },
+      {
+        '@type': 'Question',
+        name: dict.convertPage.faq5Title.replace('{from}', fromLabel).replace('{to}', toLabel),
+        acceptedAnswer: { '@type': 'Answer', text: dict.convertPage.faq5Desc },
       },
     ],
   };
@@ -101,6 +165,13 @@ export default async function Page({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <div className="pt-6 pb-0 px-4 max-w-5xl mx-auto w-full">
+        <Breadcrumbs items={breadcrumbItems} baseUrl={baseUrl} />
+      </div>
       <ConvertPage cift={cift} lang={lang} />
     </>
   );

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { DonusumCift } from '@/lib/donusum-data';
-import { getFormatRenk, getIlgiliDonusumler } from '@/lib/donusum-data';
+import { getIlgiliDonusumler } from '@/lib/donusum-data';
 import DropZone from '@/components/DropZone';
 import ProgressRing from '@/components/ProgressRing';
 import DownloadCard from '@/components/DownloadCard';
@@ -19,6 +19,7 @@ import { convertSubtitle } from '@/lib/converters/subtitle';
 import { convertSpeechToText } from '@/lib/converters/speech-to-text';
 import { useGlobalFiles } from '@/components/FileProvider';
 import { getDictionary } from '@/dictionaries';
+import TrustPanel from '@/components/TrustPanel';
 
 interface ConvertPageProps {
   cift: DonusumCift;
@@ -66,8 +67,11 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
     error: ffmpegError,
   } = useFFmpeg();
 
-  // Check FFmpeg support and banner visibility
+  // Check FFmpeg support (browser capability check) and banner visibility
+  // (sessionStorage read) - these synchronize with external browser state,
+  // so they must run as effects rather than during render.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFfmpegSupported(isFFmpegSupported());
 
     if (cift.converter === 'ffmpeg') {
@@ -78,8 +82,11 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
     }
   }, [cift.converter]);
 
-  // Set default option values
-  useEffect(() => {
+  // Set default option values when the selected conversion pair changes
+  // (adjust state during render, not in an effect)
+  const [prevSecenekler, setPrevSecenekler] = useState(cift.secenekler);
+  if (cift.secenekler !== prevSecenekler) {
+    setPrevSecenekler(cift.secenekler);
     if (cift.secenekler) {
       const defaults: Record<string, string | number | boolean> = {};
       cift.secenekler.forEach((opt) => {
@@ -87,7 +94,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       });
       setOptions(defaults);
     }
-  }, [cift.secenekler]);
+  }
 
   const handleOptionChange = (id: string, value: string | number | boolean) => {
     setOptions((prev) => ({
@@ -129,9 +136,12 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
     setFiles(validFiles);
   }, [cift.fromExt, dict.convertPage.onlyExtFiles, dict.convertPage.maxFileSizeError]);
 
-  // Handle Global Files (from Universal Converter)
+  // Handle Global Files (from Universal Converter) - synchronizes local
+  // state with a shared context and must clear that context as a side
+  // effect, so it stays in an effect rather than a render-time adjustment.
   useEffect(() => {
     if (globalFiles && globalFiles.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       handleFiles(globalFiles);
       setGlobalFiles([]); // Clear context so they don't persist on subsequent visits
     }
@@ -443,7 +453,6 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
   const progressValue = ffmpegProcessing ? ffmpegProgress : localProgress;
   const activeError = ffmpegError || localError;
 
-  const color = getFormatRenk(cift.to);
   const relatedConversions = getIlgiliDonusumler(cift, 6);
 
   return (
@@ -607,6 +616,8 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                     >
                       {dict.convertPage.convertBtn}
                     </button>
+
+                    <TrustPanel dict={dict} />
                   </div>
                 )}
               </div>
@@ -614,24 +625,27 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
             {/* Loading/Converting States */}
             {(isConverting || isLoadingFfmpeg) && (
-              <div className="p-10 rounded-2xl border border-border bg-surface flex flex-col items-center justify-center gap-6 text-center shadow-xl animate-fade-in">
-                {isLoadingFfmpeg ? (
-                  <>
-                    <div className="w-12 h-12 rounded-full border-2 border-t-prism-b border-r-transparent border-b-transparent border-l-transparent animate-spin" />
-                    <div className="flex flex-col gap-1">
-                      <h4 className="font-bold text-foreground">{dict.convertPage.engineLoading}</h4>
-                      <p className="text-xs text-muted">{dict.convertPage.engineDesc}</p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <ProgressRing progress={progressValue} size={90} />
-                    <div className="flex flex-col gap-1">
-                      <h4 className="font-bold text-foreground">{dict.convertPage.convertingFiles}</h4>
-                      <p className="text-xs text-muted font-mono">{dict.convertPage.doNotClose}</p>
-                    </div>
-                  </>
-                )}
+              <div className="flex flex-col gap-4">
+                <div className="p-10 rounded-2xl border border-border bg-surface flex flex-col items-center justify-center gap-6 text-center shadow-xl animate-fade-in">
+                  {isLoadingFfmpeg ? (
+                    <>
+                      <div className="w-12 h-12 rounded-full border-2 border-t-prism-b border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+                      <div className="flex flex-col gap-1">
+                        <h4 className="font-bold text-foreground">{dict.convertPage.engineLoading}</h4>
+                        <p className="text-xs text-muted">{dict.convertPage.engineDesc}</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <ProgressRing progress={progressValue} size={90} />
+                      <div className="flex flex-col gap-1">
+                        <h4 className="font-bold text-foreground">{dict.convertPage.convertingFiles}</h4>
+                        <p className="text-xs text-muted font-mono">{dict.convertPage.doNotClose}</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+                <TrustPanel dict={dict} />
               </div>
             )}
 
@@ -677,6 +691,22 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
             </h4>
             <p className="text-xs text-muted leading-relaxed">
               {dict.convertPage.faq3Desc}
+            </p>
+          </div>
+          <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
+            <h4 className="font-bold text-foreground text-sm">
+              {dict.convertPage.faq4Title}
+            </h4>
+            <p className="text-xs text-muted leading-relaxed">
+              {dict.convertPage.faq4Desc}
+            </p>
+          </div>
+          <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
+            <h4 className="font-bold text-foreground text-sm">
+              {dict.convertPage.faq5Title.replace('{from}', cift.from).replace('{to}', cift.to)}
+            </h4>
+            <p className="text-xs text-muted leading-relaxed">
+              {dict.convertPage.faq5Desc}
             </p>
           </div>
         </div>

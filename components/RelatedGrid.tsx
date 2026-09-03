@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import FormatBadge from '@/components/FormatBadge';
 import { getDonusumPath, type DonusumCift } from '@/lib/donusum-data';
+import type { Dictionary } from '@/dictionaries';
 
 export interface RelatedGridProps {
   items: DonusumCift[];
   title?: string;
   lang: string;
-  dict?: any;
+  dict?: Dictionary;
 }
 
 export default function RelatedGrid({ items, title, lang, dict }: RelatedGridProps) {

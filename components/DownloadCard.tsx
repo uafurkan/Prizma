@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { downloadBlob, downloadAll } from '@/lib/download';
+import type { Dictionary } from '@/dictionaries';
 
 interface ResultItem {
   blob: Blob;
@@ -15,7 +16,7 @@ interface ResultItem {
 interface DownloadCardProps {
   results: ResultItem[];
   onReset: () => void;
-  dict?: any;
+  dict?: Dictionary;
   lang?: string;
 }
 
@@ -35,6 +36,14 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
   const [blobUrls, setBlobUrls] = useState<Record<number, string>>({});
   const [activePreviewIndex, setActivePreviewIndex] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
+  const [prevResults, setPrevResults] = useState(results);
+
+  // Reset editable filenames when a new batch of results arrives
+  // (adjust state during render, not in an effect)
+  if (results !== prevResults) {
+    setPrevResults(results);
+    setFileNames(results.map((r) => r.filename));
+  }
 
   const handleCopyText = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -42,9 +51,9 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Generates object URLs (with cleanup) for thumbnails/previews, so this
+  // must stay an effect rather than a render-time state adjustment.
   useEffect(() => {
-    // Initialize editable filenames
-    setFileNames(results.map((r) => r.filename));
 
     // Generate thumbnails for image blobs
     const urls = results.map((r) => {
@@ -53,6 +62,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
       }
       return '';
     });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setThumbnails(urls);
 
     const generatedUrls: string[] = [];
@@ -75,12 +85,12 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
           }));
         });
       } else if (isDocx) {
-        import('mammoth').then((mammoth) => {
+        Promise.all([import('mammoth'), import('dompurify')]).then(([mammoth, DOMPurify]) => {
           r.blob.arrayBuffer().then((buf) => {
             mammoth.convertToHtml({ arrayBuffer: buf }).then((res) => {
               setDocxPreviews((prev) => ({
                 ...prev,
-                [idx]: res.value,
+                [idx]: DOMPurify.default.sanitize(res.value),
               }));
             });
           });
@@ -123,7 +133,8 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
       blob: r.blob,
       filename: fileNames[i] || r.filename,
     }));
-    await downloadAll(filesToDownload, 'prizma-donusturulenler.zip');
+    const zipName = lang === 'tr' ? 'prizma-donusturulenler.zip' : 'prizma-converted-files.zip';
+    await downloadAll(filesToDownload, zipName);
   };
 
   const isSingle = results.length === 1;

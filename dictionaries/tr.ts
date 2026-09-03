@@ -36,6 +36,8 @@ export const tr = {
     switchToLight: 'Açık Temaya Geç',
     switchToDark: 'Koyu Temaya Geç',
     otherPopularConversions: 'Diğer Popüler Dönüşümler',
+    privacyPolicy: 'Gizlilik Politikası',
+    termsOfService: 'Kullanım Koşulları',
   },
   hero: {
     badge1: '100% Tarayıcıda',
@@ -61,7 +63,10 @@ export const tr = {
     list2: 'Sunucu maliyeti olmadığı için 100% ücretsizdir',
     list3: 'Sayfayı kapattığınızda tüm veriler silinir',
     list4: 'Üyelik, kayıt veya kısıtlamalar yoktur',
-    shieldText: 'Görseller, videolar, ses dosyaları ve belgeler tamamen yerel bellekte işlenir.'
+    shieldText: 'Görseller, videolar, ses dosyaları ve belgeler tamamen yerel bellekte işlenir.',
+    processingTitle: 'Dosyalarınız bu cihazdan asla çıkmıyor',
+    processingBadge: 'Sunucuya yükleme yok · Kayıt yok',
+    processingDesc: 'Bu dönüştürme işlemi tamamen tarayıcınızda, çevrimdışı olarak çalışıyor. Hiçbir veri sunucuya gönderilmiyor ve sayfayı kapattığınızda hiçbir şey saklanmıyor.'
   },
   faqSection: {
     q1: 'PRİZMA tamamen ücretsiz mi?',
@@ -109,10 +114,86 @@ export const tr = {
     faq2Desc: 'Evet, tamamen. PRİZMA sıfır sunucu mimarisiyle çalışır. Yani yüklediğiniz dosyalar hiçbir sunucuya transfer edilmez; tüm işlem kendi cihazınızın tarayıcısında, belleğinde gerçekleşir. Bu yüzden dosyalarınız %100 güvendedir ve gizlidir.',
     faq3Title: 'Bu dönüşüm işlemi için ödeme yapmam gerekiyor mu?',
     faq3Desc: 'Hayır, platformumuzdaki tüm dönüşüm araçları tamamen ücretsizdir ve herhangi bir kayıt veya üyelik gerektirmeden sınırsızca kullanılabilir.',
+    faq4Title: 'Herhangi bir program yüklemem gerekiyor mu?',
+    faq4Desc: 'Hayır, hiçbir kurulum gerekmez. PRİZMA tamamen tarayıcınızın içinde çalışır (Chrome, Firefox, Edge, Safari), bilgisayar veya telefonda, herhangi bir eklenti veya uygulama indirmenize gerek kalmadan.',
+    faq5Title: '{from} dosyasını {to} formatına dönüştürmek kaliteyi düşürür mü?',
+    faq5Desc: 'Bu, seçtiğiniz format ve ayarlara bağlıdır. Bazı dönüşümlerde (PNG\'den JPG\'ye gibi) kalite dengesi söz konusu olabilir; bunu bu sayfadaki kalite/bit hızı seçenekleriyle kontrol edebilirsiniz. Uyumlu formatlar arasındaki kayıpsız dönüşümler tam kaliteyi korur.',
     errorTitle: 'Dönüşüm Sırasında Bir Hata Oluştu',
     errorDesc: 'Dosya dönüştürme işlemi sırasında beklenmeyen bir hata meydana geldi. Tarayıcınız veya dosyanız bu işlem için uygun olmayabilir.',
     errorDetails: 'Hata Detayları',
     tryAgain: 'Tekrar Dene',
     backToHome: 'Ana Sayfaya Dön',
-  }
+  },
+  cookieConsent: {
+    message: 'Temel site analitiği ve, etkinleştirilmişse, reklam gösterimi için çerez kullanıyoruz. Dosyalarınız bundan hiçbir şekilde etkilenmez — her zaman tarayıcınızda yerel olarak işlenir ve hiçbir yere yüklenmez.',
+    accept: 'Kabul Et',
+    reject: 'Reddet',
+    privacyLink: 'Gizlilik Politikası',
+  },
+  privacyPage: {
+    title: 'Gizlilik Politikası',
+    updated: 'Son güncelleme: 3 Eylül 2026',
+    intro: 'PRİZMA ("biz"), prizma.monster adresinde sunulan, tarayıcı tabanlı bir dosya dönüştürme aracıdır. Bu sayfa, siteyi kullanırken hangi verilerin işlendiğini ve hangi tercihlere sahip olduğunuzu açıklar.',
+    sections: [
+      {
+        heading: '1. Dosyalarınız asla yüklenmez',
+        body: 'Tüm dönüşümler (görsel, video, ses, belge) tamamen kendi tarayıcınızda, kendi cihazınızda gerçekleşir. Dosyalarınız hiçbir PRİZMA sunucusuna gönderilmez, saklanmaz veya işlenmez. Bu sayfayı kapattığınızda veya yenilediğinizde her şey silinir — çünkü zaten hiçbir kopyasını tutmadık.',
+      },
+      {
+        heading: '2. Analitik',
+        body: 'Sitenin temel ve toplu kullanım istatistiklerini (örn. hangi sayfaların ziyaret edildiği, yaklaşık ülke bilgisi) anlamak için Vercel Analytics kullanıyoruz. Bu araç izleme çerezi kullanmaz, ancak ziyaretiniz sırasında IP adresinizi işler; bu, GDPR/KVKK kapsamında kişisel veri sayılır. Bu veri yalnızca siteyi geliştirmek için kullanılır, üçüncü taraflara satılmaz veya paylaşılmaz.',
+      },
+      {
+        heading: '3. Çerezler ve Reklamlar',
+        body: 'Etkinleştirilmişse, PRİZMA\'yı ücretsiz tutmaya yardımcı olmak için Google AdSense ile reklam gösteriyoruz. AdSense, Google\'ın kendi gizlilik politikası doğrultusunda çerez ayarlayabilir ve kişiselleştirilmiş reklam göstermek için verilerinizi kullanabilir. İlk ziyaretinizde gösterilen çerez banner\'ından bunu kabul edebilir veya reddedebilirsiniz. Reddederseniz, hiçbir reklam çerezi ayarlanmaz ve hiçbir reklam kişiselleştirilmez.',
+      },
+      {
+        heading: '4. Çerez tercihinizi değiştirme',
+        body: 'Çerez tercihinizi istediğiniz zaman, tarayıcınızın bu site için yerel depolama (local storage) verilerini temizleyerek veya tarayıcı gizlilik ayarlarınızdan site verilerini sıfırlayarak değiştirebilirsiniz. Bu, bir sonraki ziyaretinizde çerez banner\'ının tekrar gösterilmesini sağlar.',
+      },
+      {
+        heading: '5. Haklarınız (KVKK/GDPR)',
+        body: 'Kişisel verilerinize erişme, düzeltme, silinmesini talep etme, işlenmesine itiraz etme ve veri taşınabilirliği hakkına sahipsiniz. Kullanıcı hesabı oluşturmadığımız ve dosyalarınızı saklamadığımız için, talepleriniz genellikle bizim adımıza Vercel veya Google tarafından tutulan analitik/reklam verileriyle ilgili olacaktır — bu haklarınızı doğrudan bu sağlayıcılarla da kullanabilirsiniz.',
+      },
+      {
+        heading: '6. İletişim',
+        body: 'Gizlilikle ilgili her türlü soru veya talep için privacy@prizma.monster adresinden bize ulaşabilirsiniz.',
+      },
+    ],
+  },
+  termsPage: {
+    title: 'Kullanım Koşulları',
+    updated: 'Son güncelleme: 3 Eylül 2026',
+    intro: 'PRİZMA (prizma.monster) sitesini kullanarak aşağıdaki koşulları kabul etmiş olursunuz. Kabul etmiyorsanız lütfen siteyi kullanmayınız.',
+    sections: [
+      {
+        heading: '1. Hizmet',
+        body: 'PRİZMA, tarayıcı tabanlı, ücretsiz bir dosya dönüştürme aracıdır. Dönüşümler tamamen kendi cihazınızda gerçekleşir; dönüştürdüğünüz dosyaları hiçbir şekilde almıyor, saklamıyor veya erişimimiz olmuyor.',
+      },
+      {
+        heading: '2. Garanti verilmemesi',
+        body: 'Hizmet "olduğu gibi" sunulur, herhangi bir garanti içermez. Her dönüşümün hatasız, kayıpsız veya her cihaz/yazılımla uyumlu olacağını garanti etmiyoruz. Dönüştürülen dosyalara güvenmeden önce doğrulamak sizin sorumluluğunuzdadır.',
+      },
+      {
+        heading: '3. Sorumluluk sınırlaması',
+        body: 'Yasaların izin verdiği azami ölçüde, PRİZMA ve işletmecileri, bu hizmetin kullanımından veya kullanılamamasından kaynaklanan doğrudan veya dolaylı zararlardan, veri kayıplarından veya diğer zararlardan sorumlu tutulamaz.',
+      },
+      {
+        heading: '4. Kabul edilebilir kullanım',
+        body: 'PRİZMA\'yı, yasal hakkınız olmayan dosyaları dönüştürmek için kullanmamayı veya hizmeti kesintiye uğratmaya, tersine mühendislik yapmaya ya da kötüye kullanmaya çalışmamayı kabul edersiniz.',
+      },
+      {
+        heading: '5. Reklamlar',
+        body: 'PRİZMA, ücretsiz kalabilmek için üçüncü taraf reklamlar (Google AdSense) gösterebilir. İlgili çerezler hakkında detaylı bilgi için Gizlilik Politikamıza bakınız.',
+      },
+      {
+        heading: '6. Değişiklikler',
+        body: 'Bu koşulları zaman zaman güncelleyebiliriz. Değişikliklerden sonra siteyi kullanmaya devam etmeniz, güncellenmiş koşulları kabul ettiğiniz anlamına gelir.',
+      },
+      {
+        heading: '7. İletişim',
+        body: 'Bu koşullarla ilgili herhangi bir sorunuz için privacy@prizma.monster adresinden bize ulaşabilirsiniz.',
+      },
+    ],
+  },
 };

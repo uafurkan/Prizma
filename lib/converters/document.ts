@@ -142,7 +142,7 @@ export async function textToPDF(
   }
 
   const pdfBytes = await pdfDoc.save()
-  const blob = new Blob([pdfBytes as any], { type: 'application/pdf' })
+  const blob = new Blob([pdfBytes as Uint8Array<ArrayBuffer>], { type: 'application/pdf' })
 
   return {
     blob,
@@ -172,7 +172,7 @@ export async function mergePDFs(
   }
 
   const pdfBytes = await merged.save()
-  const blob = new Blob([pdfBytes as any], { type: 'application/pdf' })
+  const blob = new Blob([pdfBytes as Uint8Array<ArrayBuffer>], { type: 'application/pdf' })
 
   return { blob, filename: outputName }
 }
@@ -196,7 +196,7 @@ export async function splitPDF(
     singleDoc.addPage(copiedPage)
 
     const singleBytes = await singleDoc.save()
-    const blob = new Blob([singleBytes as any], { type: 'application/pdf' })
+    const blob = new Blob([singleBytes as Uint8Array<ArrayBuffer>], { type: 'application/pdf' })
 
     results.push({
       blob,
@@ -279,7 +279,7 @@ export async function pdfToDocx(
     ).toString()
   }
 
-  const { Document, Packer, Paragraph, TextRun } = await import('docx')
+  const { Document, Packer, Paragraph } = await import('docx')
 
   const arrayBuf = await file.arrayBuffer()
   const pdf = await pdfjsLib.getDocument({ data: arrayBuf }).promise
@@ -290,8 +290,11 @@ export async function pdfToDocx(
     const page = await pdf.getPage(i)
     const textContent = await page.getTextContent()
     
-    const items = textContent.items.filter(item => 'str' in item && 'transform' in item) as any[]
-    
+    interface PdfTextItem { str: string; transform: number[]; width?: number }
+    const items = textContent.items.filter(
+      item => 'str' in item && 'transform' in item
+    ) as unknown as PdfTextItem[]
+
     // Filter out purely empty strings and common crop marks at the edges
     const validItems = items.filter(item => {
       const str = item.str.trim()
@@ -303,7 +306,7 @@ export async function pdfToDocx(
       return true
     })
 
-    const lines: { y: number, items: any[] }[] = []
+    const lines: { y: number, items: { x: number; str: string; width: number }[] }[] = []
     
     for (const item of validItems) {
       const x = item.transform[4]

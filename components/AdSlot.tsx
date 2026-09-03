@@ -20,11 +20,13 @@ export default function AdSlot({ format, className = '' }: AdSlotProps) {
   useEffect(() => {
     if (pushed.current) return;
     try {
-      const adsbygoogle = (window as unknown as { adsbygoogle: unknown[] }).adsbygoogle;
-      if (adsbygoogle) {
-        adsbygoogle.push({});
-        pushed.current = true;
-      }
+      // Google's own snippet queues into this array even before the main
+      // AdSense script has loaded, so this works whether the script is
+      // already present or loads later (e.g. after cookie consent).
+      const win = window as unknown as { adsbygoogle?: unknown[] };
+      win.adsbygoogle = win.adsbygoogle || [];
+      win.adsbygoogle.push({});
+      pushed.current = true;
     } catch {
       // AdSense not loaded
     }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 const BASE_COLORS = [
   [255, 77, 109],   // #ff4d6d
@@ -145,7 +145,10 @@ export default function AnimatedFavicon() {
             updateLinks(blob);
           }, 'image/png');
       } catch (err) {
-        console.error("Favicon animation error:", err);
+        if (process.env.NODE_ENV !== 'production') {
+          console.error("Favicon animation error:", err);
+        }
+        isCancelled = true;
       }
     }
 

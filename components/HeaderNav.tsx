@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { getCategoryPath } from '@/lib/donusum-data';
+import type { Dictionary } from '@/dictionaries';
 
-export default function HeaderNav({ lang, dict }: { lang: string; dict: any }) {
+export default function HeaderNav({ lang, dict }: { lang: string; dict: Dictionary }) {
   const pathname = usePathname() || '';
 
   const categories = [

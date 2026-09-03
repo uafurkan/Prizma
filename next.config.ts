@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
-import { DONUSUM_DATA, getCategoryPath } from "./lib/donusum-data";
+import { DONUSUM_DATA } from "./lib/donusum-data";
 
 const nextConfig: NextConfig = {
-  // @ts-ignore
   turbopack: {},
   async redirects() {
     const redirectList: { source: string; destination: string; permanent: boolean }[] = [];
@@ -46,6 +45,26 @@ const nextConfig: NextConfig = {
           {
             key: "Cross-Origin-Resource-Policy",
             value: "cross-origin",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
           },
         ],
       },

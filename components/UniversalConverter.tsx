@@ -42,12 +42,14 @@ export default function UniversalConverter({ lang }: { lang: string }) {
 
   const activeSource = files.length > 0 ? detectedExt : (sourceFormat === 'detect' ? '' : sourceFormat);
 
-  const availablePairs = activeSource 
-    ? DONUSUM_DATA.filter(d => 
-        d.fromExt.toLowerCase() === activeSource || 
-        (d.fromExt === '*' && files.length > 1)
-      )
-    : [];
+  const availablePairs = useMemo(() => {
+    return activeSource
+      ? DONUSUM_DATA.filter(d =>
+          d.fromExt.toLowerCase() === activeSource ||
+          (d.fromExt === '*' && files.length > 1)
+        )
+      : [];
+  }, [activeSource, files.length]);
 
   const targetTabs = useMemo(() => {
     // Check if there are duplicate toExt/to values in availablePairs

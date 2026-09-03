@@ -228,7 +228,7 @@ export async function imagesToPDF(
   }
 
   const pdfBytes = await pdfDoc.save()
-  const blob = new Blob([pdfBytes as any], { type: 'application/pdf' })
+  const blob = new Blob([pdfBytes as Uint8Array<ArrayBuffer>], { type: 'application/pdf' })
 
   return {
     blob,
