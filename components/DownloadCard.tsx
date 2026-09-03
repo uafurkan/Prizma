@@ -75,12 +75,12 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
           }));
         });
       } else if (isDocx) {
-        import('mammoth').then((mammoth) => {
+        Promise.all([import('mammoth'), import('dompurify')]).then(([mammoth, DOMPurify]) => {
           r.blob.arrayBuffer().then((buf) => {
             mammoth.convertToHtml({ arrayBuffer: buf }).then((res) => {
               setDocxPreviews((prev) => ({
                 ...prev,
-                [idx]: res.value,
+                [idx]: DOMPurify.default.sanitize(res.value),
               }));
             });
           });

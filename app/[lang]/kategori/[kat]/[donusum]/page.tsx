@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { DONUSUM_DATA, getDonusumBySlug, getTranslatedFormat } from '@/lib/donusum-data';
+import { DONUSUM_DATA, getDonusumBySlug, getTranslatedFormat, getDonusumPath } from '@/lib/donusum-data';
 import ConvertPage from './ConvertPage';
 import type { Metadata } from 'next';
 import { getDictionary } from '@/dictionaries';
@@ -64,6 +64,9 @@ export default async function Page({ params }: PageProps) {
     },
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.monster';
+  const pageUrl = `${baseUrl}${getDonusumPath(lang, cift.slug)}`;
+
   const howToSchema = {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
@@ -74,19 +77,19 @@ export default async function Page({ params }: PageProps) {
         '@type': 'HowToStep',
         name: dict.howTo.step1Title,
         text: dict.howTo.step1Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
+        url: pageUrl,
       },
       {
         '@type': 'HowToStep',
         name: dict.howTo.step2Title,
         text: dict.howTo.step2Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
+        url: pageUrl,
       },
       {
         '@type': 'HowToStep',
         name: dict.howTo.step3Title,
         text: dict.howTo.step3Desc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app'}/${lang}/kategori/${cift.kategori}/${cift.slug}`,
+        url: pageUrl,
       },
     ],
   };

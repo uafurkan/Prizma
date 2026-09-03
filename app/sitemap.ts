@@ -1,8 +1,8 @@
 import { MetadataRoute } from 'next';
-import { DONUSUM_DATA, KATEGORILER, getCategoryPath } from '@/lib/donusum-data';
+import { DONUSUM_DATA, KATEGORILER, getCategoryPath, getDonusumPath } from '@/lib/donusum-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.app';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.monster';
 
   // Base routes
   const routes = [
@@ -29,13 +29,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
   const categoryRoutes = [...categoryRoutesTR, ...categoryRoutesEN];
 
-  // Conversion routes
-  const conversionRoutes = DONUSUM_DATA.map((d) => ({
-    url: `${baseUrl}/${d.slug}`,
+  // Conversion routes (Both TR and EN, using canonical localized paths)
+  const conversionRoutesTR = DONUSUM_DATA.map((d) => ({
+    url: `${baseUrl}${getDonusumPath('tr', d.slug)}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }));
+  const conversionRoutesEN = DONUSUM_DATA.map((d) => ({
+    url: `${baseUrl}${getDonusumPath('en', d.slug)}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.9,
   }));
 
-  return [...routes, ...categoryRoutes, ...conversionRoutes];
+  return [...routes, ...categoryRoutes, ...conversionRoutesTR, ...conversionRoutesEN];
 }
