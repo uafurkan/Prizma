@@ -1,12 +1,13 @@
 import { getDictionary } from '@/dictionaries';
 
-interface PrivacyPolicyContentProps {
+interface LegalPageContentProps {
   lang: string;
+  page: 'privacyPage' | 'termsPage';
 }
 
-export default function PrivacyPolicyContent({ lang }: PrivacyPolicyContentProps) {
+export default function LegalPageContent({ lang, page }: LegalPageContentProps) {
   const dict = getDictionary(lang);
-  const { title, updated, intro, sections } = dict.privacyPage;
+  const { title, updated, intro, sections } = dict[page];
 
   return (
     <div className="flex flex-col gap-8 py-12 px-4 max-w-3xl mx-auto w-full animate-fade-in">

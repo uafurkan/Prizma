@@ -693,6 +693,22 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
               {dict.convertPage.faq3Desc}
             </p>
           </div>
+          <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
+            <h4 className="font-bold text-foreground text-sm">
+              {dict.convertPage.faq4Title}
+            </h4>
+            <p className="text-xs text-muted leading-relaxed">
+              {dict.convertPage.faq4Desc}
+            </p>
+          </div>
+          <div className="p-5 rounded-xl border border-border bg-surface flex flex-col gap-2">
+            <h4 className="font-bold text-foreground text-sm">
+              {dict.convertPage.faq5Title.replace('{from}', cift.from).replace('{to}', cift.to)}
+            </h4>
+            <p className="text-xs text-muted leading-relaxed">
+              {dict.convertPage.faq5Desc}
+            </p>
+          </div>
         </div>
       </section>
     </div>

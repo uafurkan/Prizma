@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import PrivacyPolicyContent from '@/components/PrivacyPolicyContent';
+import LegalPageContent from '@/components/LegalPageContent';
 import { getDictionary } from '@/dictionaries';
 
 interface PageProps {
@@ -29,5 +29,5 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PrivacyPage({ params }: PageProps) {
   const { lang } = await params;
-  return <PrivacyPolicyContent lang={lang} />;
+  return <LegalPageContent lang={lang} page="privacyPage" />;
 }

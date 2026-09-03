@@ -56,6 +56,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly' as const,
       priority: 0.3,
     },
+    {
+      url: `${baseUrl}/tr/kullanim-kosullari`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/en/terms`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
   ];
 
   return [...routes, ...categoryRoutes, ...conversionRoutesTR, ...conversionRoutesEN, ...legalRoutes];

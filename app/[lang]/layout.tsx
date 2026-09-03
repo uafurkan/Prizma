@@ -71,6 +71,7 @@ export default async function RootLayout({
   const { lang } = await params;
   const dict = getDictionary(lang);
   const privacyHref = lang === 'tr' ? '/tr/gizlilik' : '/en/privacy';
+  const termsHref = lang === 'tr' ? '/tr/kullanim-kosullari' : '/en/terms';
 
   return (
     <html
@@ -134,6 +135,9 @@ export default async function RootLayout({
                 </Link>
                 <Link href={privacyHref} className="hover:text-foreground transition-colors">
                   {dict.common.privacyPolicy}
+                </Link>
+                <Link href={termsHref} className="hover:text-foreground transition-colors">
+                  {dict.common.termsOfService}
                 </Link>
               </div>
             </div>

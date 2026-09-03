@@ -37,6 +37,7 @@ export const en = {
     switchToDark: 'Switch to Dark Theme',
     otherPopularConversions: 'Other Popular Conversions',
     privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service',
   },
   hero: {
     badge1: '100% In Browser',
@@ -113,6 +114,10 @@ export const en = {
     faq2Desc: 'Yes, absolutely. PRIZMA operates with a zero-server architecture. This means your uploaded files are never transferred to any server; the entire process happens in your own device\'s browser and memory. Therefore, your files are 100% secure and private.',
     faq3Title: 'Do I have to pay for this conversion process?',
     faq3Desc: 'No, all conversion tools on our platform are completely free and can be used unlimitedly without requiring any registration or membership.',
+    faq4Title: 'Do I need to install any software?',
+    faq4Desc: 'No installation is required. PRIZMA works entirely inside your web browser (Chrome, Firefox, Edge, Safari), on desktop or mobile, with no extensions or apps to download.',
+    faq5Title: 'Does converting {from} to {to} reduce quality?',
+    faq5Desc: 'It depends on the formats and settings you choose. Some conversions (like PNG to JPG) can involve quality trade-offs, which you can control with the quality/bitrate options on this page. Lossless conversions between compatible formats keep full quality.',
     errorTitle: 'An Error Occurred During Conversion',
     errorDesc: 'An unexpected error occurred during the file conversion process. Your browser or file might not be suitable for this operation.',
     errorDetails: 'Error Details',
@@ -153,6 +158,41 @@ export const en = {
       {
         heading: '6. Contact',
         body: 'For any privacy-related question or request, contact us at privacy@prizma.monster.',
+      },
+    ],
+  },
+  termsPage: {
+    title: 'Terms of Service',
+    updated: 'Last updated: September 3, 2026',
+    intro: 'By using PRIZMA (prizma.monster), you agree to the following terms. If you do not agree, please do not use the site.',
+    sections: [
+      {
+        heading: '1. The service',
+        body: 'PRIZMA is a free, browser-based file conversion tool. Conversions run entirely on your own device; we do not receive, store, or have access to the files you convert.',
+      },
+      {
+        heading: '2. No warranty',
+        body: 'The service is provided "as is", without warranties of any kind. We do not guarantee that every conversion will be error-free, lossless, or compatible with every device or software. You are responsible for verifying converted files before relying on them.',
+      },
+      {
+        heading: '3. Limitation of liability',
+        body: 'To the maximum extent permitted by law, PRIZMA and its operators are not liable for any direct or indirect damages, data loss, or other harm arising from the use of, or inability to use, this service.',
+      },
+      {
+        heading: '4. Acceptable use',
+        body: 'You agree not to use PRIZMA to process files you do not have the legal right to convert, or to attempt to disrupt, reverse-engineer, or abuse the service.',
+      },
+      {
+        heading: '5. Advertising',
+        body: 'PRIZMA may display third-party ads (Google AdSense) to remain free to use. See our Privacy Policy for details on related cookies.',
+      },
+      {
+        heading: '6. Changes',
+        body: 'We may update these terms from time to time. Continued use of the site after changes means you accept the updated terms.',
+      },
+      {
+        heading: '7. Contact',
+        body: 'For any question about these terms, contact us at privacy@prizma.monster.',
       },
     ],
   },

@@ -15,19 +15,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dict = getDictionary(lang);
 
   return {
-    title: `${dict.privacyPage.title} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`,
-    description: dict.privacyPage.intro,
+    title: `${dict.termsPage.title} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`,
+    description: dict.termsPage.intro,
     alternates: {
-      canonical: '/tr/gizlilik',
+      canonical: '/tr/kullanim-kosullari',
       languages: {
-        tr: '/tr/gizlilik',
-        en: '/en/privacy',
+        tr: '/tr/kullanim-kosullari',
+        en: '/en/terms',
       },
     },
   };
 }
 
-export default async function GizlilikPage({ params }: PageProps) {
+export default async function KullanimKosullariPage({ params }: PageProps) {
   const { lang } = await params;
-  return <LegalPageContent lang={lang} page="privacyPage" />;
+  return <LegalPageContent lang={lang} page="termsPage" />;
 }

@@ -7,7 +7,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return [{ lang: 'tr' }];
+  return [{ lang: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -15,19 +15,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dict = getDictionary(lang);
 
   return {
-    title: `${dict.privacyPage.title} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`,
-    description: dict.privacyPage.intro,
+    title: `${dict.termsPage.title} | PRIZMA`,
+    description: dict.termsPage.intro,
     alternates: {
-      canonical: '/tr/gizlilik',
+      canonical: '/en/terms',
       languages: {
-        tr: '/tr/gizlilik',
-        en: '/en/privacy',
+        tr: '/tr/kullanim-kosullari',
+        en: '/en/terms',
       },
     },
   };
 }
 
-export default async function GizlilikPage({ params }: PageProps) {
+export default async function TermsPage({ params }: PageProps) {
   const { lang } = await params;
-  return <LegalPageContent lang={lang} page="privacyPage" />;
+  return <LegalPageContent lang={lang} page="termsPage" />;
 }
