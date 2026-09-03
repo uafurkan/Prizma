@@ -4,7 +4,6 @@ import { getDonusumlerByKategori, getKategoriBySlug, KATEGORILER, KategoriSlug, 
 import FormatBadge from '@/components/FormatBadge';
 import AdSlot from '@/components/AdSlot';
 import type { Metadata } from 'next';
-import { getDictionary } from '@/dictionaries';
 
 interface CategoryPageProps {
   params: Promise<{ lang: string; kat: string }>;
@@ -39,7 +38,6 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { lang, kat } = await params;
-  const dict = getDictionary(lang);
   const kategori = getKategoriBySlug(kat as KategoriSlug);
   if (!kategori) {
     notFound();

@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import CategoryPage, { generateMetadata as _generateMetadata } from '../../kategori/[kat]/page';
 import { KATEGORILER } from '@/lib/donusum-data';
 import type { Metadata } from 'next';

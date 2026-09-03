@@ -51,7 +51,6 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 
 import { FileProvider } from '@/components/FileProvider';
 import { getDictionary } from '@/dictionaries';
-import { getCategoryPath } from '@/lib/donusum-data';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import AnimatedFavicon from '@/components/AnimatedFavicon';
 import { ThemeProvider } from '@/components/ThemeProvider';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 const BASE_COLORS = [
   [255, 77, 109],   // #ff4d6d

@@ -1,15 +1,18 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
+import type { Dictionary } from '@/dictionaries';
 
-export default function ThemeToggle({ dict }: { dict?: any }) {
+const subscribeNoop = () => () => {};
+
+export default function ThemeToggle({ dict }: { dict?: Dictionary }) {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false
+  );
 
   if (!mounted) {
     return <div className="w-9 h-9 rounded-xl border border-border bg-surface flex items-center justify-center opacity-50 shrink-0" />;

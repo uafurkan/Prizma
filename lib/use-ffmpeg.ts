@@ -96,9 +96,9 @@ export function useFFmpeg(): UseFFmpegReturn {
         const mime = getMimeForFilename(outputFileName)
         let blobPart: BlobPart
         if (outputData instanceof Uint8Array) {
-          blobPart = outputData as any
+          blobPart = outputData as Uint8Array<ArrayBuffer>
         } else {
-          blobPart = new TextEncoder().encode(outputData as string) as any
+          blobPart = new TextEncoder().encode(outputData as string)
         }
         const blob = new Blob([blobPart], { type: mime })
 

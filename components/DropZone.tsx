@@ -1,13 +1,14 @@
 'use client';
 
 import { useCallback, useState, useRef } from 'react';
+import type { Dictionary } from '@/dictionaries';
 
 interface DropZoneProps {
   accept: string;
   multiple?: boolean;
   onFiles: (files: File[]) => void;
   label?: string;
-  dict?: any;
+  dict?: Dictionary;
 }
 
 export default function DropZone({ accept, multiple = false, onFiles, label, dict }: DropZoneProps) {

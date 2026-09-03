@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
-import { DONUSUM_DATA, getCategoryPath } from "./lib/donusum-data";
+import { DONUSUM_DATA } from "./lib/donusum-data";
 
 const nextConfig: NextConfig = {
-  // @ts-ignore
   turbopack: {},
   async redirects() {
     const redirectList: { source: string; destination: string; permanent: boolean }[] = [];

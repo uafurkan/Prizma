@@ -1,6 +1,11 @@
 // @xenova/transformers loaded dynamically
 
-let transcriber: any = null;
+type Transcriber = (
+  audio: Float32Array,
+  options?: Record<string, unknown>
+) => Promise<{ text: string }>;
+
+let transcriber: Transcriber | null = null;
 
 export interface SpeechToTextOptions {
   language?: string; // e.g. 'turkish', 'english'
@@ -15,13 +20,13 @@ export async function convertSpeechToText(
   if (!transcriber) {
     // Load the multilingual whisper model
     const { pipeline } = await import('@xenova/transformers');
-    transcriber = await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', {
-      progress_callback: (data: any) => {
+    transcriber = (await pipeline('automatic-speech-recognition', 'Xenova/whisper-tiny', {
+      progress_callback: (data: Parameters<NonNullable<typeof onProgress>>[0]) => {
         if (onProgress) {
           onProgress(data);
         }
       }
-    });
+    })) as unknown as Transcriber;
   }
 
   // Start inference decoding
@@ -30,7 +35,9 @@ export async function convertSpeechToText(
   }
 
   // Decode audio using browser's AudioContext (needs to be 16kHz)
-  const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
+  const AudioContextCtor = window.AudioContext ||
+    (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+  const audioContext = new AudioContextCtor({ sampleRate: 16000 });
   const arrayBuffer = await file.arrayBuffer();
   const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
   
@@ -51,7 +58,7 @@ export async function convertSpeechToText(
     onProgress({ status: 'inferencing' });
   }
 
-  const transcriberOptions: any = {
+  const transcriberOptions: Record<string, unknown> = {
     task: 'transcribe',
   };
   

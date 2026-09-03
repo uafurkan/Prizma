@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { DonusumCift } from '@/lib/donusum-data';
-import { getFormatRenk, getIlgiliDonusumler } from '@/lib/donusum-data';
+import { getIlgiliDonusumler } from '@/lib/donusum-data';
 import DropZone from '@/components/DropZone';
 import ProgressRing from '@/components/ProgressRing';
 import DownloadCard from '@/components/DownloadCard';
@@ -66,8 +66,11 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
     error: ffmpegError,
   } = useFFmpeg();
 
-  // Check FFmpeg support and banner visibility
+  // Check FFmpeg support (browser capability check) and banner visibility
+  // (sessionStorage read) - these synchronize with external browser state,
+  // so they must run as effects rather than during render.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFfmpegSupported(isFFmpegSupported());
 
     if (cift.converter === 'ffmpeg') {
@@ -78,8 +81,11 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
     }
   }, [cift.converter]);
 
-  // Set default option values
-  useEffect(() => {
+  // Set default option values when the selected conversion pair changes
+  // (adjust state during render, not in an effect)
+  const [prevSecenekler, setPrevSecenekler] = useState(cift.secenekler);
+  if (cift.secenekler !== prevSecenekler) {
+    setPrevSecenekler(cift.secenekler);
     if (cift.secenekler) {
       const defaults: Record<string, string | number | boolean> = {};
       cift.secenekler.forEach((opt) => {
@@ -87,7 +93,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
       });
       setOptions(defaults);
     }
-  }, [cift.secenekler]);
+  }
 
   const handleOptionChange = (id: string, value: string | number | boolean) => {
     setOptions((prev) => ({
@@ -129,9 +135,12 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
     setFiles(validFiles);
   }, [cift.fromExt, dict.convertPage.onlyExtFiles, dict.convertPage.maxFileSizeError]);
 
-  // Handle Global Files (from Universal Converter)
+  // Handle Global Files (from Universal Converter) - synchronizes local
+  // state with a shared context and must clear that context as a side
+  // effect, so it stays in an effect rather than a render-time adjustment.
   useEffect(() => {
     if (globalFiles && globalFiles.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       handleFiles(globalFiles);
       setGlobalFiles([]); // Clear context so they don't persist on subsequent visits
     }
@@ -443,7 +452,6 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
   const progressValue = ffmpegProcessing ? ffmpegProgress : localProgress;
   const activeError = ffmpegError || localError;
 
-  const color = getFormatRenk(cift.to);
   const relatedConversions = getIlgiliDonusumler(cift, 6);
 
   return (

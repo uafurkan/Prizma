@@ -1,25 +1,35 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { getCategoryPath } from '@/lib/donusum-data';
+import type { Dictionary } from '@/dictionaries';
+
+const subscribeNoop = () => () => {};
 
 interface MobileMenuProps {
   lang: string;
-  dict: any;
+  dict: Dictionary;
   children: React.ReactNode; // For ThemeToggle and LanguageSwitcher
 }
 
 export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false
+  );
   const pathname = usePathname() || '';
+  const [prevPathname, setPrevPathname] = useState(pathname);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Close menu on route change (adjust state during render, not in an effect)
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setIsOpen(false);
+  }
 
   // Prevent scroll when menu is open
   useEffect(() => {
@@ -32,11 +42,6 @@ export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
-
-  // Close menu on route change
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   const categories = [
     { slug: 'goruntu', name: dict.kategoriler.goruntu },

@@ -29,8 +29,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cift = getDonusumBySlug(donusum);
   if (!cift) return {};
   
-  const dict = getDictionary(lang);
-  const baslik = cift.baslik[lang as 'en'|'tr'] || cift.baslik['en'];
   const aciklama = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
   const title = `${getTranslatedFormat(cift.from, lang)} → ${getTranslatedFormat(cift.to, lang)} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`;
   const canonicalPath = getDonusumPath(lang, cift.slug);
