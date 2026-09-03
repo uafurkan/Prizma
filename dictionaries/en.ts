@@ -61,7 +61,10 @@ export const en = {
     list2: '100% free since there are no server costs',
     list3: 'All data is cleared when you close the page',
     list4: 'No registration or limits',
-    shieldText: 'Images, videos, audio files, and documents are processed entirely in local memory.'
+    shieldText: 'Images, videos, audio files, and documents are processed entirely in local memory.',
+    processingTitle: 'Your files never leave this device',
+    processingBadge: 'No upload · No storage',
+    processingDesc: 'This conversion is running fully offline in your browser. Nothing is being sent to any server, and nothing is kept once you close or leave this page.'
   },
   faqSection: {
     q1: 'Is PRIZMA completely free?',

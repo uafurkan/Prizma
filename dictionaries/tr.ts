@@ -61,7 +61,10 @@ export const tr = {
     list2: 'Sunucu maliyeti olmadığı için 100% ücretsizdir',
     list3: 'Sayfayı kapattığınızda tüm veriler silinir',
     list4: 'Üyelik, kayıt veya kısıtlamalar yoktur',
-    shieldText: 'Görseller, videolar, ses dosyaları ve belgeler tamamen yerel bellekte işlenir.'
+    shieldText: 'Görseller, videolar, ses dosyaları ve belgeler tamamen yerel bellekte işlenir.',
+    processingTitle: 'Dosyalarınız bu cihazdan asla çıkmıyor',
+    processingBadge: 'Sunucuya yükleme yok · Kayıt yok',
+    processingDesc: 'Bu dönüştürme işlemi tamamen tarayıcınızda, çevrimdışı olarak çalışıyor. Hiçbir veri sunucuya gönderilmiyor ve sayfayı kapattığınızda hiçbir şey saklanmıyor.'
   },
   faqSection: {
     q1: 'PRİZMA tamamen ücretsiz mi?',

@@ -19,6 +19,7 @@ import { convertSubtitle } from '@/lib/converters/subtitle';
 import { convertSpeechToText } from '@/lib/converters/speech-to-text';
 import { useGlobalFiles } from '@/components/FileProvider';
 import { getDictionary } from '@/dictionaries';
+import TrustPanel from '@/components/TrustPanel';
 
 interface ConvertPageProps {
   cift: DonusumCift;
@@ -615,6 +616,8 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
                     >
                       {dict.convertPage.convertBtn}
                     </button>
+
+                    <TrustPanel dict={dict} />
                   </div>
                 )}
               </div>
@@ -622,24 +625,27 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
             {/* Loading/Converting States */}
             {(isConverting || isLoadingFfmpeg) && (
-              <div className="p-10 rounded-2xl border border-border bg-surface flex flex-col items-center justify-center gap-6 text-center shadow-xl animate-fade-in">
-                {isLoadingFfmpeg ? (
-                  <>
-                    <div className="w-12 h-12 rounded-full border-2 border-t-prism-b border-r-transparent border-b-transparent border-l-transparent animate-spin" />
-                    <div className="flex flex-col gap-1">
-                      <h4 className="font-bold text-foreground">{dict.convertPage.engineLoading}</h4>
-                      <p className="text-xs text-muted">{dict.convertPage.engineDesc}</p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <ProgressRing progress={progressValue} size={90} />
-                    <div className="flex flex-col gap-1">
-                      <h4 className="font-bold text-foreground">{dict.convertPage.convertingFiles}</h4>
-                      <p className="text-xs text-muted font-mono">{dict.convertPage.doNotClose}</p>
-                    </div>
-                  </>
-                )}
+              <div className="flex flex-col gap-4">
+                <div className="p-10 rounded-2xl border border-border bg-surface flex flex-col items-center justify-center gap-6 text-center shadow-xl animate-fade-in">
+                  {isLoadingFfmpeg ? (
+                    <>
+                      <div className="w-12 h-12 rounded-full border-2 border-t-prism-b border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+                      <div className="flex flex-col gap-1">
+                        <h4 className="font-bold text-foreground">{dict.convertPage.engineLoading}</h4>
+                        <p className="text-xs text-muted">{dict.convertPage.engineDesc}</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <ProgressRing progress={progressValue} size={90} />
+                      <div className="flex flex-col gap-1">
+                        <h4 className="font-bold text-foreground">{dict.convertPage.convertingFiles}</h4>
+                        <p className="text-xs text-muted font-mono">{dict.convertPage.doNotClose}</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+                <TrustPanel dict={dict} />
               </div>
             )}
 
