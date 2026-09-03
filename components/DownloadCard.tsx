@@ -123,7 +123,8 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
       blob: r.blob,
       filename: fileNames[i] || r.filename,
     }));
-    await downloadAll(filesToDownload, 'prizma-donusturulenler.zip');
+    const zipName = lang === 'tr' ? 'prizma-donusturulenler.zip' : 'prizma-converted-files.zip';
+    await downloadAll(filesToDownload, zipName);
   };
 
   const isSingle = results.length === 1;

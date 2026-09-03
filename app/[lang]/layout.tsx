@@ -18,9 +18,34 @@ const jetbrainsMono = JetBrains_Mono({
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.monster';
+  const title = lang === 'tr' ? 'PRİZMA | Evrensel Dosya Dönüştürücü' : 'PRIZMA | The Universal File Converter';
+  const description = lang === 'tr' ? 'Dosyalarınızı tarayıcınızda güvenle ve anında dönüştürün.' : 'Instantly convert files securely in your browser.';
+
   return {
-    title: lang === 'tr' ? 'PRİZMA | Evrensel Dosya Dönüştürücü' : 'PRIZMA | The Universal File Converter',
-    description: lang === 'tr' ? 'Dosyalarınızı tarayıcınızda güvenle ve anında dönüştürün.' : 'Instantly convert files securely in your browser.',
+    metadataBase: new URL(baseUrl),
+    title,
+    description,
+    alternates: {
+      canonical: `/${lang}`,
+      languages: {
+        tr: '/tr',
+        en: '/en',
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${baseUrl}/${lang}`,
+      siteName: lang === 'tr' ? 'PRİZMA' : 'PRIZMA',
+      locale: lang === 'tr' ? 'tr_TR' : 'en_US',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
   };
 }
 

@@ -32,10 +32,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dict = getDictionary(lang);
   const baslik = cift.baslik[lang as 'en'|'tr'] || cift.baslik['en'];
   const aciklama = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
+  const title = `${getTranslatedFormat(cift.from, lang)} → ${getTranslatedFormat(cift.to, lang)} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`;
+  const canonicalPath = getDonusumPath(lang, cift.slug);
 
   return {
-    title: `${getTranslatedFormat(cift.from, lang)} → ${getTranslatedFormat(cift.to, lang)} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`,
+    title,
     description: aciklama,
+    alternates: {
+      canonical: canonicalPath,
+      languages: {
+        tr: getDonusumPath('tr', cift.slug),
+        en: getDonusumPath('en', cift.slug),
+      },
+    },
+    openGraph: {
+      title,
+      description: aciklama,
+      url: canonicalPath,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description: aciklama,
+    },
   };
 }
 

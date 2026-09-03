@@ -145,7 +145,10 @@ export default function AnimatedFavicon() {
             updateLinks(blob);
           }, 'image/png');
       } catch (err) {
-        console.error("Favicon animation error:", err);
+        if (process.env.NODE_ENV !== 'production') {
+          console.error("Favicon animation error:", err);
+        }
+        isCancelled = true;
       }
     }
 
