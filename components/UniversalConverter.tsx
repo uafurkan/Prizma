@@ -43,12 +43,15 @@ export default function UniversalConverter({ lang }: { lang: string }) {
   const activeSource = files.length > 0 ? detectedExt : (sourceFormat === 'detect' ? '' : sourceFormat);
 
   const availablePairs = useMemo(() => {
-    return activeSource
+    const pairs = activeSource
       ? DONUSUM_DATA.filter(d =>
           d.fromExt.toLowerCase() === activeSource ||
           (d.fromExt === '*' && files.length > 1)
         )
       : [];
+    // Surface the most relevant/popular target formats first (e.g. show
+    // "OCR PDF" and "Word" ahead of niche PDF↔PDF tools when a PDF is uploaded).
+    return [...pairs].sort((a, b) => Number(b.populer) - Number(a.populer));
   }, [activeSource, files.length]);
 
   const targetTabs = useMemo(() => {

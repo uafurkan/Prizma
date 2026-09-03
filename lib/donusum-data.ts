@@ -10,7 +10,8 @@ export type ConverterType =
   | 'sheetjs'
   | 'jszip'
   | 'subsrt'
-  | 'whisper';
+  | 'whisper'
+  | 'tesseract';
 
 export interface Secenek {
   id: string;
@@ -245,6 +246,19 @@ export const WHISPER_LANGUAGES = [
   { value: 'mongolian', label: 'Монгол (Mongolian)' },
   { value: 'nepali', label: 'नेपाली (Nepali)' },
   { value: 'belarusian', label: 'Беларуская (Belarusian)' }
+];
+
+export const OCR_LANGUAGES = [
+  { value: 'tur+eng', label: 'Türkçe + English' },
+  { value: 'tur', label: 'Türkçe (Turkish)' },
+  { value: 'eng', label: 'English' },
+  { value: 'deu', label: 'Deutsch (German)' },
+  { value: 'fra', label: 'Français (French)' },
+  { value: 'spa', label: 'Español (Spanish)' },
+  { value: 'ita', label: 'Italiano (Italian)' },
+  { value: 'por', label: 'Português (Portuguese)' },
+  { value: 'rus', label: 'Русский (Russian)' },
+  { value: 'ara', label: 'العربية (Arabic)' },
 ];
 
 export const DONUSUM_DATA: DonusumCift[] = [
@@ -2455,6 +2469,27 @@ export const DONUSUM_DATA: DonusumCift[] = [
     baslik: { en: 'PDF → Word (Text Only)', tr: 'PDF → Word (Sadece Metin)' },
     aciklama: { en: 'Extract text from PDF and convert it to a DOCX file. Images and complex layouts are not preserved.', tr: 'PDF içindeki metinleri ayıklayıp DOCX dosyasına dönüştürür. Resimler ve karmaşık tasarımlar aktarılmaz.' },
     populer: true,
+  },
+  {
+    slug: 'pdf-to-ocr-pdf',
+    from: 'PDF',
+    to: 'OCR PDF',
+    fromExt: 'pdf',
+    toExt: 'pdf',
+    kategori: 'belge',
+    converter: 'tesseract',
+    baslik: { en: 'PDF → OCR PDF (Searchable)', tr: 'PDF → OCR PDF (Aranabilir)' },
+    aciklama: { en: 'Turn a scanned or image-based PDF into a searchable, selectable PDF using on-device OCR. No file ever leaves your browser.', tr: 'Taranmış veya görüntü tabanlı bir PDF\'yi, cihazınızda çalışan OCR ile aranabilir ve seçilebilir bir PDF\'ye dönüştürün. Dosyanız tarayıcınızdan hiç çıkmaz.' },
+    populer: true,
+    secenekler: [
+      {
+        id: 'language',
+        label: { en: 'Document Language', tr: 'Belge Dili' },
+        type: 'select',
+        default: 'tur+eng',
+        options: OCR_LANGUAGES,
+      },
+    ],
   },
   {
     slug: 'merge-pdf',

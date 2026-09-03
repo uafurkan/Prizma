@@ -17,6 +17,7 @@ import { docxToHTML, textToPDF, mergePDFs, splitPDF, excelToCSV, csvToExcel, pdf
 import { filesToZip, extractZip } from '@/lib/converters/archive';
 import { convertSubtitle } from '@/lib/converters/subtitle';
 import { convertSpeechToText } from '@/lib/converters/speech-to-text';
+import { pdfToSearchablePDF } from '@/lib/converters/ocr';
 import { useGlobalFiles } from '@/components/FileProvider';
 import { getDictionary } from '@/dictionaries';
 import TrustPanel from '@/components/TrustPanel';
@@ -281,6 +282,30 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
               }
             );
             finalResults.push(res);
+          }
+          setLocalProgress(95);
+          break;
+        }
+        case 'tesseract': {
+          setLocalProgress(5);
+          const ocrLang = options['language'] ? String(options['language']) : 'tur+eng';
+          for (const file of files) {
+            const res = await pdfToSearchablePDF(file, ocrLang, (data) => {
+              if (data.status === 'loading') {
+                setLocalProgress(10);
+              } else if (data.status === 'recognizing' && data.progress) {
+                // Recognition dominates the runtime; spread it across 10%-90%
+                setLocalProgress(10 + data.progress * 80);
+              } else if (data.status === 'building' && data.page && data.totalPages) {
+                setLocalProgress(10 + (data.page / data.totalPages) * 80);
+              }
+            });
+            finalResults.push({
+              blob: res.blob,
+              filename: res.filename,
+              originalSize: file.size,
+              convertedSize: res.blob.size,
+            });
           }
           setLocalProgress(95);
           break;
