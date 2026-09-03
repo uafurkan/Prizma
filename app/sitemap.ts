@@ -43,5 +43,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  return [...routes, ...categoryRoutes, ...conversionRoutesTR, ...conversionRoutesEN];
+  const legalRoutes = [
+    {
+      url: `${baseUrl}/tr/gizlilik`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/en/privacy`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+  ];
+
+  return [...routes, ...categoryRoutes, ...conversionRoutesTR, ...conversionRoutesEN, ...legalRoutes];
 }

@@ -36,6 +36,7 @@ export const tr = {
     switchToLight: 'Açık Temaya Geç',
     switchToDark: 'Koyu Temaya Geç',
     otherPopularConversions: 'Diğer Popüler Dönüşümler',
+    privacyPolicy: 'Gizlilik Politikası',
   },
   hero: {
     badge1: '100% Tarayıcıda',
@@ -117,5 +118,42 @@ export const tr = {
     errorDetails: 'Hata Detayları',
     tryAgain: 'Tekrar Dene',
     backToHome: 'Ana Sayfaya Dön',
-  }
+  },
+  cookieConsent: {
+    message: 'Temel site analitiği ve, etkinleştirilmişse, reklam gösterimi için çerez kullanıyoruz. Dosyalarınız bundan hiçbir şekilde etkilenmez — her zaman tarayıcınızda yerel olarak işlenir ve hiçbir yere yüklenmez.',
+    accept: 'Kabul Et',
+    reject: 'Reddet',
+    privacyLink: 'Gizlilik Politikası',
+  },
+  privacyPage: {
+    title: 'Gizlilik Politikası',
+    updated: 'Son güncelleme: 3 Eylül 2026',
+    intro: 'PRİZMA ("biz"), prizma.monster adresinde sunulan, tarayıcı tabanlı bir dosya dönüştürme aracıdır. Bu sayfa, siteyi kullanırken hangi verilerin işlendiğini ve hangi tercihlere sahip olduğunuzu açıklar.',
+    sections: [
+      {
+        heading: '1. Dosyalarınız asla yüklenmez',
+        body: 'Tüm dönüşümler (görsel, video, ses, belge) tamamen kendi tarayıcınızda, kendi cihazınızda gerçekleşir. Dosyalarınız hiçbir PRİZMA sunucusuna gönderilmez, saklanmaz veya işlenmez. Bu sayfayı kapattığınızda veya yenilediğinizde her şey silinir — çünkü zaten hiçbir kopyasını tutmadık.',
+      },
+      {
+        heading: '2. Analitik',
+        body: 'Sitenin temel ve toplu kullanım istatistiklerini (örn. hangi sayfaların ziyaret edildiği, yaklaşık ülke bilgisi) anlamak için Vercel Analytics kullanıyoruz. Bu araç izleme çerezi kullanmaz, ancak ziyaretiniz sırasında IP adresinizi işler; bu, GDPR/KVKK kapsamında kişisel veri sayılır. Bu veri yalnızca siteyi geliştirmek için kullanılır, üçüncü taraflara satılmaz veya paylaşılmaz.',
+      },
+      {
+        heading: '3. Çerezler ve Reklamlar',
+        body: 'Etkinleştirilmişse, PRİZMA\'yı ücretsiz tutmaya yardımcı olmak için Google AdSense ile reklam gösteriyoruz. AdSense, Google\'ın kendi gizlilik politikası doğrultusunda çerez ayarlayabilir ve kişiselleştirilmiş reklam göstermek için verilerinizi kullanabilir. İlk ziyaretinizde gösterilen çerez banner\'ından bunu kabul edebilir veya reddedebilirsiniz. Reddederseniz, hiçbir reklam çerezi ayarlanmaz ve hiçbir reklam kişiselleştirilmez.',
+      },
+      {
+        heading: '4. Çerez tercihinizi değiştirme',
+        body: 'Çerez tercihinizi istediğiniz zaman, tarayıcınızın bu site için yerel depolama (local storage) verilerini temizleyerek veya tarayıcı gizlilik ayarlarınızdan site verilerini sıfırlayarak değiştirebilirsiniz. Bu, bir sonraki ziyaretinizde çerez banner\'ının tekrar gösterilmesini sağlar.',
+      },
+      {
+        heading: '5. Haklarınız (KVKK/GDPR)',
+        body: 'Kişisel verilerinize erişme, düzeltme, silinmesini talep etme, işlenmesine itiraz etme ve veri taşınabilirliği hakkına sahipsiniz. Kullanıcı hesabı oluşturmadığımız ve dosyalarınızı saklamadığımız için, talepleriniz genellikle bizim adımıza Vercel veya Google tarafından tutulan analitik/reklam verileriyle ilgili olacaktır — bu haklarınızı doğrudan bu sağlayıcılarla da kullanabilirsiniz.',
+      },
+      {
+        heading: '6. İletişim',
+        body: 'Gizlilikle ilgili her türlü soru veya talep için privacy@prizma.monster adresinden bize ulaşabilirsiniz.',
+      },
+    ],
+  },
 };

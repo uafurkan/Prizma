@@ -36,6 +36,7 @@ export const en = {
     switchToLight: 'Switch to Light Theme',
     switchToDark: 'Switch to Dark Theme',
     otherPopularConversions: 'Other Popular Conversions',
+    privacyPolicy: 'Privacy Policy',
   },
   hero: {
     badge1: '100% In Browser',
@@ -117,5 +118,42 @@ export const en = {
     errorDetails: 'Error Details',
     tryAgain: 'Try Again',
     backToHome: 'Back to Home',
-  }
+  },
+  cookieConsent: {
+    message: 'We use cookies for basic site analytics and, if enabled, to show ads. Your files are never affected — they are always processed locally in your browser and never uploaded anywhere.',
+    accept: 'Accept',
+    reject: 'Reject',
+    privacyLink: 'Privacy Policy',
+  },
+  privacyPage: {
+    title: 'Privacy Policy',
+    updated: 'Last updated: September 3, 2026',
+    intro: 'PRIZMA ("we", "us") is a browser-based file conversion tool available at prizma.monster. This page explains what data is processed when you use the site, and what choices you have.',
+    sections: [
+      {
+        heading: '1. Your files are never uploaded',
+        body: 'All conversions (images, video, audio, documents) run entirely inside your own browser, on your own device. Your files are never sent to, stored on, or processed by any PRIZMA server. When you close or refresh this page, everything is gone — we simply never had a copy to begin with.',
+      },
+      {
+        heading: '2. Analytics',
+        body: 'We use Vercel Analytics to understand basic, aggregated usage of the site (e.g. which pages are visited, approximate country). This does not use tracking cookies, but it does process your IP address at the time of your visit, which is personal data under GDPR. This data is used solely to improve the site and is not sold or shared with third parties.',
+      },
+      {
+        heading: '3. Cookies and Advertising',
+        body: 'If enabled, we use Google AdSense to display ads and help keep PRIZMA free. AdSense may set cookies and use your data to show personalized ads, in accordance with Google\'s own privacy policy. You can accept or reject this in the cookie banner shown on your first visit. If you reject, no advertising cookies are set and no ads are personalized.',
+      },
+      {
+        heading: '4. Changing your cookie choice',
+        body: 'You can change your cookie preference at any time by clearing your browser\'s local storage for this site, or by using your browser\'s privacy settings to reset site data. This will show the cookie banner again on your next visit.',
+      },
+      {
+        heading: '5. Your rights (GDPR)',
+        body: 'If you are located in the EEA/UK, you have the right to access, correct, delete, or object to the processing of your personal data, and the right to data portability. Since we do not create user accounts and do not store your files, most requests will simply concern analytics/advertising data held by Vercel or Google on our behalf — you can also exercise your rights directly with those providers.',
+      },
+      {
+        heading: '6. Contact',
+        body: 'For any privacy-related question or request, contact us at privacy@prizma.monster.',
+      },
+    ],
+  },
 };

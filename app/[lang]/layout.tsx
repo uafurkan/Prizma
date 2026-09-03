@@ -57,6 +57,8 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import ThemeToggle from '@/components/ThemeToggle';
 import HeaderNav from '@/components/HeaderNav';
 import MobileMenu from '@/components/MobileMenu';
+import AdsenseLoader from '@/components/AdsenseLoader';
+import CookieConsent from '@/components/CookieConsent';
 
 export default async function RootLayout({
   children,
@@ -68,22 +70,15 @@ export default async function RootLayout({
   const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID;
   const { lang } = await params;
   const dict = getDictionary(lang);
+  const privacyHref = lang === 'tr' ? '/tr/gizlilik' : '/en/privacy';
 
   return (
     <html
       lang={lang}
       className={`${syne.variable} ${jetbrainsMono.variable}`}
     >
-      <head>
-        {adsenseId && (
-          <script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseId}`}
-            crossOrigin="anonymous"
-          ></script>
-        )}
-      </head>
       <body className="antialiased min-h-screen flex flex-col selection:bg-prism-b/30">
+        {adsenseId && <AdsenseLoader adsenseId={adsenseId} />}
         <AnimatedFavicon />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <FileProvider>
@@ -137,6 +132,9 @@ export default async function RootLayout({
                 <Link href="/sitemap.xml" className="hover:text-foreground transition-colors">
                   {dict.common.sitemap}
                 </Link>
+                <Link href={privacyHref} className="hover:text-foreground transition-colors">
+                  {dict.common.privacyPolicy}
+                </Link>
               </div>
             </div>
           </footer>
@@ -144,6 +142,7 @@ export default async function RootLayout({
           <Analytics />
           </FileProvider>
         </ThemeProvider>
+        <CookieConsent dict={dict} privacyHref={privacyHref} />
       </body>
     </html>
   );
