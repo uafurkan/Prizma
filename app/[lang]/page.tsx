@@ -109,8 +109,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-foreground/5 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div>
                   <span
-                    className="w-11 h-11 rounded-xl border flex items-center justify-center mb-3"
-                    style={{ color: c.renk, borderColor: `color-mix(in srgb, ${c.renk} 30%, transparent)`, backgroundColor: `color-mix(in srgb, ${c.renk} 12%, transparent)` }}
+                    className="w-11 h-11 rounded-xl border flex items-center justify-center mb-3 text-foreground"
+                    style={{ borderColor: `color-mix(in srgb, ${c.renk} 35%, transparent)`, backgroundColor: `color-mix(in srgb, ${c.renk} 14%, transparent)` }}
                   >
                     {(() => {
                       const Icon = CATEGORY_ICONS[c.ikon] || DocumentIcon;
