@@ -14,30 +14,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Category routes (Both TR and EN)
-  const categoryRoutesTR = KATEGORILER.map((cat) => ({
-    url: `${baseUrl}${getCategoryPath('tr', cat.slug)}`,
+  const categoryRoutes = KATEGORILER.map((cat) => ({
+    url: `${baseUrl}${getCategoryPath(cat.slug)}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
-  const categoryRoutesEN = KATEGORILER.map((cat) => ({
-    url: `${baseUrl}${getCategoryPath('en', cat.slug)}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
-  const categoryRoutes = [...categoryRoutesTR, ...categoryRoutesEN];
 
-  // Conversion routes (Both TR and EN, using canonical localized paths)
-  const conversionRoutesTR = DONUSUM_DATA.map((d) => ({
-    url: `${baseUrl}${getDonusumPath('tr', d.slug)}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
-  }));
-  const conversionRoutesEN = DONUSUM_DATA.map((d) => ({
-    url: `${baseUrl}${getDonusumPath('en', d.slug)}`,
+  const conversionRoutes = DONUSUM_DATA.map((d) => ({
+    url: `${baseUrl}${getDonusumPath(d.slug)}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.9,
@@ -45,19 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const legalRoutes = [
     {
-      url: `${baseUrl}/tr/gizlilik`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly' as const,
-      priority: 0.3,
-    },
-    {
       url: `${baseUrl}/en/privacy`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly' as const,
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/tr/kullanim-kosullari`,
       lastModified: new Date(),
       changeFrequency: 'yearly' as const,
       priority: 0.3,
@@ -70,5 +43,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  return [...routes, ...categoryRoutes, ...conversionRoutesTR, ...conversionRoutesEN, ...legalRoutes];
+  return [...routes, ...categoryRoutes, ...conversionRoutes, ...legalRoutes];
 }

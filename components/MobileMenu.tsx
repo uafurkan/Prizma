@@ -96,7 +96,7 @@ export default function MobileMenu({ lang, dict, children }: MobileMenuProps) {
             </Link>
             
             {categories.map((cat) => {
-              const catPath = getCategoryPath(lang, cat.slug);
+              const catPath = getCategoryPath(cat.slug);
               const isActive = pathname === catPath || pathname.startsWith(`${catPath}/`);
               
               return (

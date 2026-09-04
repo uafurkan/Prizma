@@ -24,7 +24,7 @@ export default function FormatBadge({ format, size = 'md', lang }: FormatBadgePr
         border: `1.5px solid color-mix(in srgb, ${renk} 50%, transparent)`,
       }}
     >
-      {lang ? getTranslatedFormat(format, lang) : format}
+      {lang ? getTranslatedFormat(format) : format}
     </span>
   );
 }

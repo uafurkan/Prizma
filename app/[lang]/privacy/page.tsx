@@ -19,10 +19,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: dict.privacyPage.intro,
     alternates: {
       canonical: '/en/privacy',
-      languages: {
-        tr: '/tr/gizlilik',
-        en: '/en/privacy',
-      },
     },
   };
 }

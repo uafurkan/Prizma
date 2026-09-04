@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { DONUSUM_DATA, getDonusumBySlug, getTranslatedFormat, getDonusumPath, getKategoriBySlug, getCategoryPath } from '@/lib/donusum-data';
+import { getDonusumBySlug, getTranslatedFormat, getDonusumPath, getKategoriBySlug, getCategoryPath } from '@/lib/donusum-data';
 import ConvertPage from './ConvertPage';
 import type { Metadata } from 'next';
 import { getDictionary } from '@/dictionaries';
@@ -9,40 +9,29 @@ interface PageProps {
   params: Promise<{ lang: string; kat: string; donusum: string }>;
 }
 
+// This route is only reachable through the /en/category/[kat]/[donusum] wrapper,
+// which imports it directly rather than redirecting. It is not itself a public
+// URL, so it isn't statically generated and direct requests to it 404.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
-  const locales = ['en', 'tr'];
-  const params: { lang: string; kat: string; donusum: string }[] = [];
-  
-  locales.forEach(lang => {
-    DONUSUM_DATA.forEach(d => {
-      // The 'kategori' path is nested under 'kategori/[kat]' for BOTH languages in the physical folder structure.
-      // But we will handle english via rewrite or proxy. For physical static params, we just use the raw category slug
-      // wait, actually, if the folder is `kategori/[kat]`, then `kat` must be the tr category slug for both.
-      params.push({ lang, kat: d.kategori, donusum: d.slug });
-    });
-  });
-  
-  return params;
+  return [];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { lang, donusum } = await params;
+  const { donusum } = await params;
   const cift = getDonusumBySlug(donusum);
   if (!cift) return {};
-  
-  const aciklama = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
-  const title = `${getTranslatedFormat(cift.from, lang)} → ${getTranslatedFormat(cift.to, lang)} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`;
-  const canonicalPath = getDonusumPath(lang, cift.slug);
+
+  const aciklama = cift.aciklama.en;
+  const title = `${getTranslatedFormat(cift.from)} → ${getTranslatedFormat(cift.to)} | PRIZMA`;
+  const canonicalPath = getDonusumPath(cift.slug);
 
   return {
     title,
     description: aciklama,
     alternates: {
       canonical: canonicalPath,
-      languages: {
-        tr: getDonusumPath('tr', cift.slug),
-        en: getDonusumPath('en', cift.slug),
-      },
     },
     openGraph: {
       title,
@@ -64,16 +53,16 @@ export default async function Page({ params }: PageProps) {
   if (!cift) {
     notFound();
   }
-  
+
   const dict = getDictionary(lang);
-  const title = cift.baslik[lang as 'en'|'tr'] || cift.baslik['en'];
-  const desc = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
+  const title = cift.baslik.en;
+  const desc = cift.aciklama.en;
 
   // Schema definitions
   const softwareAppSchema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: `${getTranslatedFormat(cift.from, lang)} to ${getTranslatedFormat(cift.to, lang)} Converter`,
+    name: `${getTranslatedFormat(cift.from)} to ${getTranslatedFormat(cift.to)} Converter`,
     operatingSystem: 'All',
     applicationCategory: 'UtilityApplication',
     offers: {
@@ -84,13 +73,13 @@ export default async function Page({ params }: PageProps) {
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.monster';
-  const pageUrl = `${baseUrl}${getDonusumPath(lang, cift.slug)}`;
+  const pageUrl = `${baseUrl}${getDonusumPath(cift.slug)}`;
 
   const kategori = getKategoriBySlug(cift.kategori);
-  const kategoriLabel = kategori ? (kategori.baslik[lang as 'en'|'tr'] || kategori.baslik['en']) : cift.kategori;
+  const kategoriLabel = kategori ? kategori.baslik.en : cift.kategori;
   const breadcrumbItems = [
-    { label: lang === 'tr' ? 'Ana Sayfa' : 'Home', href: `/${lang}` },
-    { label: kategoriLabel, href: getCategoryPath(lang, cift.kategori) },
+    { label: 'Home', href: '/en' },
+    { label: kategoriLabel, href: getCategoryPath(cift.kategori) },
     { label: title },
   ];
 
@@ -121,8 +110,8 @@ export default async function Page({ params }: PageProps) {
     ],
   };
 
-  const fromLabel = getTranslatedFormat(cift.from, lang);
-  const toLabel = getTranslatedFormat(cift.to, lang);
+  const fromLabel = getTranslatedFormat(cift.from);
+  const toLabel = getTranslatedFormat(cift.to);
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

@@ -16,7 +16,7 @@ export default function SearchBar({ lang }: { lang: string }) {
     if (query.length < 2) return [];
     const q = query.toLowerCase();
     return DONUSUM_DATA.filter((d) => {
-      const baslik = d.baslik[lang as 'en'|'tr'] || d.baslik['en'];
+      const baslik = d.baslik.en;
       return (
         baslik.toLowerCase().includes(q) ||
         d.from.toLowerCase().includes(q) ||
@@ -24,7 +24,7 @@ export default function SearchBar({ lang }: { lang: string }) {
         d.slug.includes(q)
       );
     }).slice(0, 8);
-  }, [query, lang]);
+  }, [query]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -74,7 +74,7 @@ export default function SearchBar({ lang }: { lang: string }) {
           {results.map((res) => (
             <Link
               key={res.slug}
-              href={getDonusumPath(lang, res.slug)}
+              href={getDonusumPath(res.slug)}
               className="flex items-center justify-between p-3 rounded-xl hover:bg-surface2 transition-colors group/item"
               onClick={() => setFocused(false)}
             >
@@ -102,7 +102,7 @@ export default function SearchBar({ lang }: { lang: string }) {
                 </span>
               </div>
               <span className="font-bold text-sm text-foreground group-hover/item:text-prism-b transition-colors">
-                {res.baslik[lang as 'en'|'tr'] || res.baslik['en']}
+                {res.baslik.en}
               </span>
             </Link>
           ))}

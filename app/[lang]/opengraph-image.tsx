@@ -3,12 +3,9 @@ import { ImageResponse } from 'next/og';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-export default async function OpengraphImage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang } = await params;
-  const title = lang === 'tr' ? 'PRİZMA' : 'PRIZMA';
-  const subtitle = lang === 'tr'
-    ? 'Dosyalarınızı tarayıcınızda anında ve güvenle dönüştürün'
-    : 'Convert your files instantly and securely in your browser';
+export default async function OpengraphImage() {
+  const title = 'PRIZMA';
+  const subtitle = 'Convert your files instantly and securely in your browser';
 
   return new ImageResponse(
     (

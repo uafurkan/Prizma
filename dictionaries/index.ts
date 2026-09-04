@@ -1,11 +1,6 @@
 import { en } from './en';
-import { tr } from './tr';
 
 export type Dictionary = typeof en;
 
-const dictionaries: Record<string, Dictionary> = {
-  en,
-  tr,
-};
-
-export const getDictionary = (locale: string) => dictionaries[locale] || dictionaries['en'];
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept so call sites passing a locale don't need updating
+export const getDictionary = (_locale?: string): Dictionary => en;
