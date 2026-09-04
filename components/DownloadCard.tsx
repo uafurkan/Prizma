@@ -28,7 +28,7 @@ function formatFileSize(bytes: number): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: DownloadCardProps) {
+export default function DownloadCard({ results, onReset, dict }: DownloadCardProps) {
   const [fileNames, setFileNames] = useState<string[]>([]);
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [textPreviews, setTextPreviews] = useState<Record<number, string>>({});
@@ -133,7 +133,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
       blob: r.blob,
       filename: fileNames[i] || r.filename,
     }));
-    const zipName = lang === 'tr' ? 'prizma-donusturulenler.zip' : 'prizma-converted-files.zip';
+    const zipName = 'prizma-converted-files.zip';
     await downloadAll(filesToDownload, zipName);
   };
 
@@ -212,7 +212,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <div className="flex justify-between items-center border-b border-border pb-2">
               <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none">
-                🎙️ {lang === 'tr' ? 'Metin Önizleme' : 'Text Preview'}
+                🎙️ {'Text Preview'}
               </span>
               <button
                 onClick={() => handleCopyText(textPreviews[0])}
@@ -223,20 +223,20 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
                     <svg className="w-3.5 h-3.5 text-prism-g animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-prism-g">{lang === 'tr' ? 'Kopyalandı!' : 'Copied!'}</span>
+                    <span className="text-prism-g">{'Copied!'}</span>
                   </>
                 ) : (
                   <>
                     <svg className="w-3.5 h-3.5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                     </svg>
-                    <span>{lang === 'tr' ? 'Kopyala' : 'Copy'}</span>
+                    <span>{'Copy'}</span>
                   </>
                 )}
               </button>
             </div>
             <div className="max-h-48 overflow-y-auto text-xs leading-relaxed text-foreground/80 whitespace-pre-wrap font-sans select-text pr-1 pt-1.5">
-              {textPreviews[0] || (lang === 'tr' ? 'Metin yükleniyor...' : 'Loading text...')}
+              {textPreviews[0] || ('Loading text...')}
             </div>
           </div>
         )}
@@ -245,7 +245,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
         {isDocx && docxPreviews[0] !== undefined && (
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none border-b border-border pb-2">
-              📘 {lang === 'tr' ? 'Belge Önizleme' : 'Document Preview'}
+              📘 {'Document Preview'}
             </span>
             <div 
               className="max-h-64 overflow-y-auto text-xs leading-relaxed text-foreground/80 rounded-xl border border-border/60 bg-background p-4 select-text font-sans docx-preview-content"
@@ -258,7 +258,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
         {isPdf && blobUrls[0] && (
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none">
-              📕 {lang === 'tr' ? 'PDF Önizleme' : 'PDF Preview'}
+              📕 {'PDF Preview'}
             </span>
             <iframe src={`${blobUrls[0]}#toolbar=0`} className="w-full h-80 rounded-xl mt-1 border border-border/85" />
           </div>
@@ -268,7 +268,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
         {isAudio && blobUrls[0] && (
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none">
-              🎵 {lang === 'tr' ? 'Ses Önizleme' : 'Audio Preview'}
+              🎵 {'Audio Preview'}
             </span>
             <audio controls src={blobUrls[0]} className="w-full mt-1 focus:outline-none" />
           </div>
@@ -278,7 +278,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
         {isVideo && blobUrls[0] && (
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none">
-              🎬 {lang === 'tr' ? 'Video Önizleme' : 'Video Preview'}
+              🎬 {'Video Preview'}
             </span>
             <video controls src={blobUrls[0]} className="w-full max-h-72 rounded-xl mt-1 border border-border bg-black" />
           </div>
@@ -358,7 +358,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
                           ? 'bg-prism-b/15 border-prism-b text-prism-b' 
                           : 'bg-surface2 border-border text-muted hover:text-prism-b hover:border-prism-b/30'
                       }`}
-                      title={lang === 'tr' ? 'Önizle' : 'Preview'}
+                      title={'Preview'}
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -387,16 +387,16 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
                     <>
                       <div className="flex justify-between items-center border-b border-border pb-1">
                         <span className="text-[10px] font-bold text-muted select-none">
-                          📝 {lang === 'tr' ? 'Önizleme' : 'Preview'}
+                          📝 {'Preview'}
                         </span>
                         <button
                           onClick={() => handleCopyText(textPreviews[i])}
                           className="text-[9px] font-bold px-2 py-0.5 rounded bg-surface2 hover:bg-background border border-border text-foreground transition-all flex items-center gap-1 active:scale-95 cursor-pointer"
                         >
                           {copied ? (
-                            <span className="text-prism-g">{lang === 'tr' ? 'Kopyalandı!' : 'Copied!'}</span>
+                            <span className="text-prism-g">{'Copied!'}</span>
                           ) : (
-                            <span>{lang === 'tr' ? 'Kopyala' : 'Copy'}</span>
+                            <span>{'Copy'}</span>
                           )}
                         </button>
                       </div>
@@ -410,7 +410,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
                   {isDocx && docxPreviews[i] !== undefined && (
                     <>
                       <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1">
-                        📘 {lang === 'tr' ? 'Belge Önizleme' : 'Document Preview'}
+                        📘 {'Document Preview'}
                       </span>
                       <div 
                         className="max-h-48 overflow-y-auto text-[10px] leading-relaxed text-foreground/85 rounded border border-border/60 bg-background p-2.5 select-text font-sans docx-preview-content"
@@ -423,7 +423,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
                   {isPdf && blobUrls[i] && (
                     <>
                       <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1">
-                        📕 {lang === 'tr' ? 'PDF Önizleme' : 'PDF Preview'}
+                        📕 {'PDF Preview'}
                       </span>
                       <iframe src={`${blobUrls[i]}#toolbar=0`} className="w-full h-64 rounded mt-1 border border-border/70" />
                     </>
@@ -433,7 +433,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
                   {isAudio && blobUrls[i] && (
                     <>
                       <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1">
-                        🎵 {lang === 'tr' ? 'Ses Önizleme' : 'Audio Preview'}
+                        🎵 {'Audio Preview'}
                       </span>
                       <audio controls src={blobUrls[i]} className="w-full mt-1 focus:outline-none" />
                     </>
@@ -443,7 +443,7 @@ export default function DownloadCard({ results, onReset, dict, lang = 'tr' }: Do
                   {isVideo && blobUrls[i] && (
                     <>
                       <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1">
-                        🎬 {lang === 'tr' ? 'Video Önizleme' : 'Video Preview'}
+                        🎬 {'Video Preview'}
                       </span>
                       <video controls src={blobUrls[i]} className="w-full max-h-48 rounded mt-1 border border-border bg-black" />
                     </>

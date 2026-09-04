@@ -46,8 +46,8 @@ function formatFileSize(bytes: number): string {
 
 export default function ConvertPage({ cift, lang }: ConvertPageProps) {
   const dict = getDictionary(lang);
-  const baslik = cift.baslik[lang as 'en'|'tr'] || cift.baslik['en'];
-  const aciklama = cift.aciklama[lang as 'en'|'tr'] || cift.aciklama['en'];
+  const baslik = cift.baslik.en;
+  const aciklama = cift.aciklama.en;
 
   const [files, setFiles] = useState<File[]>([]);
   const [results, setResults] = useState<ResultItem[]>([]);
@@ -543,7 +543,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
             <div className="p-6 rounded-2xl border border-border bg-surface max-w-xl mx-auto w-full flex flex-col gap-5 animate-fade-in">
               <h3 className="font-bold text-sm text-foreground border-b border-border pb-2">{dict.convertPage.conversionSettings}</h3>
               {cift.secenekler.map((opt) => {
-                const optLabel = opt.label[lang as 'en'|'tr'] || opt.label['en'];
+                const optLabel = opt.label.en;
                 return (
                   <div key={opt.id} className="flex flex-col gap-2">
                     <div className="flex justify-between items-center text-xs font-semibold">

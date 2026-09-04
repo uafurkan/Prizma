@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { getCategoryPath } from '@/lib/donusum-data';
 import type { Dictionary } from '@/dictionaries';
 
-export default function HeaderNav({ lang, dict }: { lang: string; dict: Dictionary }) {
+export default function HeaderNav({ dict }: { dict: Dictionary }) {
   const pathname = usePathname() || '';
 
   const categories = [
@@ -21,7 +21,7 @@ export default function HeaderNav({ lang, dict }: { lang: string; dict: Dictiona
   return (
     <>
       {categories.map((cat) => {
-        const catPath = getCategoryPath(lang, cat.slug);
+        const catPath = getCategoryPath(cat.slug);
         const isActive = pathname === catPath || pathname.startsWith(`${catPath}/`);
         
         return (

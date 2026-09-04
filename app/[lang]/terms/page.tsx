@@ -19,10 +19,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: dict.termsPage.intro,
     alternates: {
       canonical: '/en/terms',
-      languages: {
-        tr: '/tr/kullanim-kosullari',
-        en: '/en/terms',
-      },
     },
   };
 }

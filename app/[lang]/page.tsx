@@ -98,11 +98,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
           {KATEGORILER.map((c) => {
             const count = getCatCount(c.slug);
-            const baslik = c.baslik[lang as 'en'|'tr'] || c.baslik['en'];
+            const baslik = c.baslik.en;
             return (
               <Link
                 key={c.slug}
-                href={getCategoryPath(lang, c.slug)}
+                href={getCategoryPath(c.slug)}
                 className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-6 hover:bg-surface2 hover:border-muted/50 transition-all duration-300 flex flex-col justify-between min-h-[160px]"
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-foreground/5 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -128,11 +128,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {populerDonusumler.map((d) => {
-            const aciklama = d.aciklama[lang as 'en'|'tr'] || d.aciklama['en'];
+            const aciklama = d.aciklama.en;
             return (
               <Link
                 key={d.slug}
-                href={getDonusumPath(lang, d.slug)}
+                href={getDonusumPath(d.slug)}
                 className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-5 hover:border-muted/50 hover:bg-surface2 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="flex items-center gap-3 mb-2">

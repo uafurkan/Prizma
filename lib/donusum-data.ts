@@ -15,7 +15,7 @@ export type ConverterType =
 
 export interface Secenek {
   id: string;
-  label: { en: string; tr: string };
+  label: { en: string };
   type: 'range' | 'select' | 'checkbox';
   default: string | number | boolean;
   min?: number;
@@ -33,8 +33,8 @@ export interface DonusumCift {
   toExt: string;
   kategori: KategoriSlug;
   converter: ConverterType;
-  baslik: { en: string; tr: string };
-  aciklama: { en: string; tr: string };
+  baslik: { en: string };
+  aciklama: { en: string };
   populer: boolean;
   secenekler?: Secenek[];
   cokluDosya?: boolean;
@@ -45,8 +45,8 @@ export type KategoriSlug = 'goruntu' | 'video' | 'ses' | 'belge' | 'arsiv' | 'al
 
 export interface Kategori {
   slug: KategoriSlug;
-  baslik: { en: string; tr: string };
-  aciklama: { en: string; tr: string };
+  baslik: { en: string };
+  aciklama: { en: string };
   ikon: string;
   renk: string;
 }
@@ -54,122 +54,78 @@ export interface Kategori {
 export const KATEGORILER: Kategori[] = [
   {
     slug: 'goruntu',
-    baslik: { en: 'Image', tr: 'Görüntü' },
-    aciklama: { en: 'Convert between JPG, PNG, WebP, SVG, HEIC and more image formats.', tr: 'JPG, PNG, WebP, SVG, HEIC ve daha fazla görüntü formatı arasında dönüştürme yapın.' },
+    baslik: { en: 'Image' },
+    aciklama: { en: 'Convert between JPG, PNG, WebP, SVG, HEIC and more image formats.' },
     ikon: '🖼️',
     renk: '#ff4d6d',
   },
   {
     slug: 'video',
-    baslik: { en: 'Video', tr: 'Video' },
-    aciklama: { en: 'Convert MP4, WebM, AVI, MOV and other video formats.', tr: 'MP4, WebM, AVI, MOV ve diğer video formatlarını dönüştürün.' },
+    baslik: { en: 'Video' },
+    aciklama: { en: 'Convert MP4, WebM, AVI, MOV and other video formats.' },
     ikon: '🎬',
     renk: '#ff8c42',
   },
   {
     slug: 'ses',
-    baslik: { en: 'Audio', tr: 'Ses' },
-    aciklama: { en: 'Convert between MP3, WAV, OGG, AAC and other audio formats.', tr: 'MP3, WAV, OGG, AAC ve diğer ses formatları arasında dönüştürme.' },
+    baslik: { en: 'Audio' },
+    aciklama: { en: 'Convert between MP3, WAV, OGG, AAC and other audio formats.' },
     ikon: '🎵',
     renk: '#ffd166',
   },
   {
     slug: 'belge',
-    baslik: { en: 'Document', tr: 'Belge' },
-    aciklama: { en: 'Convert PDF, DOCX, TXT, CSV and other document formats.', tr: 'PDF, DOCX, TXT, CSV ve diğer belge formatlarını dönüştürün.' },
+    baslik: { en: 'Document' },
+    aciklama: { en: 'Convert PDF, DOCX, TXT, CSV and other document formats.' },
     ikon: '📄',
     renk: '#06d6a0',
   },
   {
     slug: 'arsiv',
-    baslik: { en: 'Archive', tr: 'Arşiv' },
-    aciklama: { en: 'Create and extract ZIP archives.', tr: 'ZIP arşivleri oluşturun ve çıkartın.' },
+    baslik: { en: 'Archive' },
+    aciklama: { en: 'Create and extract ZIP archives.' },
     ikon: '📦',
     renk: '#4d9fff',
   },
   {
     slug: 'altyazi',
-    baslik: { en: 'Subtitle', tr: 'Altyazı' },
-    aciklama: { en: 'Convert SRT, VTT, SUB subtitle files.', tr: 'SRT, VTT, SUB altyazı dosyalarını dönüştürün.' },
+    baslik: { en: 'Subtitle' },
+    aciklama: { en: 'Convert SRT, VTT, SUB subtitle files.' },
     ikon: '📝',
     renk: '#ffb703',
   },
   {
     slug: 'desifre',
-    baslik: { en: 'Transcription', tr: 'Ses Deşifre' },
-    aciklama: { en: 'Transcribe audio files to text using AI directly in your browser.', tr: 'Ses dosyalarındaki konuşmaları tarayıcınızda yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'Transcription' },
+    aciklama: { en: 'Transcribe audio files to text using AI directly in your browser.' },
     ikon: '🎙️',
     renk: '#06d6a0',
   },
 ];
 
-export function getCategoryPath(lang: string, catSlug: string): string {
-  if (lang === 'tr') return `/tr/kategori/${catSlug}`;
-  const enMap: Record<string, string> = {
-    'goruntu': 'image',
-    'video': 'video',
-    'ses': 'audio',
-    'belge': 'document',
-    'arsiv': 'archive',
-    'altyazi': 'subtitle',
-    'desifre': 'transcription',
-  };
-  return `/en/category/${enMap[catSlug] || catSlug}`;
+const KATEGORI_SLUG_TO_EN: Record<string, string> = {
+  'goruntu': 'image',
+  'video': 'video',
+  'ses': 'audio',
+  'belge': 'document',
+  'arsiv': 'archive',
+  'altyazi': 'subtitle',
+  'desifre': 'transcription',
+};
+
+export function getCategoryPath(catSlug: string): string {
+  return `/en/category/${KATEGORI_SLUG_TO_EN[catSlug] || catSlug}`;
 }
 
-export function getDonusumPath(lang: string, slug: string): string {
+export function getDonusumPath(slug: string): string {
   const tool = DONUSUM_DATA.find(d => d.slug === slug);
-  if (!tool) return `/${lang}/${slug}`; // Fallback if tool not found
+  if (!tool) return `/en/${slug}`; // Fallback if tool not found
 
-  const catPath = getCategoryPath(lang, tool.kategori);
+  const catPath = getCategoryPath(tool.kategori);
   return `${catPath}/${slug}`;
 }
 
-export function getTranslatedPath(pathname: string, currentLang: string, targetLang: string): string {
-  if (currentLang === targetLang) return pathname;
-
-  const enMap: Record<string, string> = {
-    'goruntu': 'image',
-    'video': 'video',
-    'ses': 'audio',
-    'belge': 'document',
-    'arsiv': 'archive',
-    'altyazi': 'subtitle',
-    'desifre': 'transcription',
-  };
-  
-  const trMap: Record<string, string> = Object.entries(enMap).reduce((acc, [k, v]) => ({ ...acc, [v]: k }), {});
-
-  let newPath = pathname;
-
-  if (currentLang === 'tr' && targetLang === 'en') {
-    // /tr/kategori/goruntu/jpg-to-png → /en/category/image/jpg-to-png
-    // /tr/kategori/goruntu → /en/category/image
-    newPath = newPath.replace('/tr/', '/en/');
-    newPath = newPath.replace('/kategori/', '/category/');
-    for (const [trSlug, enSlug] of Object.entries(enMap)) {
-      // Replace category slug segment (not the tool slug at the end)
-      newPath = newPath.replace(`/category/${trSlug}`, `/category/${enSlug}`);
-    }
-  } else if (currentLang === 'en' && targetLang === 'tr') {
-    // /en/category/image/jpg-to-png → /tr/kategori/goruntu/jpg-to-png
-    // /en/category/image → /tr/kategori/goruntu
-    newPath = newPath.replace('/en/', '/tr/');
-    newPath = newPath.replace('/category/', '/kategori/');
-    for (const [enSlug, trSlug] of Object.entries(trMap)) {
-      newPath = newPath.replace(`/kategori/${enSlug}`, `/kategori/${trSlug}`);
-    }
-  }
-
-  if (newPath === pathname) {
-    newPath = pathname.replace(`/${currentLang}`, `/${targetLang}`);
-  }
-
-  return newPath;
-}
-
-export function getTranslatedFormat(format: string, lang: string): string {
-  if (lang === 'tr') return format;
+export function getTranslatedFormat(format: string): string {
   const enMap: Record<string, string> = {
     'Görseller': 'Images',
     'Dosyalar': 'Files',
@@ -271,8 +227,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'png',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'JPG → PNG Converter', tr: 'JPG → PNG Dönüştürücü' },
-    aciklama: { en: 'Convert your JPG files to PNG format with transparent background support. Lossless quality, entirely in your browser.', tr: 'JPG dosyalarınızı şeffaf arka plan destekli PNG formatına dönüştürün. Kalite kaybı olmadan, tamamen tarayıcıda.' },
+    baslik: { en: 'JPG → PNG Converter' },
+    aciklama: { en: 'Convert your JPG files to PNG format with transparent background support. Lossless quality, entirely in your browser.' },
     populer: true,
   },
   {
@@ -283,13 +239,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'jpg',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'PNG → JPG Converter', tr: 'PNG → JPG Dönüştürücü' },
-    aciklama: { en: 'Convert your PNG files to smaller-sized JPG format. Optimize file size by adjusting the quality.', tr: 'PNG dosyalarınızı küçük boyutlu JPG formatına dönüştürün. Kaliteyi ayarlayarak dosya boyutunu optimize edin.' },
+    baslik: { en: 'PNG → JPG Converter' },
+    aciklama: { en: 'Convert your PNG files to smaller-sized JPG format. Optimize file size by adjusting the quality.' },
     populer: true,
     secenekler: [
       {
         id: 'quality',
-        label: { en: 'Quality', tr: 'Kalite' },
+        label: { en: 'Quality' },
         type: 'range',
         default: 92,
         min: 10,
@@ -306,13 +262,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'JPG → WebP Converter', tr: 'JPG → WebP Dönüştürücü' },
-    aciklama: { en: 'Convert your JPG files to modern WebP format. Smaller size, same quality.', tr: 'JPG dosyalarınızı modern WebP formatına dönüştürün. Daha küçük boyut, aynı kalite.' },
+    baslik: { en: 'JPG → WebP Converter' },
+    aciklama: { en: 'Convert your JPG files to modern WebP format. Smaller size, same quality.' },
     populer: true,
     secenekler: [
       {
         id: 'quality',
-        label: { en: 'Quality', tr: 'Kalite' },
+        label: { en: 'Quality' },
         type: 'range',
         default: 85,
         min: 10,
@@ -329,13 +285,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'PNG → WebP Converter', tr: 'PNG → WebP Dönüştürücü' },
-    aciklama: { en: 'Convert your PNG images to WebP format. Transparency is preserved, size is reduced.', tr: 'PNG görüntülerinizi WebP formatına dönüştürün. Şeffaflık korunur, boyut küçülür.' },
+    baslik: { en: 'PNG → WebP Converter' },
+    aciklama: { en: 'Convert your PNG images to WebP format. Transparency is preserved, size is reduced.' },
     populer: true,
     secenekler: [
       {
         id: 'quality',
-        label: { en: 'Quality', tr: 'Kalite' },
+        label: { en: 'Quality' },
         type: 'range',
         default: 85,
         min: 10,
@@ -352,8 +308,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'png',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'WebP → PNG Converter', tr: 'WebP → PNG Dönüştürücü' },
-    aciklama: { en: 'Convert your WebP images to the common PNG format.', tr: 'WebP görüntülerinizi yaygın PNG formatına dönüştürün.' },
+    baslik: { en: 'WebP → PNG Converter' },
+    aciklama: { en: 'Convert your WebP images to the common PNG format.' },
     populer: true,
   },
   {
@@ -364,13 +320,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'jpg',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'WebP → JPG Converter', tr: 'WebP → JPG Dönüştürücü' },
-    aciklama: { en: 'Convert your WebP images to JPG format.', tr: 'WebP görüntülerinizi JPG formatına dönüştürün.' },
+    baslik: { en: 'WebP → JPG Converter' },
+    aciklama: { en: 'Convert your WebP images to JPG format.' },
     populer: true,
     secenekler: [
       {
         id: 'quality',
-        label: { en: 'Quality', tr: 'Kalite' },
+        label: { en: 'Quality' },
         type: 'range',
         default: 92,
         min: 10,
@@ -387,13 +343,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'jpg',
     kategori: 'goruntu',
     converter: 'heic2any',
-    baslik: { en: 'HEIC → JPG Converter', tr: 'HEIC → JPG Dönüştürücü' },
-    aciklama: { en: 'Convert your iPhone HEIC photos to JPG format. Make them viewable everywhere.', tr: 'iPhone HEIC fotoğraflarınızı JPG formatına dönüştürün. Her yerde açılabilir hale getirin.' },
+    baslik: { en: 'HEIC → JPG Converter' },
+    aciklama: { en: 'Convert your iPhone HEIC photos to JPG format. Make them viewable everywhere.' },
     populer: true,
     secenekler: [
       {
         id: 'quality',
-        label: { en: 'Quality', tr: 'Kalite' },
+        label: { en: 'Quality' },
         type: 'range',
         default: 92,
         min: 10,
@@ -410,8 +366,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'png',
     kategori: 'goruntu',
     converter: 'heic2any',
-    baslik: { en: 'HEIC → PNG Converter', tr: 'HEIC → PNG Dönüştürücü' },
-    aciklama: { en: 'Convert your iPhone HEIC photos to transparent PNG format.', tr: 'iPhone HEIC fotoğraflarınızı şeffaf PNG formatına dönüştürün.' },
+    baslik: { en: 'HEIC → PNG Converter' },
+    aciklama: { en: 'Convert your iPhone HEIC photos to transparent PNG format.' },
     populer: true,
   },
   {
@@ -422,8 +378,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'png',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'SVG → PNG Converter', tr: 'SVG → PNG Dönüştürücü' },
-    aciklama: { en: 'Convert your vector SVG files to pixel-based PNG format.', tr: 'Vektör SVG dosyalarınızı piksel tabanlı PNG formatına dönüştürün.' },
+    baslik: { en: 'SVG → PNG Converter' },
+    aciklama: { en: 'Convert your vector SVG files to pixel-based PNG format.' },
     populer: false,
   },
   {
@@ -434,8 +390,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'png',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'BMP → PNG Converter', tr: 'BMP → PNG Dönüştürücü' },
-    aciklama: { en: 'Convert your BMP files to compressed PNG format.', tr: 'BMP dosyalarınızı sıkıştırılmış PNG formatına dönüştürün.' },
+    baslik: { en: 'BMP → PNG Converter' },
+    aciklama: { en: 'Convert your BMP files to compressed PNG format.' },
     populer: false,
   },
   {
@@ -446,8 +402,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'png',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'GIF → PNG Converter', tr: 'GIF → PNG Dönüştürücü' },
-    aciklama: { en: 'Convert the first frame of your GIF files to PNG format.', tr: 'GIF dosyalarının ilk karesini PNG formatına dönüştürün.' },
+    baslik: { en: 'GIF → PNG Converter' },
+    aciklama: { en: 'Convert the first frame of your GIF files to PNG format.' },
     populer: false,
   },
   {
@@ -458,8 +414,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'bmp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'JPG → BMP Converter', tr: 'JPG → BMP Dönüştürücü' },
-    aciklama: { en: 'Convert your JPG images to BMP format.', tr: 'JPG resimlerinizi BMP formatına dönüştürün.' },
+    baslik: { en: 'JPG → BMP Converter' },
+    aciklama: { en: 'Convert your JPG images to BMP format.' },
     populer: false,
   },
   {
@@ -470,8 +426,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'JPG → GIF Converter', tr: 'JPG → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert your JPG images to GIF format (first frame).', tr: 'JPG resimlerinizi GIF formatına (ilk kare) dönüştürün.' },
+    baslik: { en: 'JPG → GIF Converter' },
+    aciklama: { en: 'Convert your JPG images to GIF format (first frame).' },
     populer: false,
   },
   {
@@ -482,8 +438,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'bmp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'PNG → BMP Converter', tr: 'PNG → BMP Dönüştürücü' },
-    aciklama: { en: 'Convert your PNG images to BMP format.', tr: 'PNG resimlerinizi BMP formatına dönüştürün.' },
+    baslik: { en: 'PNG → BMP Converter' },
+    aciklama: { en: 'Convert your PNG images to BMP format.' },
     populer: false,
   },
   {
@@ -494,8 +450,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'PNG → GIF Converter', tr: 'PNG → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert your PNG images to GIF format.', tr: 'PNG resimlerinizi GIF formatına dönüştürün.' },
+    baslik: { en: 'PNG → GIF Converter' },
+    aciklama: { en: 'Convert your PNG images to GIF format.' },
     populer: false,
   },
   {
@@ -506,8 +462,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'bmp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'WebP → BMP Converter', tr: 'WebP → BMP Dönüştürücü' },
-    aciklama: { en: 'Convert your WebP images to BMP format.', tr: 'WebP resimlerinizi BMP formatına dönüştürün.' },
+    baslik: { en: 'WebP → BMP Converter' },
+    aciklama: { en: 'Convert your WebP images to BMP format.' },
     populer: false,
   },
   {
@@ -518,8 +474,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'WebP → GIF Converter', tr: 'WebP → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert your WebP images to GIF format.', tr: 'WebP resimlerinizi GIF formatına dönüştürün.' },
+    baslik: { en: 'WebP → GIF Converter' },
+    aciklama: { en: 'Convert your WebP images to GIF format.' },
     populer: false,
   },
   {
@@ -530,8 +486,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webp',
     kategori: 'goruntu',
     converter: 'heic2any',
-    baslik: { en: 'HEIC → WebP Converter', tr: 'HEIC → WebP Dönüştürücü' },
-    aciklama: { en: 'Convert HEIC images to modern WebP format.', tr: 'HEIC resimlerinizi modern WebP formatına dönüştürün.' },
+    baslik: { en: 'HEIC → WebP Converter' },
+    aciklama: { en: 'Convert HEIC images to modern WebP format.' },
     populer: false,
   },
   {
@@ -542,8 +498,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'jpg',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'SVG → JPG Converter', tr: 'SVG → JPG Dönüştürücü' },
-    aciklama: { en: 'Convert vector SVG files to JPG format.', tr: 'Vektör SVG dosyalarınızı JPG formatına dönüştürün.' },
+    baslik: { en: 'SVG → JPG Converter' },
+    aciklama: { en: 'Convert vector SVG files to JPG format.' },
     populer: false,
   },
   {
@@ -554,8 +510,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'SVG → WebP Converter', tr: 'SVG → WebP Dönüştürücü' },
-    aciklama: { en: 'Convert vector SVG files to WebP format.', tr: 'Vektör SVG dosyalarınızı WebP formatına dönüştürün.' },
+    baslik: { en: 'SVG → WebP Converter' },
+    aciklama: { en: 'Convert vector SVG files to WebP format.' },
     populer: false,
   },
   {
@@ -566,8 +522,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'jpg',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'BMP → JPG Converter', tr: 'BMP → JPG Dönüştürücü' },
-    aciklama: { en: 'Convert BMP images to JPG format.', tr: 'BMP resimlerinizi JPG formatına dönüştürün.' },
+    baslik: { en: 'BMP → JPG Converter' },
+    aciklama: { en: 'Convert BMP images to JPG format.' },
     populer: false,
   },
   {
@@ -578,8 +534,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'BMP → WebP Converter', tr: 'BMP → WebP Dönüştürücü' },
-    aciklama: { en: 'Convert BMP images to WebP format.', tr: 'BMP resimlerinizi WebP formatına dönüştürün.' },
+    baslik: { en: 'BMP → WebP Converter' },
+    aciklama: { en: 'Convert BMP images to WebP format.' },
     populer: false,
   },
   {
@@ -590,8 +546,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'BMP → GIF Converter', tr: 'BMP → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert BMP images to GIF format.', tr: 'BMP resimlerinizi GIF formatına dönüştürün.' },
+    baslik: { en: 'BMP → GIF Converter' },
+    aciklama: { en: 'Convert BMP images to GIF format.' },
     populer: false,
   },
   {
@@ -602,8 +558,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'jpg',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'GIF → JPG Converter', tr: 'GIF → JPG Dönüştürücü' },
-    aciklama: { en: 'Convert GIF images to JPG format.', tr: 'GIF resimlerinizi JPG formatına dönüştürün.' },
+    baslik: { en: 'GIF → JPG Converter' },
+    aciklama: { en: 'Convert GIF images to JPG format.' },
     populer: false,
   },
   {
@@ -614,8 +570,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'GIF → WebP Converter', tr: 'GIF → WebP Dönüştürücü' },
-    aciklama: { en: 'Convert GIF images to WebP format.', tr: 'GIF resimlerinizi WebP formatına dönüştürün.' },
+    baslik: { en: 'GIF → WebP Converter' },
+    aciklama: { en: 'Convert GIF images to WebP format.' },
     populer: false,
   },
   {
@@ -626,8 +582,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'bmp',
     kategori: 'goruntu',
     converter: 'canvas',
-    baslik: { en: 'GIF → BMP Converter', tr: 'GIF → BMP Dönüştürücü' },
-    aciklama: { en: 'Convert GIF images to BMP format.', tr: 'GIF resimlerinizi BMP formatına dönüştürün.' },
+    baslik: { en: 'GIF → BMP Converter' },
+    aciklama: { en: 'Convert GIF images to BMP format.' },
     populer: false,
   },
 
@@ -641,8 +597,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webm',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → WebM Converter', tr: 'MP4 → WebM Dönüştürücü' },
-    aciklama: { en: 'Convert your MP4 videos to open-source WebM format. Optimized for the web.', tr: 'MP4 videolarınızı açık kaynak WebM formatına dönüştürün. Web için optimize.' },
+    baslik: { en: 'MP4 → WebM Converter' },
+    aciklama: { en: 'Convert your MP4 videos to open-source WebM format. Optimized for the web.' },
     populer: true,
     ffmpegArgs: ['-c:v', 'libvpx-vp9', '-crf', '30', '-b:v', '0', '-c:a', 'libopus'],
   },
@@ -654,8 +610,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'avi',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → AVI Converter', tr: 'MP4 → AVI Dönüştürücü' },
-    aciklama: { en: 'Convert your MP4 videos to AVI format.', tr: 'MP4 videolarınızı AVI formatına dönüştürün.' },
+    baslik: { en: 'MP4 → AVI Converter' },
+    aciklama: { en: 'Convert your MP4 videos to AVI format.' },
     populer: false,
     ffmpegArgs: ['-c:v', 'mpeg4', '-vtag', 'xvid', '-qscale:v', '3', '-c:a', 'libmp3lame'],
   },
@@ -667,8 +623,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mov',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → MOV Converter', tr: 'MP4 → MOV Dönüştürücü' },
-    aciklama: { en: 'Convert your MP4 videos to Apple MOV format.', tr: 'MP4 videolarınızı Apple MOV formatına dönüştürün.' },
+    baslik: { en: 'MP4 → MOV Converter' },
+    aciklama: { en: 'Convert your MP4 videos to Apple MOV format.' },
     populer: false,
     ffmpegArgs: ['-c:v', 'copy', '-c:a', 'copy'],
   },
@@ -680,8 +636,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mkv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → MKV Converter', tr: 'MP4 → MKV Dönüştürücü' },
-    aciklama: { en: 'Convert your MP4 videos to MKV format.', tr: 'MP4 videolarınızı MKV formatına dönüştürün.' },
+    baslik: { en: 'MP4 → MKV Converter' },
+    aciklama: { en: 'Convert your MP4 videos to MKV format.' },
     populer: false,
     ffmpegArgs: ['-c:v', 'copy', '-c:a', 'copy'],
   },
@@ -693,8 +649,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp4',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → MP4 Converter', tr: 'WebM → MP4 Dönüştürücü' },
-    aciklama: { en: 'Convert your WebM videos to the common MP4 format.', tr: 'WebM videolarınızı yaygın MP4 formatına dönüştürün.' },
+    baslik: { en: 'WebM → MP4 Converter' },
+    aciklama: { en: 'Convert your WebM videos to the common MP4 format.' },
     populer: true,
     ffmpegArgs: ['-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-c:a', 'aac'],
   },
@@ -706,8 +662,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp4',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → MP4 Converter', tr: 'AVI → MP4 Dönüştürücü' },
-    aciklama: { en: 'Convert your old AVI videos to modern MP4 format.', tr: 'Eski AVI videolarınızı modern MP4 formatına dönüştürün.' },
+    baslik: { en: 'AVI → MP4 Converter' },
+    aciklama: { en: 'Convert your old AVI videos to modern MP4 format.' },
     populer: false,
     ffmpegArgs: ['-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-c:a', 'aac'],
   },
@@ -719,8 +675,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp4',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → MP4 Converter', tr: 'MOV → MP4 Dönüştürücü' },
-    aciklama: { en: 'Convert your Apple MOV videos to MP4 format. Play on any device.', tr: 'Apple MOV videolarınızı MP4 formatına dönüştürün. Her cihazda oynatın.' },
+    baslik: { en: 'MOV → MP4 Converter' },
+    aciklama: { en: 'Convert your Apple MOV videos to MP4 format. Play on any device.' },
     populer: true,
     ffmpegArgs: ['-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-c:a', 'aac'],
   },
@@ -732,8 +688,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → GIF Converter', tr: 'MP4 → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert your video clips to animated GIF files.', tr: 'Video kliplerinizi animasyonlu GIF dosyalarına dönüştürün.' },
+    baslik: { en: 'MP4 → GIF Converter' },
+    aciklama: { en: 'Convert your video clips to animated GIF files.' },
     populer: true,
     ffmpegArgs: ['-vf', 'fps=15,scale=480:-1:flags=lanczos', '-loop', '0'],
   },
@@ -745,8 +701,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp4',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → MP4 Converter', tr: 'MKV → MP4 Dönüştürücü' },
-    aciklama: { en: 'Convert your MKV videos to compatible MP4 format.', tr: 'MKV videolarınızı uyumlu MP4 formatına dönüştürün.' },
+    baslik: { en: 'MKV → MP4 Converter' },
+    aciklama: { en: 'Convert your MKV videos to compatible MP4 format.' },
     populer: false,
     ffmpegArgs: ['-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-c:a', 'aac'],
   },
@@ -758,8 +714,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → FLV Converter', tr: 'MP4 → FLV Dönüştürücü' },
-    aciklama: { en: 'Convert MP4 videos to FLV format.', tr: 'MP4 videolarınızı FLV formatına dönüştürün.' },
+    baslik: { en: 'MP4 → FLV Converter' },
+    aciklama: { en: 'Convert MP4 videos to FLV format.' },
     populer: false,
   },
   {
@@ -770,8 +726,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wmv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → WMV Converter', tr: 'MP4 → WMV Dönüştürücü' },
-    aciklama: { en: 'Convert MP4 videos to WMV format.', tr: 'MP4 videolarınızı WMV formatına dönüştürün.' },
+    baslik: { en: 'MP4 → WMV Converter' },
+    aciklama: { en: 'Convert MP4 videos to WMV format.' },
     populer: false,
   },
   {
@@ -782,8 +738,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'avi',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → AVI Converter', tr: 'WebM → AVI Dönüştürücü' },
-    aciklama: { en: 'Convert WebM videos to AVI format.', tr: 'WebM videolarınızı AVI formatına dönüştürün.' },
+    baslik: { en: 'WebM → AVI Converter' },
+    aciklama: { en: 'Convert WebM videos to AVI format.' },
     populer: false,
   },
   {
@@ -794,8 +750,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mov',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → MOV Converter', tr: 'WebM → MOV Dönüştürücü' },
-    aciklama: { en: 'Convert WebM videos to Apple MOV format.', tr: 'WebM videolarınızı Apple MOV formatına dönüştürün.' },
+    baslik: { en: 'WebM → MOV Converter' },
+    aciklama: { en: 'Convert WebM videos to Apple MOV format.' },
     populer: false,
   },
   {
@@ -806,8 +762,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mkv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → MKV Converter', tr: 'WebM → MKV Dönüştürücü' },
-    aciklama: { en: 'Convert WebM videos to MKV format.', tr: 'WebM videolarınızı MKV formatına dönüştürün.' },
+    baslik: { en: 'WebM → MKV Converter' },
+    aciklama: { en: 'Convert WebM videos to MKV format.' },
     populer: false,
   },
   {
@@ -818,8 +774,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → FLV Converter', tr: 'WebM → FLV Dönüştürücü' },
-    aciklama: { en: 'Convert WebM videos to FLV format.', tr: 'WebM videolarınızı FLV formatına dönüştürün.' },
+    baslik: { en: 'WebM → FLV Converter' },
+    aciklama: { en: 'Convert WebM videos to FLV format.' },
     populer: false,
   },
   {
@@ -830,8 +786,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wmv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → WMV Converter', tr: 'WebM → WMV Dönüştürücü' },
-    aciklama: { en: 'Convert WebM videos to WMV format.', tr: 'WebM videolarınızı WMV formatına dönüştürün.' },
+    baslik: { en: 'WebM → WMV Converter' },
+    aciklama: { en: 'Convert WebM videos to WMV format.' },
     populer: false,
   },
   {
@@ -842,8 +798,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → GIF Converter', tr: 'WebM → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert WebM videos to animated GIF files.', tr: 'WebM videolarınızı animasyonlu GIF dosyalarına dönüştürün.' },
+    baslik: { en: 'WebM → GIF Converter' },
+    aciklama: { en: 'Convert WebM videos to animated GIF files.' },
     populer: false,
   },
   {
@@ -854,8 +810,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webm',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → WebM Converter', tr: 'AVI → WebM Dönüştürücü' },
-    aciklama: { en: 'Convert AVI videos to open-source WebM format.', tr: 'AVI videolarınızı açık kaynak WebM formatına dönüştürün.' },
+    baslik: { en: 'AVI → WebM Converter' },
+    aciklama: { en: 'Convert AVI videos to open-source WebM format.' },
     populer: false,
   },
   {
@@ -866,8 +822,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mov',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → MOV Converter', tr: 'AVI → MOV Dönüştürücü' },
-    aciklama: { en: 'Convert AVI videos to Apple MOV format.', tr: 'AVI videolarınızı Apple MOV formatına dönüştürün.' },
+    baslik: { en: 'AVI → MOV Converter' },
+    aciklama: { en: 'Convert AVI videos to Apple MOV format.' },
     populer: false,
   },
   {
@@ -878,8 +834,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mkv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → MKV Converter', tr: 'AVI → MKV Dönüştürücü' },
-    aciklama: { en: 'Convert AVI videos to MKV format.', tr: 'AVI videolarınızı MKV formatına dönüştürün.' },
+    baslik: { en: 'AVI → MKV Converter' },
+    aciklama: { en: 'Convert AVI videos to MKV format.' },
     populer: false,
   },
   {
@@ -890,8 +846,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → FLV Converter', tr: 'AVI → FLV Dönüştürücü' },
-    aciklama: { en: 'Convert AVI videos to FLV format.', tr: 'AVI videolarınızı FLV formatına dönüştürün.' },
+    baslik: { en: 'AVI → FLV Converter' },
+    aciklama: { en: 'Convert AVI videos to FLV format.' },
     populer: false,
   },
   {
@@ -902,8 +858,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wmv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → WMV Converter', tr: 'AVI → WMV Dönüştürücü' },
-    aciklama: { en: 'Convert AVI videos to WMV format.', tr: 'AVI videolarınızı WMV formatına dönüştürün.' },
+    baslik: { en: 'AVI → WMV Converter' },
+    aciklama: { en: 'Convert AVI videos to WMV format.' },
     populer: false,
   },
   {
@@ -914,8 +870,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → GIF Converter', tr: 'AVI → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert AVI videos to animated GIF files.', tr: 'AVI videolarınızı animasyonlu GIF dosyalarına dönüştürün.' },
+    baslik: { en: 'AVI → GIF Converter' },
+    aciklama: { en: 'Convert AVI videos to animated GIF files.' },
     populer: false,
   },
   {
@@ -926,8 +882,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webm',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → WebM Converter', tr: 'MOV → WebM Dönüştürücü' },
-    aciklama: { en: 'Convert MOV videos to open-source WebM format.', tr: 'MOV videolarınızı açık kaynak WebM formatına dönüştürün.' },
+    baslik: { en: 'MOV → WebM Converter' },
+    aciklama: { en: 'Convert MOV videos to open-source WebM format.' },
     populer: false,
   },
   {
@@ -938,8 +894,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'avi',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → AVI Converter', tr: 'MOV → AVI Dönüştürücü' },
-    aciklama: { en: 'Convert MOV videos to AVI format.', tr: 'MOV videolarınızı AVI formatına dönüştürün.' },
+    baslik: { en: 'MOV → AVI Converter' },
+    aciklama: { en: 'Convert MOV videos to AVI format.' },
     populer: false,
   },
   {
@@ -950,8 +906,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mkv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → MKV Converter', tr: 'MOV → MKV Dönüştürücü' },
-    aciklama: { en: 'Convert MOV videos to MKV format.', tr: 'MOV videolarınızı MKV formatına dönüştürün.' },
+    baslik: { en: 'MOV → MKV Converter' },
+    aciklama: { en: 'Convert MOV videos to MKV format.' },
     populer: false,
   },
   {
@@ -962,8 +918,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → FLV Converter', tr: 'MOV → FLV Dönüştürücü' },
-    aciklama: { en: 'Convert MOV videos to FLV format.', tr: 'MOV videolarınızı FLV formatına dönüştürün.' },
+    baslik: { en: 'MOV → FLV Converter' },
+    aciklama: { en: 'Convert MOV videos to FLV format.' },
     populer: false,
   },
   {
@@ -974,8 +930,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wmv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → WMV Converter', tr: 'MOV → WMV Dönüştürücü' },
-    aciklama: { en: 'Convert MOV videos to WMV format.', tr: 'MOV videolarınızı WMV formatına dönüştürün.' },
+    baslik: { en: 'MOV → WMV Converter' },
+    aciklama: { en: 'Convert MOV videos to WMV format.' },
     populer: false,
   },
   {
@@ -986,8 +942,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → GIF Converter', tr: 'MOV → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert MOV videos to animated GIF files.', tr: 'MOV videolarınızı animasyonlu GIF dosyalarına dönüştürün.' },
+    baslik: { en: 'MOV → GIF Converter' },
+    aciklama: { en: 'Convert MOV videos to animated GIF files.' },
     populer: false,
   },
   {
@@ -998,8 +954,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webm',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → WebM Converter', tr: 'MKV → WebM Dönüştürücü' },
-    aciklama: { en: 'Convert MKV videos to open-source WebM format.', tr: 'MKV videolarınızı açık kaynak WebM formatına dönüştürün.' },
+    baslik: { en: 'MKV → WebM Converter' },
+    aciklama: { en: 'Convert MKV videos to open-source WebM format.' },
     populer: false,
   },
   {
@@ -1010,8 +966,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'avi',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → AVI Converter', tr: 'MKV → AVI Dönüştürücü' },
-    aciklama: { en: 'Convert MKV videos to AVI format.', tr: 'MKV videolarınızı AVI formatına dönüştürün.' },
+    baslik: { en: 'MKV → AVI Converter' },
+    aciklama: { en: 'Convert MKV videos to AVI format.' },
     populer: false,
   },
   {
@@ -1022,8 +978,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mov',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → MOV Converter', tr: 'MKV → MOV Dönüştürücü' },
-    aciklama: { en: 'Convert MKV videos to Apple MOV format.', tr: 'MKV videolarınızı Apple MOV formatına dönüştürün.' },
+    baslik: { en: 'MKV → MOV Converter' },
+    aciklama: { en: 'Convert MKV videos to Apple MOV format.' },
     populer: false,
   },
   {
@@ -1034,8 +990,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → FLV Converter', tr: 'MKV → FLV Dönüştürücü' },
-    aciklama: { en: 'Convert MKV videos to FLV format.', tr: 'MKV videolarınızı FLV formatına dönüştürün.' },
+    baslik: { en: 'MKV → FLV Converter' },
+    aciklama: { en: 'Convert MKV videos to FLV format.' },
     populer: false,
   },
   {
@@ -1046,8 +1002,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wmv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → WMV Converter', tr: 'MKV → WMV Dönüştürücü' },
-    aciklama: { en: 'Convert MKV videos to WMV format.', tr: 'MKV videolarınızı WMV formatına dönüştürün.' },
+    baslik: { en: 'MKV → WMV Converter' },
+    aciklama: { en: 'Convert MKV videos to WMV format.' },
     populer: false,
   },
   {
@@ -1058,8 +1014,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → GIF Converter', tr: 'MKV → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert MKV videos to animated GIF files.', tr: 'MKV videolarınızı animasyonlu GIF dosyalarına dönüştürün.' },
+    baslik: { en: 'MKV → GIF Converter' },
+    aciklama: { en: 'Convert MKV videos to animated GIF files.' },
     populer: false,
   },
   {
@@ -1070,8 +1026,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp4',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'FLV → MP4 Converter', tr: 'FLV → MP4 Dönüştürücü' },
-    aciklama: { en: 'Convert FLV videos to compatible MP4 format.', tr: 'FLV videolarınızı uyumlu MP4 formatına dönüştürün.' },
+    baslik: { en: 'FLV → MP4 Converter' },
+    aciklama: { en: 'Convert FLV videos to compatible MP4 format.' },
     populer: false,
   },
   {
@@ -1082,8 +1038,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webm',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'FLV → WebM Converter', tr: 'FLV → WebM Dönüştürücü' },
-    aciklama: { en: 'Convert FLV videos to open-source WebM format.', tr: 'FLV videolarınızı açık kaynak WebM formatına dönüştürün.' },
+    baslik: { en: 'FLV → WebM Converter' },
+    aciklama: { en: 'Convert FLV videos to open-source WebM format.' },
     populer: false,
   },
   {
@@ -1094,8 +1050,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'avi',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'FLV → AVI Converter', tr: 'FLV → AVI Dönüştürücü' },
-    aciklama: { en: 'Convert FLV videos to AVI format.', tr: 'FLV videolarınızı AVI formatına dönüştürün.' },
+    baslik: { en: 'FLV → AVI Converter' },
+    aciklama: { en: 'Convert FLV videos to AVI format.' },
     populer: false,
   },
   {
@@ -1106,8 +1062,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mov',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'FLV → MOV Converter', tr: 'FLV → MOV Dönüştürücü' },
-    aciklama: { en: 'Convert FLV videos to Apple MOV format.', tr: 'FLV videolarınızı Apple MOV formatına dönüştürün.' },
+    baslik: { en: 'FLV → MOV Converter' },
+    aciklama: { en: 'Convert FLV videos to Apple MOV format.' },
     populer: false,
   },
   {
@@ -1118,8 +1074,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mkv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'FLV → MKV Converter', tr: 'FLV → MKV Dönüştürücü' },
-    aciklama: { en: 'Convert FLV videos to MKV format.', tr: 'FLV videolarınızı MKV formatına dönüştürün.' },
+    baslik: { en: 'FLV → MKV Converter' },
+    aciklama: { en: 'Convert FLV videos to MKV format.' },
     populer: false,
   },
   {
@@ -1130,8 +1086,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wmv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'FLV → WMV Converter', tr: 'FLV → WMV Dönüştürücü' },
-    aciklama: { en: 'Convert FLV videos to WMV format.', tr: 'FLV videolarınızı WMV formatına dönüştürün.' },
+    baslik: { en: 'FLV → WMV Converter' },
+    aciklama: { en: 'Convert FLV videos to WMV format.' },
     populer: false,
   },
   {
@@ -1142,8 +1098,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'FLV → GIF Converter', tr: 'FLV → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert FLV videos to animated GIF files.', tr: 'FLV videolarınızı animasyonlu GIF dosyalarına dönüştürün.' },
+    baslik: { en: 'FLV → GIF Converter' },
+    aciklama: { en: 'Convert FLV videos to animated GIF files.' },
     populer: false,
   },
   {
@@ -1154,8 +1110,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp4',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WMV → MP4 Converter', tr: 'WMV → MP4 Dönüştürücü' },
-    aciklama: { en: 'Convert WMV videos to compatible MP4 format.', tr: 'WMV videolarınızı uyumlu MP4 formatına dönüştürün.' },
+    baslik: { en: 'WMV → MP4 Converter' },
+    aciklama: { en: 'Convert WMV videos to compatible MP4 format.' },
     populer: false,
   },
   {
@@ -1166,8 +1122,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webm',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WMV → WebM Converter', tr: 'WMV → WebM Dönüştürücü' },
-    aciklama: { en: 'Convert WMV videos to open-source WebM format.', tr: 'WMV videolarınızı açık kaynak WebM formatına dönüştürün.' },
+    baslik: { en: 'WMV → WebM Converter' },
+    aciklama: { en: 'Convert WMV videos to open-source WebM format.' },
     populer: false,
   },
   {
@@ -1178,8 +1134,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'avi',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WMV → AVI Converter', tr: 'WMV → AVI Dönüştürücü' },
-    aciklama: { en: 'Convert WMV videos to AVI format.', tr: 'WMV videolarınızı AVI formatına dönüştürün.' },
+    baslik: { en: 'WMV → AVI Converter' },
+    aciklama: { en: 'Convert WMV videos to AVI format.' },
     populer: false,
   },
   {
@@ -1190,8 +1146,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mov',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WMV → MOV Converter', tr: 'WMV → MOV Dönüştürücü' },
-    aciklama: { en: 'Convert WMV videos to Apple MOV format.', tr: 'WMV videolarınızı Apple MOV formatına dönüştürün.' },
+    baslik: { en: 'WMV → MOV Converter' },
+    aciklama: { en: 'Convert WMV videos to Apple MOV format.' },
     populer: false,
   },
   {
@@ -1202,8 +1158,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mkv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WMV → MKV Converter', tr: 'WMV → MKV Dönüştürücü' },
-    aciklama: { en: 'Convert WMV videos to MKV format.', tr: 'WMV videolarınızı MKV formatına dönüştürün.' },
+    baslik: { en: 'WMV → MKV Converter' },
+    aciklama: { en: 'Convert WMV videos to MKV format.' },
     populer: false,
   },
   {
@@ -1214,8 +1170,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WMV → FLV Converter', tr: 'WMV → FLV Dönüştürücü' },
-    aciklama: { en: 'Convert WMV videos to FLV format.', tr: 'WMV videolarınızı FLV formatına dönüştürün.' },
+    baslik: { en: 'WMV → FLV Converter' },
+    aciklama: { en: 'Convert WMV videos to FLV format.' },
     populer: false,
   },
   {
@@ -1226,8 +1182,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'gif',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'WMV → GIF Converter', tr: 'WMV → GIF Dönüştürücü' },
-    aciklama: { en: 'Convert WMV videos to animated GIF files.', tr: 'WMV videolarınızı animasyonlu GIF dosyalarına dönüştürün.' },
+    baslik: { en: 'WMV → GIF Converter' },
+    aciklama: { en: 'Convert WMV videos to animated GIF files.' },
     populer: false,
   },
   {
@@ -1238,8 +1194,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp4',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'GIF → MP4 Converter', tr: 'GIF → MP4 Dönüştürücü' },
-    aciklama: { en: 'Convert animated GIF files to MP4 format.', tr: 'Animasyonlu GIF dosyalarınızı MP4 formatına dönüştürün.' },
+    baslik: { en: 'GIF → MP4 Converter' },
+    aciklama: { en: 'Convert animated GIF files to MP4 format.' },
     populer: false,
   },
   {
@@ -1250,8 +1206,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'webm',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'GIF → WebM Converter', tr: 'GIF → WebM Dönüştürücü' },
-    aciklama: { en: 'Convert animated GIF files to WebM format.', tr: 'Animasyonlu GIF dosyalarınızı WebM formatına dönüştürün.' },
+    baslik: { en: 'GIF → WebM Converter' },
+    aciklama: { en: 'Convert animated GIF files to WebM format.' },
     populer: false,
   },
   {
@@ -1262,8 +1218,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'avi',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'GIF → AVI Converter', tr: 'GIF → AVI Dönüştürücü' },
-    aciklama: { en: 'Convert animated GIF files to AVI format.', tr: 'Animasyonlu GIF dosyalarınızı AVI formatına dönüştürün.' },
+    baslik: { en: 'GIF → AVI Converter' },
+    aciklama: { en: 'Convert animated GIF files to AVI format.' },
     populer: false,
   },
   {
@@ -1274,8 +1230,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mov',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'GIF → MOV Converter', tr: 'GIF → MOV Dönüştürücü' },
-    aciklama: { en: 'Convert animated GIF files to Apple MOV format.', tr: 'Animasyonlu GIF dosyalarınızı Apple MOV formatına dönüştürün.' },
+    baslik: { en: 'GIF → MOV Converter' },
+    aciklama: { en: 'Convert animated GIF files to Apple MOV format.' },
     populer: false,
   },
   {
@@ -1286,8 +1242,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mkv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'GIF → MKV Converter', tr: 'GIF → MKV Dönüştürücü' },
-    aciklama: { en: 'Convert animated GIF files to MKV format.', tr: 'Animasyonlu GIF dosyalarınızı MKV formatına dönüştürün.' },
+    baslik: { en: 'GIF → MKV Converter' },
+    aciklama: { en: 'Convert animated GIF files to MKV format.' },
     populer: false,
   },
   {
@@ -1298,8 +1254,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'GIF → FLV Converter', tr: 'GIF → FLV Dönüştürücü' },
-    aciklama: { en: 'Convert animated GIF files to FLV format.', tr: 'Animasyonlu GIF dosyalarınızı FLV formatına dönüştürün.' },
+    baslik: { en: 'GIF → FLV Converter' },
+    aciklama: { en: 'Convert animated GIF files to FLV format.' },
     populer: false,
   },
   {
@@ -1310,8 +1266,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wmv',
     kategori: 'video',
     converter: 'ffmpeg',
-    baslik: { en: 'GIF → WMV Converter', tr: 'GIF → WMV Dönüştürücü' },
-    aciklama: { en: 'Convert animated GIF files to WMV format.', tr: 'Animasyonlu GIF dosyalarınızı WMV formatına dönüştürün.' },
+    baslik: { en: 'GIF → WMV Converter' },
+    aciklama: { en: 'Convert animated GIF files to WMV format.' },
     populer: false,
   },
 
@@ -1325,8 +1281,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP3 → WAV Converter', tr: 'MP3 → WAV Dönüştürücü' },
-    aciklama: { en: 'Convert your MP3 files to lossless WAV format.', tr: 'MP3 dosyalarınızı kayıpsız WAV formatına dönüştürün.' },
+    baslik: { en: 'MP3 → WAV Converter' },
+    aciklama: { en: 'Convert your MP3 files to lossless WAV format.' },
     populer: true,
     ffmpegArgs: ['-acodec', 'pcm_s16le'],
   },
@@ -1338,8 +1294,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WAV → MP3 Converter', tr: 'WAV → MP3 Dönüştürücü' },
-    aciklama: { en: 'Compress your large WAV files to small MP3 format.', tr: 'Büyük WAV dosyalarınızı küçük MP3 formatına sıkıştırın.' },
+    baslik: { en: 'WAV → MP3 Converter' },
+    aciklama: { en: 'Compress your large WAV files to small MP3 format.' },
     populer: true,
     ffmpegArgs: ['-acodec', 'libmp3lame', '-b:a', '192k'],
   },
@@ -1351,8 +1307,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → MP3 Converter', tr: 'MP4 → MP3 Dönüştürücü' },
-    aciklama: { en: 'Extract audio from videos. Save the audio part of your MP4 file as MP3.', tr: 'Videolardan ses çıkartın. MP4 dosyanızın ses kısmını MP3 olarak kaydedin.' },
+    baslik: { en: 'MP4 → MP3 Converter' },
+    aciklama: { en: 'Extract audio from videos. Save the audio part of your MP4 file as MP3.' },
     populer: true,
     ffmpegArgs: ['-vn', '-acodec', 'libmp3lame', '-b:a', '192k'],
   },
@@ -1364,8 +1320,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OGG → MP3 Converter', tr: 'OGG → MP3 Dönüştürücü' },
-    aciklama: { en: 'Convert your OGG audio files to the common MP3 format.', tr: 'OGG ses dosyalarınızı yaygın MP3 formatına dönüştürün.' },
+    baslik: { en: 'OGG → MP3 Converter' },
+    aciklama: { en: 'Convert your OGG audio files to the common MP3 format.' },
     populer: false,
     ffmpegArgs: ['-acodec', 'libmp3lame', '-b:a', '192k'],
   },
@@ -1377,8 +1333,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP3 → OGG Converter', tr: 'MP3 → OGG Dönüştürücü' },
-    aciklama: { en: 'Convert your MP3 files to open-source OGG format.', tr: 'MP3 dosyalarınızı açık kaynak OGG formatına dönüştürün.' },
+    baslik: { en: 'MP3 → OGG Converter' },
+    aciklama: { en: 'Convert your MP3 files to open-source OGG format.' },
     populer: false,
     ffmpegArgs: ['-acodec', 'libvorbis', '-b:a', '192k'],
   },
@@ -1390,8 +1346,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → MP3 Converter', tr: 'WebM → MP3 Dönüştürücü' },
-    aciklama: { en: 'Extract audio from WebM videos and save it as MP3.', tr: 'WebM videolarından ses çıkartın ve MP3 olarak kaydedin.' },
+    baslik: { en: 'WebM → MP3 Converter' },
+    aciklama: { en: 'Extract audio from WebM videos and save it as MP3.' },
     populer: false,
     ffmpegArgs: ['-vn', '-acodec', 'libmp3lame', '-b:a', '192k'],
   },
@@ -1403,8 +1359,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'FLAC → MP3 Converter', tr: 'FLAC → MP3 Dönüştürücü' },
-    aciklama: { en: 'Convert your lossless FLAC files to MP3 format.', tr: 'Kayıpsız FLAC dosyalarınızı MP3 formatına dönüştürün.' },
+    baslik: { en: 'FLAC → MP3 Converter' },
+    aciklama: { en: 'Convert your lossless FLAC files to MP3 format.' },
     populer: false,
     ffmpegArgs: ['-acodec', 'libmp3lame', '-b:a', '320k'],
   },
@@ -1416,8 +1372,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP3 → AAC Converter', tr: 'MP3 → AAC Dönüştürücü' },
-    aciklama: { en: 'Convert your MP3 files to AAC format.', tr: 'MP3 dosyalarınızı AAC formatına dönüştürün.' },
+    baslik: { en: 'MP3 → AAC Converter' },
+    aciklama: { en: 'Convert your MP3 files to AAC format.' },
     populer: false,
   },
   {
@@ -1428,8 +1384,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP3 → FLAC Converter', tr: 'MP3 → FLAC Dönüştürücü' },
-    aciklama: { en: 'Convert your MP3 files to lossless FLAC format.', tr: 'MP3 dosyalarınızı kayıpsız FLAC formatına dönüştürün.' },
+    baslik: { en: 'MP3 → FLAC Converter' },
+    aciklama: { en: 'Convert your MP3 files to lossless FLAC format.' },
     populer: false,
   },
   {
@@ -1440,8 +1396,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP3 → M4A Converter', tr: 'MP3 → M4A Dönüştürücü' },
-    aciklama: { en: 'Convert your MP3 files to M4A format.', tr: 'MP3 dosyalarınızı M4A formatına dönüştürün.' },
+    baslik: { en: 'MP3 → M4A Converter' },
+    aciklama: { en: 'Convert your MP3 files to M4A format.' },
     populer: false,
   },
   {
@@ -1452,8 +1408,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wma',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP3 → WMA Converter', tr: 'MP3 → WMA Dönüştürücü' },
-    aciklama: { en: 'Convert your MP3 files to WMA format.', tr: 'MP3 dosyalarınızı WMA formatına dönüştürün.' },
+    baslik: { en: 'MP3 → WMA Converter' },
+    aciklama: { en: 'Convert your MP3 files to WMA format.' },
     populer: false,
   },
   {
@@ -1464,8 +1420,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'opus',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP3 → OPUS Converter', tr: 'MP3 → OPUS Dönüştürücü' },
-    aciklama: { en: 'Convert your MP3 files to OPUS format.', tr: 'MP3 dosyalarınızı OPUS formatına dönüştürün.' },
+    baslik: { en: 'MP3 → OPUS Converter' },
+    aciklama: { en: 'Convert your MP3 files to OPUS format.' },
     populer: false,
   },
   {
@@ -1476,8 +1432,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WAV → OGG Converter', tr: 'WAV → OGG Dönüştürücü' },
-    aciklama: { en: 'Convert WAV files to OGG format.', tr: 'WAV dosyalarınızı OGG formatına dönüştürün.' },
+    baslik: { en: 'WAV → OGG Converter' },
+    aciklama: { en: 'Convert WAV files to OGG format.' },
     populer: false,
   },
   {
@@ -1488,8 +1444,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WAV → AAC Converter', tr: 'WAV → AAC Dönüştürücü' },
-    aciklama: { en: 'Convert WAV files to AAC format.', tr: 'WAV dosyalarınızı AAC formatına dönüştürün.' },
+    baslik: { en: 'WAV → AAC Converter' },
+    aciklama: { en: 'Convert WAV files to AAC format.' },
     populer: false,
   },
   {
@@ -1500,8 +1456,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WAV → FLAC Converter', tr: 'WAV → FLAC Dönüştürücü' },
-    aciklama: { en: 'Convert WAV files to lossless FLAC format.', tr: 'WAV dosyalarınızı kayıpsız FLAC formatına dönüştürün.' },
+    baslik: { en: 'WAV → FLAC Converter' },
+    aciklama: { en: 'Convert WAV files to lossless FLAC format.' },
     populer: false,
   },
   {
@@ -1512,8 +1468,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WAV → M4A Converter', tr: 'WAV → M4A Dönüştürücü' },
-    aciklama: { en: 'Convert WAV files to M4A format.', tr: 'WAV dosyalarınızı M4A formatına dönüştürün.' },
+    baslik: { en: 'WAV → M4A Converter' },
+    aciklama: { en: 'Convert WAV files to M4A format.' },
     populer: false,
   },
   {
@@ -1524,8 +1480,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wma',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WAV → WMA Converter', tr: 'WAV → WMA Dönüştürücü' },
-    aciklama: { en: 'Convert WAV files to WMA format.', tr: 'WAV dosyalarınızı WMA formatına dönüştürün.' },
+    baslik: { en: 'WAV → WMA Converter' },
+    aciklama: { en: 'Convert WAV files to WMA format.' },
     populer: false,
   },
   {
@@ -1536,8 +1492,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'opus',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WAV → OPUS Converter', tr: 'WAV → OPUS Dönüştürücü' },
-    aciklama: { en: 'Convert WAV files to OPUS format.', tr: 'WAV dosyalarınızı OPUS formatına dönüştürün.' },
+    baslik: { en: 'WAV → OPUS Converter' },
+    aciklama: { en: 'Convert WAV files to OPUS format.' },
     populer: false,
   },
   {
@@ -1548,8 +1504,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OGG → WAV Converter', tr: 'OGG → WAV Dönüştürücü' },
-    aciklama: { en: 'Convert OGG files to WAV format.', tr: 'OGG dosyalarınızı WAV formatına dönüştürün.' },
+    baslik: { en: 'OGG → WAV Converter' },
+    aciklama: { en: 'Convert OGG files to WAV format.' },
     populer: false,
   },
   {
@@ -1560,8 +1516,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OGG → AAC Converter', tr: 'OGG → AAC Dönüştürücü' },
-    aciklama: { en: 'Convert OGG files to AAC format.', tr: 'OGG dosyalarınızı AAC formatına dönüştürün.' },
+    baslik: { en: 'OGG → AAC Converter' },
+    aciklama: { en: 'Convert OGG files to AAC format.' },
     populer: false,
   },
   {
@@ -1572,8 +1528,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OGG → FLAC Converter', tr: 'OGG → FLAC Dönüştürücü' },
-    aciklama: { en: 'Convert OGG files to lossless FLAC format.', tr: 'OGG dosyalarınızı kayıpsız FLAC formatına dönüştürün.' },
+    baslik: { en: 'OGG → FLAC Converter' },
+    aciklama: { en: 'Convert OGG files to lossless FLAC format.' },
     populer: false,
   },
   {
@@ -1584,8 +1540,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OGG → M4A Converter', tr: 'OGG → M4A Dönüştürücü' },
-    aciklama: { en: 'Convert OGG files to M4A format.', tr: 'OGG dosyalarınızı M4A formatına dönüştürün.' },
+    baslik: { en: 'OGG → M4A Converter' },
+    aciklama: { en: 'Convert OGG files to M4A format.' },
     populer: false,
   },
   {
@@ -1596,8 +1552,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wma',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OGG → WMA Converter', tr: 'OGG → WMA Dönüştürücü' },
-    aciklama: { en: 'Convert OGG files to WMA format.', tr: 'OGG dosyalarınızı WMA formatına dönüştürün.' },
+    baslik: { en: 'OGG → WMA Converter' },
+    aciklama: { en: 'Convert OGG files to WMA format.' },
     populer: false,
   },
   {
@@ -1608,8 +1564,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'opus',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OGG → OPUS Converter', tr: 'OGG → OPUS Dönüştürücü' },
-    aciklama: { en: 'Convert OGG files to OPUS format.', tr: 'OGG dosyalarınızı OPUS formatına dönüştürün.' },
+    baslik: { en: 'OGG → OPUS Converter' },
+    aciklama: { en: 'Convert OGG files to OPUS format.' },
     populer: false,
   },
   {
@@ -1620,8 +1576,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AAC → MP3 Converter', tr: 'AAC → MP3 Dönüştürücü' },
-    aciklama: { en: 'Convert AAC files to MP3 format.', tr: 'AAC dosyalarınızı MP3 formatına dönüştürün.' },
+    baslik: { en: 'AAC → MP3 Converter' },
+    aciklama: { en: 'Convert AAC files to MP3 format.' },
     populer: false,
   },
   {
@@ -1632,8 +1588,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AAC → WAV Converter', tr: 'AAC → WAV Dönüştürücü' },
-    aciklama: { en: 'Convert AAC files to WAV format.', tr: 'AAC dosyalarınızı WAV formatına dönüştürün.' },
+    baslik: { en: 'AAC → WAV Converter' },
+    aciklama: { en: 'Convert AAC files to WAV format.' },
     populer: false,
   },
   {
@@ -1644,8 +1600,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AAC → OGG Converter', tr: 'AAC → OGG Dönüştürücü' },
-    aciklama: { en: 'Convert AAC files to OGG format.', tr: 'AAC dosyalarınızı OGG formatına dönüştürün.' },
+    baslik: { en: 'AAC → OGG Converter' },
+    aciklama: { en: 'Convert AAC files to OGG format.' },
     populer: false,
   },
   {
@@ -1656,8 +1612,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AAC → FLAC Converter', tr: 'AAC → FLAC Dönüştürücü' },
-    aciklama: { en: 'Convert AAC files to lossless FLAC format.', tr: 'AAC dosyalarınızı kayıpsız FLAC formatına dönüştürün.' },
+    baslik: { en: 'AAC → FLAC Converter' },
+    aciklama: { en: 'Convert AAC files to lossless FLAC format.' },
     populer: false,
   },
   {
@@ -1668,8 +1624,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AAC → M4A Converter', tr: 'AAC → M4A Dönüştürücü' },
-    aciklama: { en: 'Convert AAC files to M4A format.', tr: 'AAC dosyalarınızı M4A formatına dönüştürün.' },
+    baslik: { en: 'AAC → M4A Converter' },
+    aciklama: { en: 'Convert AAC files to M4A format.' },
     populer: false,
   },
   {
@@ -1680,8 +1636,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wma',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AAC → WMA Converter', tr: 'AAC → WMA Dönüştürücü' },
-    aciklama: { en: 'Convert AAC files to WMA format.', tr: 'AAC dosyalarınızı WMA formatına dönüştürün.' },
+    baslik: { en: 'AAC → WMA Converter' },
+    aciklama: { en: 'Convert AAC files to WMA format.' },
     populer: false,
   },
   {
@@ -1692,8 +1648,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'opus',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AAC → OPUS Converter', tr: 'AAC → OPUS Dönüştürücü' },
-    aciklama: { en: 'Convert AAC files to OPUS format.', tr: 'AAC dosyalarınızı OPUS formatına dönüştürün.' },
+    baslik: { en: 'AAC → OPUS Converter' },
+    aciklama: { en: 'Convert AAC files to OPUS format.' },
     populer: false,
   },
   {
@@ -1704,8 +1660,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'FLAC → WAV Converter', tr: 'FLAC → WAV Dönüştürücü' },
-    aciklama: { en: 'Convert FLAC files to WAV format.', tr: 'FLAC dosyalarınızı WAV formatına dönüştürün.' },
+    baslik: { en: 'FLAC → WAV Converter' },
+    aciklama: { en: 'Convert FLAC files to WAV format.' },
     populer: false,
   },
   {
@@ -1716,8 +1672,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'FLAC → OGG Converter', tr: 'FLAC → OGG Dönüştürücü' },
-    aciklama: { en: 'Convert FLAC files to OGG format.', tr: 'FLAC dosyalarınızı OGG formatına dönüştürün.' },
+    baslik: { en: 'FLAC → OGG Converter' },
+    aciklama: { en: 'Convert FLAC files to OGG format.' },
     populer: false,
   },
   {
@@ -1728,8 +1684,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'FLAC → AAC Converter', tr: 'FLAC → AAC Dönüştürücü' },
-    aciklama: { en: 'Convert FLAC files to AAC format.', tr: 'FLAC dosyalarınızı AAC formatına dönüştürün.' },
+    baslik: { en: 'FLAC → AAC Converter' },
+    aciklama: { en: 'Convert FLAC files to AAC format.' },
     populer: false,
   },
   {
@@ -1740,8 +1696,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'FLAC → M4A Converter', tr: 'FLAC → M4A Dönüştürücü' },
-    aciklama: { en: 'Convert FLAC files to M4A format.', tr: 'FLAC dosyalarınızı M4A formatına dönüştürün.' },
+    baslik: { en: 'FLAC → M4A Converter' },
+    aciklama: { en: 'Convert FLAC files to M4A format.' },
     populer: false,
   },
   {
@@ -1752,8 +1708,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wma',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'FLAC → WMA Converter', tr: 'FLAC → WMA Dönüştürücü' },
-    aciklama: { en: 'Convert FLAC files to WMA format.', tr: 'FLAC dosyalarınızı WMA formatına dönüştürün.' },
+    baslik: { en: 'FLAC → WMA Converter' },
+    aciklama: { en: 'Convert FLAC files to WMA format.' },
     populer: false,
   },
   {
@@ -1764,8 +1720,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'opus',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'FLAC → OPUS Converter', tr: 'FLAC → OPUS Dönüştürücü' },
-    aciklama: { en: 'Convert FLAC files to OPUS format.', tr: 'FLAC dosyalarınızı OPUS formatına dönüştürün.' },
+    baslik: { en: 'FLAC → OPUS Converter' },
+    aciklama: { en: 'Convert FLAC files to OPUS format.' },
     populer: false,
   },
   {
@@ -1776,8 +1732,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'M4A → MP3 Converter', tr: 'M4A → MP3 Dönüştürücü' },
-    aciklama: { en: 'Convert M4A files to MP3 format.', tr: 'M4A dosyalarınızı MP3 formatına dönüştürün.' },
+    baslik: { en: 'M4A → MP3 Converter' },
+    aciklama: { en: 'Convert M4A files to MP3 format.' },
     populer: false,
   },
   {
@@ -1788,8 +1744,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'M4A → WAV Converter', tr: 'M4A → WAV Dönüştürücü' },
-    aciklama: { en: 'Convert M4A files to WAV format.', tr: 'M4A dosyalarınızı WAV formatına dönüştürün.' },
+    baslik: { en: 'M4A → WAV Converter' },
+    aciklama: { en: 'Convert M4A files to WAV format.' },
     populer: false,
   },
   {
@@ -1800,8 +1756,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'M4A → OGG Converter', tr: 'M4A → OGG Dönüştürücü' },
-    aciklama: { en: 'Convert M4A files to OGG format.', tr: 'M4A dosyalarınızı OGG formatına dönüştürün.' },
+    baslik: { en: 'M4A → OGG Converter' },
+    aciklama: { en: 'Convert M4A files to OGG format.' },
     populer: false,
   },
   {
@@ -1812,8 +1768,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'M4A → AAC Converter', tr: 'M4A → AAC Dönüştürücü' },
-    aciklama: { en: 'Convert M4A files to AAC format.', tr: 'M4A dosyalarınızı AAC formatına dönüştürün.' },
+    baslik: { en: 'M4A → AAC Converter' },
+    aciklama: { en: 'Convert M4A files to AAC format.' },
     populer: false,
   },
   {
@@ -1824,8 +1780,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'M4A → FLAC Converter', tr: 'M4A → FLAC Dönüştürücü' },
-    aciklama: { en: 'Convert M4A files to lossless FLAC format.', tr: 'M4A dosyalarınızı kayıpsız FLAC formatına dönüştürün.' },
+    baslik: { en: 'M4A → FLAC Converter' },
+    aciklama: { en: 'Convert M4A files to lossless FLAC format.' },
     populer: false,
   },
   {
@@ -1836,8 +1792,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wma',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'M4A → WMA Converter', tr: 'M4A → WMA Dönüştürücü' },
-    aciklama: { en: 'Convert M4A files to WMA format.', tr: 'M4A dosyalarınızı WMA formatına dönüştürün.' },
+    baslik: { en: 'M4A → WMA Converter' },
+    aciklama: { en: 'Convert M4A files to WMA format.' },
     populer: false,
   },
   {
@@ -1848,8 +1804,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'opus',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'M4A → OPUS Converter', tr: 'M4A → OPUS Dönüştürücü' },
-    aciklama: { en: 'Convert M4A files to OPUS format.', tr: 'M4A dosyalarınızı OPUS formatına dönüştürün.' },
+    baslik: { en: 'M4A → OPUS Converter' },
+    aciklama: { en: 'Convert M4A files to OPUS format.' },
     populer: false,
   },
   {
@@ -1860,8 +1816,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WMA → MP3 Converter', tr: 'WMA → MP3 Dönüştürücü' },
-    aciklama: { en: 'Convert WMA files to MP3 format.', tr: 'WMA dosyalarınızı MP3 formatına dönüştürün.' },
+    baslik: { en: 'WMA → MP3 Converter' },
+    aciklama: { en: 'Convert WMA files to MP3 format.' },
     populer: false,
   },
   {
@@ -1872,8 +1828,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WMA → WAV Converter', tr: 'WMA → WAV Dönüştürücü' },
-    aciklama: { en: 'Convert WMA files to WAV format.', tr: 'WMA dosyalarınızı WAV formatına dönüştürün.' },
+    baslik: { en: 'WMA → WAV Converter' },
+    aciklama: { en: 'Convert WMA files to WAV format.' },
     populer: false,
   },
   {
@@ -1884,8 +1840,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WMA → OGG Converter', tr: 'WMA → OGG Dönüştürücü' },
-    aciklama: { en: 'Convert WMA files to OGG format.', tr: 'WMA dosyalarınızı OGG formatına dönüştürün.' },
+    baslik: { en: 'WMA → OGG Converter' },
+    aciklama: { en: 'Convert WMA files to OGG format.' },
     populer: false,
   },
   {
@@ -1896,8 +1852,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WMA → AAC Converter', tr: 'WMA → AAC Dönüştürücü' },
-    aciklama: { en: 'Convert WMA files to AAC format.', tr: 'WMA dosyalarınızı AAC formatına dönüştürün.' },
+    baslik: { en: 'WMA → AAC Converter' },
+    aciklama: { en: 'Convert WMA files to AAC format.' },
     populer: false,
   },
   {
@@ -1908,8 +1864,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WMA → FLAC Converter', tr: 'WMA → FLAC Dönüştürücü' },
-    aciklama: { en: 'Convert WMA files to lossless FLAC format.', tr: 'WMA dosyalarınızı kayıpsız FLAC formatına dönüştürün.' },
+    baslik: { en: 'WMA → FLAC Converter' },
+    aciklama: { en: 'Convert WMA files to lossless FLAC format.' },
     populer: false,
   },
   {
@@ -1920,8 +1876,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WMA → M4A Converter', tr: 'WMA → M4A Dönüştürücü' },
-    aciklama: { en: 'Convert WMA files to M4A format.', tr: 'WMA dosyalarınızı M4A formatına dönüştürün.' },
+    baslik: { en: 'WMA → M4A Converter' },
+    aciklama: { en: 'Convert WMA files to M4A format.' },
     populer: false,
   },
   {
@@ -1932,8 +1888,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'opus',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WMA → OPUS Converter', tr: 'WMA → OPUS Dönüştürücü' },
-    aciklama: { en: 'Convert WMA files to OPUS format.', tr: 'WMA dosyalarınızı OPUS formatına dönüştürün.' },
+    baslik: { en: 'WMA → OPUS Converter' },
+    aciklama: { en: 'Convert WMA files to OPUS format.' },
     populer: false,
   },
   {
@@ -1944,8 +1900,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OPUS → MP3 Converter', tr: 'OPUS → MP3 Dönüştürücü' },
-    aciklama: { en: 'Convert OPUS files to MP3 format.', tr: 'OPUS dosyalarınızı MP3 formatına dönüştürün.' },
+    baslik: { en: 'OPUS → MP3 Converter' },
+    aciklama: { en: 'Convert OPUS files to MP3 format.' },
     populer: false,
   },
   {
@@ -1956,8 +1912,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OPUS → WAV Converter', tr: 'OPUS → WAV Dönüştürücü' },
-    aciklama: { en: 'Convert OPUS files to WAV format.', tr: 'OPUS dosyalarınızı WAV formatına dönüştürün.' },
+    baslik: { en: 'OPUS → WAV Converter' },
+    aciklama: { en: 'Convert OPUS files to WAV format.' },
     populer: false,
   },
   {
@@ -1968,8 +1924,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OPUS → OGG Converter', tr: 'OPUS → OGG Dönüştürücü' },
-    aciklama: { en: 'Convert OPUS files to OGG format.', tr: 'OPUS dosyalarınızı OGG formatına dönüştürün.' },
+    baslik: { en: 'OPUS → OGG Converter' },
+    aciklama: { en: 'Convert OPUS files to OGG format.' },
     populer: false,
   },
   {
@@ -1980,8 +1936,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OPUS → AAC Converter', tr: 'OPUS → AAC Dönüştürücü' },
-    aciklama: { en: 'Convert OPUS files to AAC format.', tr: 'OPUS dosyalarınızı AAC formatına dönüştürün.' },
+    baslik: { en: 'OPUS → AAC Converter' },
+    aciklama: { en: 'Convert OPUS files to AAC format.' },
     populer: false,
   },
   {
@@ -1992,8 +1948,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OPUS → FLAC Converter', tr: 'OPUS → FLAC Dönüştürücü' },
-    aciklama: { en: 'Convert OPUS files to lossless FLAC format.', tr: 'OPUS dosyalarınızı kayıpsız FLAC formatına dönüştürün.' },
+    baslik: { en: 'OPUS → FLAC Converter' },
+    aciklama: { en: 'Convert OPUS files to lossless FLAC format.' },
     populer: false,
   },
   {
@@ -2004,8 +1960,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OPUS → M4A Converter', tr: 'OPUS → M4A Dönüştürücü' },
-    aciklama: { en: 'Convert OPUS files to M4A format.', tr: 'OPUS dosyalarınızı M4A formatına dönüştürün.' },
+    baslik: { en: 'OPUS → M4A Converter' },
+    aciklama: { en: 'Convert OPUS files to M4A format.' },
     populer: false,
   },
   {
@@ -2016,8 +1972,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wma',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'OPUS → WMA Converter', tr: 'OPUS → WMA Dönüştürücü' },
-    aciklama: { en: 'Convert OPUS files to WMA format.', tr: 'OPUS dosyalarınızı WMA formatına dönüştürün.' },
+    baslik: { en: 'OPUS → WMA Converter' },
+    aciklama: { en: 'Convert OPUS files to WMA format.' },
     populer: false,
   },
   {
@@ -2028,8 +1984,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → WAV Converter', tr: 'MP4 → WAV Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MP4 video and save as WAV.', tr: 'MP4 videosundan ses çıkartın ve WAV olarak kaydedin.' },
+    baslik: { en: 'MP4 → WAV Converter' },
+    aciklama: { en: 'Extract audio from MP4 video and save as WAV.' },
     populer: false,
   },
   {
@@ -2040,8 +1996,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → OGG Converter', tr: 'MP4 → OGG Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MP4 video and save as OGG.', tr: 'MP4 videosundan ses çıkartın ve OGG olarak kaydedin.' },
+    baslik: { en: 'MP4 → OGG Converter' },
+    aciklama: { en: 'Extract audio from MP4 video and save as OGG.' },
     populer: false,
   },
   {
@@ -2052,8 +2008,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → AAC Converter', tr: 'MP4 → AAC Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MP4 video and save as AAC.', tr: 'MP4 videosundan ses çıkartın ve AAC olarak kaydedin.' },
+    baslik: { en: 'MP4 → AAC Converter' },
+    aciklama: { en: 'Extract audio from MP4 video and save as AAC.' },
     populer: false,
   },
   {
@@ -2064,8 +2020,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → FLAC Converter', tr: 'MP4 → FLAC Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MP4 video and save as FLAC.', tr: 'MP4 videosundan ses çıkartın ve FLAC olarak kaydedin.' },
+    baslik: { en: 'MP4 → FLAC Converter' },
+    aciklama: { en: 'Extract audio from MP4 video and save as FLAC.' },
     populer: false,
   },
   {
@@ -2076,8 +2032,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → M4A Converter', tr: 'MP4 → M4A Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MP4 video and save as M4A.', tr: 'MP4 videosundan ses çıkartın ve M4A olarak kaydedin.' },
+    baslik: { en: 'MP4 → M4A Converter' },
+    aciklama: { en: 'Extract audio from MP4 video and save as M4A.' },
     populer: false,
   },
   {
@@ -2088,8 +2044,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'opus',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MP4 → OPUS Converter', tr: 'MP4 → OPUS Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MP4 video and save as OPUS.', tr: 'MP4 videosundan ses çıkartın ve OPUS olarak kaydedin.' },
+    baslik: { en: 'MP4 → OPUS Converter' },
+    aciklama: { en: 'Extract audio from MP4 video and save as OPUS.' },
     populer: false,
   },
   {
@@ -2100,8 +2056,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → WAV Converter', tr: 'WebM → WAV Dönüştürücü' },
-    aciklama: { en: 'Extract audio from WebM video and save as WAV.', tr: 'WebM videosundan ses çıkartın ve WAV olarak kaydedin.' },
+    baslik: { en: 'WebM → WAV Converter' },
+    aciklama: { en: 'Extract audio from WebM video and save as WAV.' },
     populer: false,
   },
   {
@@ -2112,8 +2068,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ogg',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → OGG Converter', tr: 'WebM → OGG Dönüştürücü' },
-    aciklama: { en: 'Extract audio from WebM video and save as OGG.', tr: 'WebM videosundan ses çıkartın ve OGG olarak kaydedin.' },
+    baslik: { en: 'WebM → OGG Converter' },
+    aciklama: { en: 'Extract audio from WebM video and save as OGG.' },
     populer: false,
   },
   {
@@ -2124,8 +2080,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'aac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WebM → AAC Converter', tr: 'WebM → AAC Dönüştürücü' },
-    aciklama: { en: 'Extract audio from WebM video and save as AAC.', tr: 'WebM videosundan ses çıkartın ve AAC olarak kaydedin.' },
+    baslik: { en: 'WebM → AAC Converter' },
+    aciklama: { en: 'Extract audio from WebM video and save as AAC.' },
     populer: false,
   },
   {
@@ -2136,8 +2092,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → MP3 Converter', tr: 'MOV → MP3 Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MOV video and save as MP3.', tr: 'MOV videosundan ses çıkartın ve MP3 olarak kaydedin.' },
+    baslik: { en: 'MOV → MP3 Converter' },
+    aciklama: { en: 'Extract audio from MOV video and save as MP3.' },
     populer: false,
   },
   {
@@ -2148,8 +2104,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → WAV Converter', tr: 'MOV → WAV Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MOV video and save as WAV.', tr: 'MOV videosundan ses çıkartın ve WAV olarak kaydedin.' },
+    baslik: { en: 'MOV → WAV Converter' },
+    aciklama: { en: 'Extract audio from MOV video and save as WAV.' },
     populer: false,
   },
   {
@@ -2160,8 +2116,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'm4a',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MOV → M4A Converter', tr: 'MOV → M4A Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MOV video and save as M4A.', tr: 'MOV videosundan ses çıkartın ve M4A olarak kaydedin.' },
+    baslik: { en: 'MOV → M4A Converter' },
+    aciklama: { en: 'Extract audio from MOV video and save as M4A.' },
     populer: false,
   },
   {
@@ -2172,8 +2128,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → MP3 Converter', tr: 'AVI → MP3 Dönüştürücü' },
-    aciklama: { en: 'Extract audio from AVI video and save as MP3.', tr: 'AVI videosundan ses çıkartın ve MP3 olarak kaydedin.' },
+    baslik: { en: 'AVI → MP3 Converter' },
+    aciklama: { en: 'Extract audio from AVI video and save as MP3.' },
     populer: false,
   },
   {
@@ -2184,8 +2140,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'AVI → WAV Converter', tr: 'AVI → WAV Dönüştürücü' },
-    aciklama: { en: 'Extract audio from AVI video and save as WAV.', tr: 'AVI videosundan ses çıkartın ve WAV olarak kaydedin.' },
+    baslik: { en: 'AVI → WAV Converter' },
+    aciklama: { en: 'Extract audio from AVI video and save as WAV.' },
     populer: false,
   },
   {
@@ -2196,8 +2152,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → MP3 Converter', tr: 'MKV → MP3 Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MKV video and save as MP3.', tr: 'MKV videosundan ses çıkartın ve MP3 olarak kaydedin.' },
+    baslik: { en: 'MKV → MP3 Converter' },
+    aciklama: { en: 'Extract audio from MKV video and save as MP3.' },
     populer: false,
   },
   {
@@ -2208,8 +2164,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'wav',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → WAV Converter', tr: 'MKV → WAV Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MKV video and save as WAV.', tr: 'MKV videosundan ses çıkartın ve WAV olarak kaydedin.' },
+    baslik: { en: 'MKV → WAV Converter' },
+    aciklama: { en: 'Extract audio from MKV video and save as WAV.' },
     populer: false,
   },
   {
@@ -2220,8 +2176,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'flac',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'MKV → FLAC Converter', tr: 'MKV → FLAC Dönüştürücü' },
-    aciklama: { en: 'Extract audio from MKV video and save as FLAC.', tr: 'MKV videosundan ses çıkartın ve FLAC olarak kaydedin.' },
+    baslik: { en: 'MKV → FLAC Converter' },
+    aciklama: { en: 'Extract audio from MKV video and save as FLAC.' },
     populer: false,
   },
   {
@@ -2232,8 +2188,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'FLV → MP3 Converter', tr: 'FLV → MP3 Dönüştürücü' },
-    aciklama: { en: 'Extract audio from FLV video and save as MP3.', tr: 'FLV videosundan ses çıkartın ve MP3 olarak kaydedin.' },
+    baslik: { en: 'FLV → MP3 Converter' },
+    aciklama: { en: 'Extract audio from FLV video and save as MP3.' },
     populer: false,
   },
   {
@@ -2244,8 +2200,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'mp3',
     kategori: 'ses',
     converter: 'ffmpeg',
-    baslik: { en: 'WMV → MP3 Converter', tr: 'WMV → MP3 Dönüştürücü' },
-    aciklama: { en: 'Extract audio from WMV video and save as MP3.', tr: 'WMV videosundan ses çıkartın ve MP3 olarak kaydedin.' },
+    baslik: { en: 'WMV → MP3 Converter' },
+    aciklama: { en: 'Extract audio from WMV video and save as MP3.' },
     populer: false,
   },
 
@@ -2258,13 +2214,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'txt',
     kategori: 'desifre',
     converter: 'whisper',
-    baslik: { en: 'MP3 → TXT (Speech to Text)', tr: 'MP3 → TXT (Sesi Yazıya Dök)' },
-    aciklama: { en: 'Transcribe your MP3 audio files to text using AI directly in your browser.', tr: 'MP3 ses dosyalarınızı tarayıcınızda yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'MP3 → TXT (Speech to Text)' },
+    aciklama: { en: 'Transcribe your MP3 audio files to text using AI directly in your browser.' },
     populer: true,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        label: { en: 'Audio Language' },
         type: 'select',
         default: 'auto',
         options: WHISPER_LANGUAGES
@@ -2279,13 +2235,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'txt',
     kategori: 'desifre',
     converter: 'whisper',
-    baslik: { en: 'WAV → TXT (Speech to Text)', tr: 'WAV → TXT (Sesi Yazıya Dök)' },
-    aciklama: { en: 'Transcribe your WAV audio files to text using AI directly in your browser.', tr: 'WAV ses dosyalarınızı tarayıcınızda yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'WAV → TXT (Speech to Text)' },
+    aciklama: { en: 'Transcribe your WAV audio files to text using AI directly in your browser.' },
     populer: false,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        label: { en: 'Audio Language' },
         type: 'select',
         default: 'auto',
         options: WHISPER_LANGUAGES
@@ -2300,13 +2256,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'txt',
     kategori: 'desifre',
     converter: 'whisper',
-    baslik: { en: 'OGG → TXT (Speech to Text)', tr: 'OGG → TXT (Sesi Yazıya Dök)' },
-    aciklama: { en: 'Transcribe your OGG audio files to text using AI.', tr: 'OGG ses dosyalarınızı yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'OGG → TXT (Speech to Text)' },
+    aciklama: { en: 'Transcribe your OGG audio files to text using AI.' },
     populer: false,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        label: { en: 'Audio Language' },
         type: 'select',
         default: 'auto',
         options: WHISPER_LANGUAGES
@@ -2321,13 +2277,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'txt',
     kategori: 'desifre',
     converter: 'whisper',
-    baslik: { en: 'M4A → TXT (Speech to Text)', tr: 'M4A → TXT (Sesi Yazıya Dök)' },
-    aciklama: { en: 'Transcribe your M4A audio files to text using AI.', tr: 'M4A ses dosyalarınızı yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'M4A → TXT (Speech to Text)' },
+    aciklama: { en: 'Transcribe your M4A audio files to text using AI.' },
     populer: false,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        label: { en: 'Audio Language' },
         type: 'select',
         default: 'auto',
         options: WHISPER_LANGUAGES
@@ -2342,13 +2298,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'txt',
     kategori: 'desifre',
     converter: 'whisper',
-    baslik: { en: 'AAC → TXT (Speech to Text)', tr: 'AAC → TXT (Sesi Yazıya Dök)' },
-    aciklama: { en: 'Transcribe your AAC audio files to text using AI.', tr: 'AAC ses dosyalarınızı yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'AAC → TXT (Speech to Text)' },
+    aciklama: { en: 'Transcribe your AAC audio files to text using AI.' },
     populer: false,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        label: { en: 'Audio Language' },
         type: 'select',
         default: 'auto',
         options: WHISPER_LANGUAGES
@@ -2363,13 +2319,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'txt',
     kategori: 'desifre',
     converter: 'whisper',
-    baslik: { en: 'FLAC → TXT (Speech to Text)', tr: 'FLAC → TXT (Sesi Yazıya Dök)' },
-    aciklama: { en: 'Transcribe your FLAC audio files to text using AI.', tr: 'FLAC ses dosyalarınızı yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'FLAC → TXT (Speech to Text)' },
+    aciklama: { en: 'Transcribe your FLAC audio files to text using AI.' },
     populer: false,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        label: { en: 'Audio Language' },
         type: 'select',
         default: 'auto',
         options: WHISPER_LANGUAGES
@@ -2384,13 +2340,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'txt',
     kategori: 'desifre',
     converter: 'whisper',
-    baslik: { en: 'OPUS → TXT (Speech to Text)', tr: 'OPUS → TXT (Sesi Yazıya Dök)' },
-    aciklama: { en: 'Transcribe your OPUS audio files to text using AI.', tr: 'OPUS ses dosyalarınızı yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'OPUS → TXT (Speech to Text)' },
+    aciklama: { en: 'Transcribe your OPUS audio files to text using AI.' },
     populer: false,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        label: { en: 'Audio Language' },
         type: 'select',
         default: 'auto',
         options: WHISPER_LANGUAGES
@@ -2405,13 +2361,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'txt',
     kategori: 'desifre',
     converter: 'whisper',
-    baslik: { en: 'WMA → TXT (Speech to Text)', tr: 'WMA → TXT (Sesi Yazıya Dök)' },
-    aciklama: { en: 'Transcribe your WMA audio files to text using AI.', tr: 'WMA ses dosyalarınızı yapay zeka ile yazıya dökün.' },
+    baslik: { en: 'WMA → TXT (Speech to Text)' },
+    aciklama: { en: 'Transcribe your WMA audio files to text using AI.' },
     populer: false,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Audio Language', tr: 'Ses Dili' },
+        label: { en: 'Audio Language' },
         type: 'select',
         default: 'auto',
         options: WHISPER_LANGUAGES
@@ -2429,8 +2385,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'pdf',
     kategori: 'belge',
     converter: 'pdf-lib',
-    baslik: { en: 'Convert Images to PDF', tr: 'Görselleri PDF\'ye Dönüştür' },
-    aciklama: { en: 'Combine your JPG or PNG images into a single PDF file.', tr: 'JPG veya PNG görsellerinizi tek bir PDF dosyasında birleştirin.' },
+    baslik: { en: 'Convert Images to PDF' },
+    aciklama: { en: 'Combine your JPG or PNG images into a single PDF file.' },
     populer: true,
     cokluDosya: true,
   },
@@ -2442,8 +2398,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'png',
     kategori: 'belge',
     converter: 'pdf-lib',
-    baslik: { en: 'PDF → PNG Converter', tr: 'PDF → PNG Dönüştürücü' },
-    aciklama: { en: 'Convert your PDF pages to separate PNG images.', tr: 'PDF sayfalarınızı ayrı PNG görsellerine dönüştürün.' },
+    baslik: { en: 'PDF → PNG Converter' },
+    aciklama: { en: 'Convert your PDF pages to separate PNG images.' },
     populer: false,
   },
   {
@@ -2454,8 +2410,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'jpg',
     kategori: 'belge',
     converter: 'pdf-lib',
-    baslik: { en: 'PDF → JPG Converter', tr: 'PDF → JPG Dönüştürücü' },
-    aciklama: { en: 'Convert your PDF pages to separate JPG images.', tr: 'PDF sayfalarınızı ayrı JPG görsellerine dönüştürün.' },
+    baslik: { en: 'PDF → JPG Converter' },
+    aciklama: { en: 'Convert your PDF pages to separate JPG images.' },
     populer: true,
   },
   {
@@ -2466,8 +2422,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'docx',
     kategori: 'belge',
     converter: 'pdf-lib', // Using pdf-lib for the icon/category tracking implicitly, but we use docx + pdfjs internally. We can use 'pdf-lib' as the type for now to route properly in ConvertPage
-    baslik: { en: 'PDF → Word (Text Only)', tr: 'PDF → Word (Sadece Metin)' },
-    aciklama: { en: 'Extract text from PDF and convert it to a DOCX file. Images and complex layouts are not preserved.', tr: 'PDF içindeki metinleri ayıklayıp DOCX dosyasına dönüştürür. Resimler ve karmaşık tasarımlar aktarılmaz.' },
+    baslik: { en: 'PDF → Word (Text Only)' },
+    aciklama: { en: 'Extract text from PDF and convert it to a DOCX file. Images and complex layouts are not preserved.' },
     populer: true,
   },
   {
@@ -2478,13 +2434,13 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'pdf',
     kategori: 'belge',
     converter: 'tesseract',
-    baslik: { en: 'PDF → OCR PDF (Searchable)', tr: 'PDF → OCR PDF (Aranabilir)' },
-    aciklama: { en: 'Turn a scanned or image-based PDF into a searchable, selectable PDF using on-device OCR. No file ever leaves your browser.', tr: 'Taranmış veya görüntü tabanlı bir PDF\'yi, cihazınızda çalışan OCR ile aranabilir ve seçilebilir bir PDF\'ye dönüştürün. Dosyanız tarayıcınızdan hiç çıkmaz.' },
+    baslik: { en: 'PDF → OCR PDF (Searchable)' },
+    aciklama: { en: 'Turn a scanned or image-based PDF into a searchable, selectable PDF using on-device OCR. No file ever leaves your browser.' },
     populer: true,
     secenekler: [
       {
         id: 'language',
-        label: { en: 'Document Language', tr: 'Belge Dili' },
+        label: { en: 'Document Language' },
         type: 'select',
         default: 'tur+eng',
         options: OCR_LANGUAGES,
@@ -2499,8 +2455,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'pdf',
     kategori: 'belge',
     converter: 'pdf-lib',
-    baslik: { en: 'PDF Merger', tr: 'PDF Birleştirici' },
-    aciklama: { en: 'Merge multiple PDF files into a single PDF.', tr: 'Birden fazla PDF dosyasını tek bir PDF\'de birleştirin.' },
+    baslik: { en: 'PDF Merger' },
+    aciklama: { en: 'Merge multiple PDF files into a single PDF.' },
     populer: true,
     cokluDosya: true,
   },
@@ -2512,8 +2468,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'pdf',
     kategori: 'belge',
     converter: 'pdf-lib',
-    baslik: { en: 'PDF Splitter', tr: 'PDF Bölücü' },
-    aciklama: { en: 'Split your PDF file into separate pages.', tr: 'PDF dosyanızı sayfa sayfa ayrı dosyalara bölün.' },
+    baslik: { en: 'PDF Splitter' },
+    aciklama: { en: 'Split your PDF file into separate pages.' },
     populer: false,
   },
   {
@@ -2524,8 +2480,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'pdf',
     kategori: 'belge',
     converter: 'pdf-lib',
-    baslik: { en: 'Text → PDF Converter', tr: 'Metin → PDF Dönüştürücü' },
-    aciklama: { en: 'Convert your text files to professional PDF documents.', tr: 'Metin dosyalarınızı profesyonel PDF belgelerine dönüştürün.' },
+    baslik: { en: 'Text → PDF Converter' },
+    aciklama: { en: 'Convert your text files to professional PDF documents.' },
     populer: false,
   },
   {
@@ -2536,8 +2492,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'html',
     kategori: 'belge',
     converter: 'mammoth',
-    baslik: { en: 'DOCX → HTML Converter', tr: 'DOCX → HTML Dönüştürücü' },
-    aciklama: { en: 'Convert your Word documents to clean HTML code.', tr: 'Word belgelerinizi temiz HTML koduna dönüştürün.' },
+    baslik: { en: 'DOCX → HTML Converter' },
+    aciklama: { en: 'Convert your Word documents to clean HTML code.' },
     populer: false,
   },
   {
@@ -2548,8 +2504,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'csv',
     kategori: 'belge',
     converter: 'sheetjs',
-    baslik: { en: 'Excel → CSV Converter', tr: 'Excel → CSV Dönüştürücü' },
-    aciklama: { en: 'Convert your Excel spreadsheets to CSV format.', tr: 'Excel tablolarınızı CSV formatına dönüştürün.' },
+    baslik: { en: 'Excel → CSV Converter' },
+    aciklama: { en: 'Convert your Excel spreadsheets to CSV format.' },
     populer: false,
   },
   {
@@ -2560,8 +2516,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'xlsx',
     kategori: 'belge',
     converter: 'sheetjs',
-    baslik: { en: 'CSV → Excel Converter', tr: 'CSV → Excel Dönüştürücü' },
-    aciklama: { en: 'Convert your CSV files to Excel format.', tr: 'CSV dosyalarınızı Excel formatına dönüştürün.' },
+    baslik: { en: 'CSV → Excel Converter' },
+    aciklama: { en: 'Convert your CSV files to Excel format.' },
     populer: false,
   },
   {
@@ -2572,8 +2528,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'pdf',
     kategori: 'belge',
     converter: 'pdf-lib',
-    baslik: { en: 'DOCX → PDF Converter', tr: 'DOCX → PDF Dönüştürücü' },
-    aciklama: { en: 'Convert Word document (.docx) to PDF format.', tr: 'Word belgesini (.docx) PDF formatına dönüştürün.' },
+    baslik: { en: 'DOCX → PDF Converter' },
+    aciklama: { en: 'Convert Word document (.docx) to PDF format.' },
     populer: true,
   },
   {
@@ -2584,8 +2540,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'pdf',
     kategori: 'belge',
     converter: 'pdf-lib',
-    baslik: { en: 'HTML → PDF Converter', tr: 'HTML → PDF Dönüştürücü' },
-    aciklama: { en: 'Convert HTML files to PDF format.', tr: 'HTML dosyalarınızı PDF formatına dönüştürün.' },
+    baslik: { en: 'HTML → PDF Converter' },
+    aciklama: { en: 'Convert HTML files to PDF format.' },
     populer: false,
   },
 
@@ -2599,8 +2555,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'zip',
     kategori: 'arsiv',
     converter: 'jszip',
-    baslik: { en: 'Zip Files', tr: 'Dosyaları ZIP\'le' },
-    aciklama: { en: 'Compress multiple files into a single ZIP archive.', tr: 'Birden fazla dosyayı tek bir ZIP arşivinde sıkıştırın.' },
+    baslik: { en: 'Zip Files' },
+    aciklama: { en: 'Compress multiple files into a single ZIP archive.' },
     populer: false,
     cokluDosya: true,
   },
@@ -2612,8 +2568,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: '*',
     kategori: 'arsiv',
     converter: 'jszip',
-    baslik: { en: 'Extract ZIP', tr: 'ZIP Çıkart' },
-    aciklama: { en: 'Extract ZIP archives and access your files.', tr: 'ZIP arşivlerini çıkartın ve dosyalarınıza erişin.' },
+    baslik: { en: 'Extract ZIP' },
+    aciklama: { en: 'Extract ZIP archives and access your files.' },
     populer: false,
   },
 
@@ -2626,8 +2582,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'vtt',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'SRT → VTT Converter', tr: 'SRT → VTT Dönüştürücü' },
-    aciklama: { en: 'Convert your SRT subtitle files to HTML5-compatible WebVTT (VTT) format.', tr: 'SRT altyazı dosyalarınızı HTML5 uyumlu WebVTT (VTT) formatına dönüştürün.' },
+    baslik: { en: 'SRT → VTT Converter' },
+    aciklama: { en: 'Convert your SRT subtitle files to HTML5-compatible WebVTT (VTT) format.' },
     populer: true,
   },
   {
@@ -2638,8 +2594,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'srt',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'VTT → SRT Converter', tr: 'VTT → SRT Dönüştürücü' },
-    aciklama: { en: 'Convert your VTT subtitles to the most common format, SRT.', tr: 'VTT altyazılarınızı en yaygın format olan SRT\'ye dönüştürün.' },
+    baslik: { en: 'VTT → SRT Converter' },
+    aciklama: { en: 'Convert your VTT subtitles to the most common format, SRT.' },
     populer: true,
   },
   {
@@ -2650,8 +2606,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ass',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'SRT → ASS Converter', tr: 'SRT → ASS Dönüştürücü' },
-    aciklama: { en: 'Convert your SRT files to ASS format with advanced styling support.', tr: 'SRT dosyalarınızı gelişmiş stil desteği olan ASS formatına dönüştürün.' },
+    baslik: { en: 'SRT → ASS Converter' },
+    aciklama: { en: 'Convert your SRT files to ASS format with advanced styling support.' },
     populer: false,
   },
   {
@@ -2662,8 +2618,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'srt',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'ASS → SRT Converter', tr: 'ASS → SRT Dönüştürücü' },
-    aciklama: { en: 'Convert your ASS files to standard SRT format.', tr: 'ASS dosyalarınızı standart SRT formatına dönüştürün.' },
+    baslik: { en: 'ASS → SRT Converter' },
+    aciklama: { en: 'Convert your ASS files to standard SRT format.' },
     populer: false,
   },
   {
@@ -2674,8 +2630,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'srt',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'SUB → SRT Converter', tr: 'SUB → SRT Dönüştürücü' },
-    aciklama: { en: 'Convert your old SUB subtitles to the common SRT format.', tr: 'Eski SUB altyazılarınızı yaygın SRT formatına dönüştürün.' },
+    baslik: { en: 'SUB → SRT Converter' },
+    aciklama: { en: 'Convert your old SUB subtitles to the common SRT format.' },
     populer: false,
   },
   {
@@ -2686,8 +2642,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'sub',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'SRT → SUB Converter', tr: 'SRT → SUB Dönüştürücü' },
-    aciklama: { en: 'Convert your SRT subtitles to SUB format.', tr: 'SRT altyazılarınızı SUB formatına dönüştürün.' },
+    baslik: { en: 'SRT → SUB Converter' },
+    aciklama: { en: 'Convert your SRT subtitles to SUB format.' },
     populer: false,
   },
   {
@@ -2698,8 +2654,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ass',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'VTT → ASS Converter', tr: 'VTT → ASS Dönüştürücü' },
-    aciklama: { en: 'Convert your VTT subtitles to ASS format.', tr: 'VTT altyazılarınızı ASS formatına dönüştürün.' },
+    baslik: { en: 'VTT → ASS Converter' },
+    aciklama: { en: 'Convert your VTT subtitles to ASS format.' },
     populer: false,
   },
   {
@@ -2710,8 +2666,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'sub',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'VTT → SUB Converter', tr: 'VTT → SUB Dönüştürücü' },
-    aciklama: { en: 'Convert your VTT subtitles to SUB format.', tr: 'VTT altyazılarınızı SUB formatına dönüştürün.' },
+    baslik: { en: 'VTT → SUB Converter' },
+    aciklama: { en: 'Convert your VTT subtitles to SUB format.' },
     populer: false,
   },
   {
@@ -2722,8 +2678,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'vtt',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'ASS → VTT Converter', tr: 'ASS → VTT Dönüştürücü' },
-    aciklama: { en: 'Convert your ASS subtitles to WebVTT (VTT) format.', tr: 'ASS altyazılarınızı WebVTT (VTT) formatına dönüştürün.' },
+    baslik: { en: 'ASS → VTT Converter' },
+    aciklama: { en: 'Convert your ASS subtitles to WebVTT (VTT) format.' },
     populer: false,
   },
   {
@@ -2734,8 +2690,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'sub',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'ASS → SUB Converter', tr: 'ASS → SUB Dönüştürücü' },
-    aciklama: { en: 'Convert your ASS subtitles to SUB format.', tr: 'ASS altyazılarınızı SUB formatına dönüştürün.' },
+    baslik: { en: 'ASS → SUB Converter' },
+    aciklama: { en: 'Convert your ASS subtitles to SUB format.' },
     populer: false,
   },
   {
@@ -2746,8 +2702,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'vtt',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'SUB → VTT Converter', tr: 'SUB → VTT Dönüştürücü' },
-    aciklama: { en: 'Convert your SUB subtitles to WebVTT (VTT) format.', tr: 'SUB altyazılarınızı WebVTT (VTT) formatına dönüştürün.' },
+    baslik: { en: 'SUB → VTT Converter' },
+    aciklama: { en: 'Convert your SUB subtitles to WebVTT (VTT) format.' },
     populer: false,
   },
   {
@@ -2758,8 +2714,8 @@ export const DONUSUM_DATA: DonusumCift[] = [
     toExt: 'ass',
     kategori: 'altyazi',
     converter: 'subsrt',
-    baslik: { en: 'SUB → ASS Converter', tr: 'SUB → ASS Dönüştürücü' },
-    aciklama: { en: 'Convert your SUB subtitles to ASS format.', tr: 'SUB altyazılarınızı ASS formatına dönüştürün.' },
+    baslik: { en: 'SUB → ASS Converter' },
+    aciklama: { en: 'Convert your SUB subtitles to ASS format.' },
     populer: false,
   },
 

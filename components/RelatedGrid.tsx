@@ -20,11 +20,11 @@ export default function RelatedGrid({ items, title, lang, dict }: RelatedGridPro
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((d) => {
-          const aciklama = d.aciklama[lang as 'en'|'tr'] || d.aciklama['en'];
+          const aciklama = d.aciklama.en;
           return (
             <Link
               key={d.slug}
-              href={getDonusumPath(lang, d.slug)}
+              href={getDonusumPath(d.slug)}
               className="group flex flex-col p-4 rounded-xl border border-border bg-surface2 hover:border-muted/50 hover:bg-[#1a1a2e] transition-colors gap-3"
             >
             <div className="flex items-center gap-3 mb-3">

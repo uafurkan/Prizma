@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getDonusumlerByKategori, getKategoriBySlug, KATEGORILER, KategoriSlug, getDonusumPath, getCategoryPath } from '@/lib/donusum-data';
+import { getDonusumlerByKategori, getKategoriBySlug, KategoriSlug, getDonusumPath, getCategoryPath } from '@/lib/donusum-data';
 import FormatBadge from '@/components/FormatBadge';
 import AdSlot from '@/components/AdSlot';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -10,28 +10,24 @@ interface CategoryPageProps {
   params: Promise<{ lang: string; kat: string }>;
 }
 
+// This route is only reachable through the /en/category/[kat] wrapper,
+// which imports it directly rather than redirecting. It is not itself a public
+// URL, so it isn't statically generated and direct requests to it 404.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
-  const locales = ['en', 'tr'];
-  const params: { lang: string; kat: string }[] = [];
-  
-  locales.forEach(lang => {
-    KATEGORILER.forEach(c => {
-      params.push({ lang, kat: c.slug });
-    });
-  });
-  
-  return params;
+  return [];
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const { lang, kat } = await params;
+  const { kat } = await params;
   const kategori = getKategoriBySlug(kat as KategoriSlug);
   if (!kategori) return {};
 
-  const baslik = kategori.baslik[lang as 'en'|'tr'] || kategori.baslik['en'];
-  const aciklama = kategori.aciklama[lang as 'en'|'tr'] || kategori.aciklama['en'];
-  const title = `${baslik} | ${lang === 'tr' ? 'PRİZMA' : 'PRIZMA'}`;
-  const canonicalPath = getCategoryPath(lang, kat);
+  const baslik = kategori.baslik.en;
+  const aciklama = kategori.aciklama.en;
+  const title = `${baslik} | PRIZMA`;
+  const canonicalPath = getCategoryPath(kat);
 
   return {
     title,
@@ -61,11 +57,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const donusumler = getDonusumlerByKategori(kat as KategoriSlug);
-  const baslik = kategori.baslik[lang as 'en'|'tr'] || kategori.baslik['en'];
-  const aciklama = kategori.aciklama[lang as 'en'|'tr'] || kategori.aciklama['en'];
+  const baslik = kategori.baslik.en;
+  const aciklama = kategori.aciklama.en;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prizma.monster';
   const breadcrumbItems = [
-    { label: lang === 'tr' ? 'Ana Sayfa' : 'Home', href: `/${lang}` },
+    { label: 'Home', href: '/en' },
     { label: baslik },
   ];
 
@@ -93,11 +89,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <section className="flex flex-col gap-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {donusumler.map((d) => {
-            const dAciklama = d.aciklama[lang as 'en'|'tr'] || d.aciklama['en'];
+            const dAciklama = d.aciklama.en;
             return (
               <Link
                 key={d.slug}
-                href={getDonusumPath(lang, d.slug)}
+                href={getDonusumPath(d.slug)}
                 className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-5 hover:border-muted/50 hover:bg-surface2 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="flex items-center gap-3 mb-2">

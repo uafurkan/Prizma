@@ -69,9 +69,9 @@ export default function UniversalConverter({ lang }: { lang: string }) {
       // If there are duplicate targets for the same extension (like pdf -> pdf split, merge),
       // we show the localized short title (e.g. 'PDF Birleştir', 'PDF Böl') or the full title.
       // Let's use the short version or first two words of baslik
-      let label = getTranslatedFormat(p.to, lang).toUpperCase();
+      let label = getTranslatedFormat(p.to).toUpperCase();
       if (hasDuplicate) {
-        label = p.baslik[lang as 'tr' | 'en'] || p.baslik.tr;
+        label = p.baslik.en;
       }
 
       return {
@@ -80,7 +80,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
         label,
       };
     });
-  }, [availablePairs, lang]);
+  }, [availablePairs]);
 
   const selectSourceFormat = (format: string) => {
     setSourceFormat(format);
@@ -135,7 +135,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
 
     if (isValidForFile) {
       setGlobalFiles(newFiles);
-      router.push(getDonusumPath(lang, targetSlug));
+      router.push(getDonusumPath(targetSlug));
     } else {
       // Reset targetSlug if it is no longer valid for the uploaded file
       const isValid = DONUSUM_DATA.some(d => d.slug === targetSlug && d.fromExt.toLowerCase() === normalizedExt);
@@ -174,7 +174,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
   const onConvertClick = () => {
     if (!targetSlug || files.length === 0) return;
     setGlobalFiles(files);
-    router.push(getDonusumPath(lang, targetSlug));
+    router.push(getDonusumPath(targetSlug));
   };
 
 
@@ -198,10 +198,10 @@ export default function UniversalConverter({ lang }: { lang: string }) {
             <span>
               {files.length > 0
                 ? sourceFormat === 'detect'
-                  ? `${detectedExt.toUpperCase()} (${lang === 'tr' ? 'Algılandı' : 'Detected'})`
+                  ? `${detectedExt.toUpperCase()} (Detected)`
                   : sourceFormat.toUpperCase()
                 : sourceFormat === 'detect'
-                ? (lang === 'tr' ? 'Dosya Türünü Algıla' : 'Detect Format')
+                ? ('Detect Format')
                 : sourceFormat.toUpperCase()}
             </span>
             <svg className={`w-4 h-4 text-muted transition-transform ${showSourceDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -219,7 +219,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                 {/* Search Input */}
                 <input
                   type="text"
-                  placeholder={lang === 'tr' ? 'Format ara...' : 'Search format...'}
+                  placeholder={'Search format...'}
                   value={sourceSearch}
                   onChange={(e) => setSourceSearch(e.target.value)}
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:border-prism-b"
@@ -227,7 +227,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                 
                 <div className="overflow-y-auto flex-1 pr-1 flex flex-col gap-2 scrollbar-none">
                   {/* Detect Format option */}
-                  {(!sourceSearch || (lang === 'tr' ? 'algıla' : 'detect').includes(sourceSearch.toLowerCase())) && (
+                  {(!sourceSearch || 'detect'.includes(sourceSearch.toLowerCase())) && (
                     <button
                       onClick={() => {
                         selectSourceFormat('detect');
@@ -240,7 +240,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                           : 'text-muted hover:text-foreground hover:bg-surface'
                       }`}
                     >
-                      <span>{lang === 'tr' ? 'Dosya Türünü Algıla' : 'Detect Format'}</span>
+                      <span>{'Detect Format'}</span>
                       {sourceFormat === 'detect' && <span className="text-xs">✓</span>}
                     </button>
                   )}
@@ -348,10 +348,10 @@ export default function UniversalConverter({ lang }: { lang: string }) {
           >
             <span>
               {activeSource === ''
-                ? (lang === 'tr' ? 'Hedef Format' : 'Target Format')
+                ? ('Target Format')
                 : targetSlug
                 ? (targetTabs.find(t => t.slug === targetSlug)?.label || '')
-                : (lang === 'tr' ? 'Hedef Format Seçin' : 'Select Target Format')}
+                : ('Select Target Format')}
             </span>
             <svg className={`w-4 h-4 text-muted transition-transform ${showTargetDropdown ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -396,9 +396,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
               <p className="text-xs font-medium text-center px-4">
-                {lang === 'tr'
-                  ? 'Dosya türünü seçin veya sol tarafa bir dosya yükleyin'
-                  : 'Select a format or upload a file on the left'}
+                {'Select a format or upload a file on the left'}
               </p>
             </div>
           ) : !targetSlug ? (
@@ -406,7 +404,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
               <p className="text-xs font-bold text-foreground mb-3">{dict.common.selectTargetFormat}</p>
               <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-2">
                 {availablePairs.map((pair) => {
-                  const label = targetTabs.find(t => t.slug === pair.slug)?.label || getTranslatedFormat(pair.to, lang);
+                  const label = targetTabs.find(t => t.slug === pair.slug)?.label || getTranslatedFormat(pair.to);
                   return (
                     <button
                       key={pair.slug}
@@ -442,9 +440,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                   </span>
                 </div>
                 <p className="text-xs text-muted text-center px-4 max-w-xs">
-                  {lang === 'tr'
-                    ? 'Dönüşümü tamamlamak için kaynak dosyanızı seçin.'
-                    : 'Select your source file to complete the conversion.'}
+                  {'Select your source file to complete the conversion.'}
                 </p>
               </div>
               
@@ -452,7 +448,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                 onClick={() => inputRef.current?.click()}
                 className="mt-4 w-full py-4 rounded-xl font-black text-sm uppercase tracking-wide transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-prism-b to-prism-p text-white hover:shadow-[0_0_20px_rgba(77,159,255,0.3)] hover:opacity-90"
               >
-                {lang === 'tr' ? 'Dönüştürülecek Dosyayı Seç' : 'Select File to Convert'}
+                {'Select File to Convert'}
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
                 </svg>
@@ -470,7 +466,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
             <p className="text-xs font-bold text-foreground mb-3">{dict.common.selectTargetFormat}</p>
             <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-[180px] pr-2">
               {availablePairs.map((pair) => {
-                const label = targetTabs.find(t => t.slug === pair.slug)?.label || getTranslatedFormat(pair.to, lang);
+                const label = targetTabs.find(t => t.slug === pair.slug)?.label || getTranslatedFormat(pair.to);
                 return (
                   <button
                     key={pair.slug}
@@ -495,7 +491,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
           <div className="flex flex-col h-full justify-between min-h-[180px]">
             <div className="flex-1 flex flex-col items-center justify-center py-6">
               <p className="text-sm font-bold text-foreground mb-2">
-                {lang === 'tr' ? 'Dönüşüm Hazır' : 'Conversion Ready'}
+                {'Conversion Ready'}
               </p>
               <div className="flex items-center gap-3 bg-surface2/50 border border-border px-4 py-2 rounded-xl">
                 <span className="text-xs font-mono font-bold text-muted">{activeSource.toUpperCase()}</span>
