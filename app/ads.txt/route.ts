@@ -1,13 +1,11 @@
-// AdSense requires a real ads.txt file at the domain root, listing the
-// publisher ID it already knows from NEXT_PUBLIC_ADSENSE_ID - generated
-// here instead of a static file so the two never drift out of sync.
-export async function GET() {
-  const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID;
-  const publisherId = adsenseId?.replace(/^ca-/, '');
+import { ADSENSE_CLIENT_ID } from '@/lib/adsense';
 
-  const body = publisherId
-    ? `google.com, ${publisherId}, DIRECT, f08c47fec0942fa0\n`
-    : '';
+// AdSense requires a real ads.txt file at the domain root, listing the
+// publisher ID it already knows - generated here instead of a static file
+// so the two can never drift out of sync.
+export async function GET() {
+  const publisherId = ADSENSE_CLIENT_ID.replace(/^ca-/, '');
+  const body = `google.com, ${publisherId}, DIRECT, f08c47fec0942fa0\n`;
 
   return new Response(body, {
     headers: { 'Content-Type': 'text/plain' },

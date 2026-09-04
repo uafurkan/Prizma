@@ -52,8 +52,8 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import ThemeToggle from '@/components/ThemeToggle';
 import HeaderNav from '@/components/HeaderNav';
 import MobileMenu from '@/components/MobileMenu';
-import AdsenseLoader from '@/components/AdsenseLoader';
 import CookieConsent from '@/components/CookieConsent';
+import { ADSENSE_CLIENT_ID } from '@/lib/adsense';
 
 export default async function RootLayout({
   children,
@@ -62,7 +62,6 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ lang: string }>;
 }>) {
-  const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID;
   const { lang } = await params;
   const dict = getDictionary(lang);
   const privacyHref = '/en/privacy';
@@ -73,8 +72,20 @@ export default async function RootLayout({
       lang={lang}
       className={`${syne.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        {/* AdSense site-ownership verification snippet - must be present on
+            every page's <head> unconditionally (Google's crawler checks the
+            static HTML, so this can't be gated behind cookie consent like
+            actual ad rendering is). It only loads the ad platform API; no
+            ad unit on the page requests or displays an ad until AdSlot's
+            own consent check passes. */}
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="antialiased min-h-screen flex flex-col selection:bg-prism-b/30">
-        {adsenseId && <AdsenseLoader adsenseId={adsenseId} />}
         <AnimatedFavicon />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <FileProvider>
