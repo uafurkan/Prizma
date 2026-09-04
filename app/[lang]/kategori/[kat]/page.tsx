@@ -74,8 +74,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <section className="flex flex-col gap-4 text-center md:text-left pt-2">
         <div className="flex items-center justify-center md:justify-start gap-4">
           <span
-            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl border flex items-center justify-center flex-shrink-0"
-            style={{ color: kategori.renk, borderColor: `color-mix(in srgb, ${kategori.renk} 30%, transparent)`, backgroundColor: `color-mix(in srgb, ${kategori.renk} 12%, transparent)` }}
+            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl border flex items-center justify-center flex-shrink-0 text-foreground"
+            style={{ borderColor: `color-mix(in srgb, ${kategori.renk} 35%, transparent)`, backgroundColor: `color-mix(in srgb, ${kategori.renk} 14%, transparent)` }}
           >
             {(() => {
               const Icon = CATEGORY_ICONS[kategori.ikon] || DocumentIcon;
