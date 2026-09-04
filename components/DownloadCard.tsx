@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { downloadBlob, downloadAll } from '@/lib/download';
 import type { Dictionary } from '@/dictionaries';
+import { DocumentIcon, TranscriptionIcon, AudioIcon, VideoIcon, PackageIcon, EyeIcon, CheckIcon } from '@/components/icons';
+import type { IconProps } from '@/components/icons';
 
 interface ResultItem {
   blob: Blob;
@@ -154,12 +156,12 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
     const isAudio = ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'opus', 'wma'].includes(ext) || r.blob.type.startsWith('audio/');
     const isVideo = ['mp4', 'webm', 'mov', 'mkv', 'avi', 'flv', 'wmv'].includes(ext) || r.blob.type.startsWith('video/');
 
-    let icon = '📄';
-    if (isTxt) icon = '🎙️';
-    else if (isPdf) icon = '📕';
-    else if (isDocx) icon = '📘';
-    else if (isAudio) icon = '🎵';
-    else if (isVideo) icon = '🎬';
+    let Icon: (props: IconProps) => React.JSX.Element = DocumentIcon;
+    if (isTxt) Icon = TranscriptionIcon;
+    else if (isPdf) Icon = DocumentIcon;
+    else if (isDocx) Icon = DocumentIcon;
+    else if (isAudio) Icon = AudioIcon;
+    else if (isVideo) Icon = VideoIcon;
 
     return (
       <div className="relative overflow-hidden rounded-2xl border border-border bg-surface p-6 flex flex-col gap-6 animate-fade-in w-full">
@@ -173,7 +175,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
               // eslint-disable-next-line @next/next/no-img-element
               <img src={thumb} alt="Önizleme" className="object-cover w-full h-full" />
             ) : (
-              <span className="text-3xl select-none">{icon}</span>
+              <Icon className="w-9 h-9 text-muted" />
             )}
           </div>
 
@@ -212,7 +214,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <div className="flex justify-between items-center border-b border-border pb-2">
               <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none">
-                🎙️ {'Text Preview'}
+                <TranscriptionIcon className="w-3.5 h-3.5" /> {'Text Preview'}
               </span>
               <button
                 onClick={() => handleCopyText(textPreviews[0])}
@@ -220,9 +222,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
               >
                 {copied ? (
                   <>
-                    <svg className="w-3.5 h-3.5 text-prism-g animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
+                    <CheckIcon className="w-3.5 h-3.5 text-prism-g animate-pulse" strokeWidth={3} />
                     <span className="text-prism-g">{'Copied!'}</span>
                   </>
                 ) : (
@@ -245,7 +245,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
         {isDocx && docxPreviews[0] !== undefined && (
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none border-b border-border pb-2">
-              📘 {'Document Preview'}
+              <DocumentIcon className="w-3.5 h-3.5" /> {'Document Preview'}
             </span>
             <div 
               className="max-h-64 overflow-y-auto text-xs leading-relaxed text-foreground/80 rounded-xl border border-border/60 bg-background p-4 select-text font-sans docx-preview-content"
@@ -258,7 +258,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
         {isPdf && blobUrls[0] && (
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none">
-              📕 {'PDF Preview'}
+              <DocumentIcon className="w-3.5 h-3.5" /> {'PDF Preview'}
             </span>
             <iframe src={`${blobUrls[0]}#toolbar=0`} className="w-full h-80 rounded-xl mt-1 border border-border/85" />
           </div>
@@ -268,7 +268,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
         {isAudio && blobUrls[0] && (
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none">
-              🎵 {'Audio Preview'}
+              <AudioIcon className="w-3.5 h-3.5" /> {'Audio Preview'}
             </span>
             <audio controls src={blobUrls[0]} className="w-full mt-1 focus:outline-none" />
           </div>
@@ -278,7 +278,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
         {isVideo && blobUrls[0] && (
           <div className="flex flex-col gap-2 border border-border bg-background/50 rounded-xl p-4 shadow-inner w-full">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5 select-none">
-              🎬 {'Video Preview'}
+              <VideoIcon className="w-3.5 h-3.5" /> {'Video Preview'}
             </span>
             <video controls src={blobUrls[0]} className="w-full max-h-72 rounded-xl mt-1 border border-border bg-black" />
           </div>
@@ -315,7 +315,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
           onClick={handleDownloadAllZip}
           className="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-prism-g/15 text-prism-g hover:bg-prism-g/25 flex items-center gap-1.5"
         >
-          📦 {dict?.common?.downloadAllZip}
+          <PackageIcon className="w-3.5 h-3.5" /> {dict?.common?.downloadAllZip}
         </button>
       </div>
 
@@ -360,10 +360,7 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
                       }`}
                       title={'Preview'}
                     >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
+                      <EyeIcon className="w-4 h-4" />
                     </button>
                   )}
                   
@@ -386,8 +383,8 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
                   {isTxt && textPreviews[i] !== undefined && (
                     <>
                       <div className="flex justify-between items-center border-b border-border pb-1">
-                        <span className="text-[10px] font-bold text-muted select-none">
-                          📝 {'Preview'}
+                        <span className="text-[10px] font-bold text-muted select-none flex items-center gap-1">
+                          <EyeIcon className="w-3 h-3" /> {'Preview'}
                         </span>
                         <button
                           onClick={() => handleCopyText(textPreviews[i])}
@@ -409,8 +406,8 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
                   {/* DOCX Preview */}
                   {isDocx && docxPreviews[i] !== undefined && (
                     <>
-                      <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1">
-                        📘 {'Document Preview'}
+                      <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1 flex items-center gap-1">
+                        <DocumentIcon className="w-3 h-3" /> {'Document Preview'}
                       </span>
                       <div 
                         className="max-h-48 overflow-y-auto text-[10px] leading-relaxed text-foreground/85 rounded border border-border/60 bg-background p-2.5 select-text font-sans docx-preview-content"
@@ -422,8 +419,8 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
                   {/* PDF Preview */}
                   {isPdf && blobUrls[i] && (
                     <>
-                      <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1">
-                        📕 {'PDF Preview'}
+                      <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1 flex items-center gap-1">
+                        <DocumentIcon className="w-3 h-3" /> {'PDF Preview'}
                       </span>
                       <iframe src={`${blobUrls[i]}#toolbar=0`} className="w-full h-64 rounded mt-1 border border-border/70" />
                     </>
@@ -432,8 +429,8 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
                   {/* Audio Preview */}
                   {isAudio && blobUrls[i] && (
                     <>
-                      <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1">
-                        🎵 {'Audio Preview'}
+                      <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1 flex items-center gap-1">
+                        <AudioIcon className="w-3 h-3" /> {'Audio Preview'}
                       </span>
                       <audio controls src={blobUrls[i]} className="w-full mt-1 focus:outline-none" />
                     </>
@@ -442,8 +439,8 @@ export default function DownloadCard({ results, onReset, dict }: DownloadCardPro
                   {/* Video Preview */}
                   {isVideo && blobUrls[i] && (
                     <>
-                      <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1">
-                        🎬 {'Video Preview'}
+                      <span className="text-[10px] font-bold text-muted select-none border-b border-border pb-1 flex items-center gap-1">
+                        <VideoIcon className="w-3 h-3" /> {'Video Preview'}
                       </span>
                       <video controls src={blobUrls[i]} className="w-full max-h-48 rounded mt-1 border border-border bg-black" />
                     </>

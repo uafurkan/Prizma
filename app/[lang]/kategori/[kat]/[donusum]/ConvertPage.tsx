@@ -21,6 +21,7 @@ import { pdfToSearchablePDF } from '@/lib/converters/ocr';
 import { useGlobalFiles } from '@/components/FileProvider';
 import { getDictionary } from '@/dictionaries';
 import TrustPanel from '@/components/TrustPanel';
+import { LockIcon, WarningIcon, InfoIcon } from '@/components/icons';
 
 interface ConvertPageProps {
   cift: DonusumCift;
@@ -502,14 +503,14 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
 
         {/* Privacy badge */}
         <div className="flex items-center gap-1.5 text-xs text-muted bg-surface border border-border px-4 py-1.5 rounded-full mt-2 font-semibold">
-          <span>🔒</span> {dict.security.shieldText}
+          <LockIcon className="w-3.5 h-3.5 text-prism-g" /> {dict.security.shieldText}
         </div>
       </section>
 
       {/* FFmpeg Support check / warning */}
       {cift.converter === 'ffmpeg' && !ffmpegSupported ? (
         <div className="p-6 rounded-2xl border border-prism-r/30 bg-prism-r/5 text-center flex flex-col gap-3 max-w-xl mx-auto w-full">
-          <span className="text-3xl">⚠️</span>
+          <WarningIcon className="w-9 h-9 text-prism-r mx-auto" />
           <h3 className="font-bold text-prism-r text-lg">{dict.convertPage.browserNotSupported}</h3>
           <p className="text-sm text-muted leading-relaxed">
             {dict.convertPage.sabDesc}
@@ -524,7 +525,7 @@ export default function ConvertPage({ cift, lang }: ConvertPageProps) {
           {showInfoBanner && (
             <div className="p-4 rounded-xl border border-prism-b/20 bg-prism-b/5 text-sm flex items-center justify-between gap-4 max-w-xl mx-auto w-full animate-fade-in">
               <div className="flex items-start gap-2.5">
-                <span className="text-base mt-0.5">ℹ️</span>
+                <InfoIcon className="w-4 h-4 mt-0.5 text-prism-b flex-shrink-0" />
                 <p className="text-muted leading-normal text-xs">
                   {dict.convertPage.ffmpegBannerText}
                 </p>

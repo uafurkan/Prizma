@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getDonusumlerByKategori, getKategoriBySlug, KategoriSlug, getDonusumPath, getCategoryPath } from '@/lib/donusum-data';
 import FormatBadge from '@/components/FormatBadge';
+import { CATEGORY_ICONS, DocumentIcon } from '@/components/icons';
 import AdSlot from '@/components/AdSlot';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import type { Metadata } from 'next';
@@ -72,7 +73,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       {/* Category Header */}
       <section className="flex flex-col gap-4 text-center md:text-left pt-2">
         <div className="flex items-center justify-center md:justify-start gap-4">
-          <span className="text-4xl md:text-5xl">{kategori.ikon}</span>
+          <span
+            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl border flex items-center justify-center flex-shrink-0"
+            style={{ color: kategori.renk, borderColor: `color-mix(in srgb, ${kategori.renk} 30%, transparent)`, backgroundColor: `color-mix(in srgb, ${kategori.renk} 12%, transparent)` }}
+          >
+            {(() => {
+              const Icon = CATEGORY_ICONS[kategori.ikon] || DocumentIcon;
+              return <Icon className="w-6 h-6 md:w-7 md:h-7" />;
+            })()}
+          </span>
           <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r from-foreground to-muted bg-clip-text text-transparent">
             {baslik}
           </h1>
