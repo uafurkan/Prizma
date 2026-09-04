@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useGlobalFiles } from '@/components/FileProvider';
 import { DONUSUM_DATA, getFormatRenk, getTranslatedFormat, getDonusumPath } from '@/lib/donusum-data';
 import { getDictionary } from '@/dictionaries';
+import { CheckIcon, WarningIcon } from '@/components/icons';
 
 export default function UniversalConverter({ lang }: { lang: string }) {
   const dict = getDictionary(lang);
@@ -241,7 +242,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                       }`}
                     >
                       <span>{'Detect Format'}</span>
-                      {sourceFormat === 'detect' && <span className="text-xs">✓</span>}
+                      {sourceFormat === 'detect' && <CheckIcon className="w-3.5 h-3.5" />}
                     </button>
                   )}
                   
@@ -380,7 +381,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
                       }`}
                     >
                       <span>{tab.label}</span>
-                      {targetSlug === tab.slug && <span className="text-xs">✓</span>}
+                      {targetSlug === tab.slug && <CheckIcon className="w-3.5 h-3.5" />}
                     </button>
                   ))}
                 </div>
@@ -457,7 +458,7 @@ export default function UniversalConverter({ lang }: { lang: string }) {
           )
         ) : availablePairs.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center bg-prism-r/5 border border-prism-r/20 rounded-2xl min-h-[180px]">
-            <span className="text-3xl mb-1">⚠️</span>
+            <WarningIcon className="w-8 h-8 mb-1 text-prism-r" />
             <p className="text-sm text-prism-r font-bold">{dict.common.unsupportedFormat}</p>
             <p className="text-xs text-muted">{dict.common.noConversionFound.replace('{ext}', detectedExt)}</p>
           </div>

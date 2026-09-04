@@ -5,6 +5,7 @@ import FormatBadge from '@/components/FormatBadge';
 import { KATEGORILER, DONUSUM_DATA, getCategoryPath, getDonusumPath } from '@/lib/donusum-data';
 import { getDictionary } from '@/dictionaries';
 import SearchBar from '@/components/SearchBar';
+import { CATEGORY_ICONS, DocumentIcon, LockIcon, BoltIcon, ShieldIcon, CheckIcon } from '@/components/icons';
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
@@ -29,10 +30,10 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         {/* Badge Row */}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <span className="text-xs font-semibold px-4 py-1.5 rounded-full bg-surface border border-border text-foreground flex items-center gap-1.5">
-            <span>🔒</span> {dict.hero.badge1}
+            <LockIcon className="w-3.5 h-3.5 text-prism-g" /> {dict.hero.badge1}
           </span>
           <span className="text-xs font-semibold px-4 py-1.5 rounded-full bg-surface border border-border text-foreground flex items-center gap-1.5">
-            <span>⚡</span> {dict.hero.badge2}
+            <BoltIcon className="w-3.5 h-3.5 text-prism-y" /> {dict.hero.badge2}
           </span>
           <span className="text-xs font-semibold px-4 py-1.5 rounded-full bg-surface border border-border text-foreground flex items-center gap-1.5">
             <span>∞</span> {dict.hero.badge3}
@@ -107,7 +108,15 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-foreground/5 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div>
-                  <span className="text-3xl mb-3 block">{c.ikon}</span>
+                  <span
+                    className="w-11 h-11 rounded-xl border flex items-center justify-center mb-3"
+                    style={{ color: c.renk, borderColor: `color-mix(in srgb, ${c.renk} 30%, transparent)`, backgroundColor: `color-mix(in srgb, ${c.renk} 12%, transparent)` }}
+                  >
+                    {(() => {
+                      const Icon = CATEGORY_ICONS[c.ikon] || DocumentIcon;
+                      return <Icon className="w-5 h-5" />;
+                    })()}
+                  </span>
                   <h3 className="font-bold text-foreground text-lg leading-tight group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-prism-r group-hover:to-prism-p group-hover:bg-clip-text">
                     {baslik}
                   </h3>
@@ -195,22 +204,22 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </p>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
             <li className="flex items-center gap-2 text-sm text-foreground">
-              <span className="text-prism-g font-bold">✓</span> {dict.security.list1}
+              <CheckIcon className="w-4 h-4 text-prism-g flex-shrink-0" /> {dict.security.list1}
             </li>
             <li className="flex items-center gap-2 text-sm text-foreground">
-              <span className="text-prism-g font-bold">✓</span> {dict.security.list2}
+              <CheckIcon className="w-4 h-4 text-prism-g flex-shrink-0" /> {dict.security.list2}
             </li>
             <li className="flex items-center gap-2 text-sm text-foreground">
-              <span className="text-prism-g font-bold">✓</span> {dict.security.list3}
+              <CheckIcon className="w-4 h-4 text-prism-g flex-shrink-0" /> {dict.security.list3}
             </li>
             <li className="flex items-center gap-2 text-sm text-foreground">
-              <span className="text-prism-g font-bold">✓</span> {dict.security.list4}
+              <CheckIcon className="w-4 h-4 text-prism-g flex-shrink-0" /> {dict.security.list4}
             </li>
           </ul>
         </div>
         <div className="w-full md:w-64 h-48 bg-background border border-border rounded-2xl flex flex-col items-center justify-center p-6 text-center gap-3 relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-prism-r to-prism-p" />
-          <span className="text-4xl">🛡️</span>
+          <ShieldIcon className="w-10 h-10 text-prism-r" />
           <p className="text-xs text-muted font-mono leading-relaxed">
             {dict.security.shieldText}
           </p>

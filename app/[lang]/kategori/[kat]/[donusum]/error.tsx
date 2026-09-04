@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getDictionary } from '@/dictionaries';
+import { WarningIcon } from '@/components/icons';
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -22,8 +23,8 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center py-20 px-4 text-center max-w-xl mx-auto w-full animate-fade-in gap-6">
-      <div className="w-16 h-16 rounded-2xl bg-prism-r/15 border border-prism-r/30 flex items-center justify-center text-4xl text-prism-r">
-        ⚠️
+      <div className="w-16 h-16 rounded-2xl bg-prism-r/15 border border-prism-r/30 flex items-center justify-center text-prism-r">
+        <WarningIcon className="w-8 h-8" />
       </div>
 
       <div className="flex flex-col gap-2">
